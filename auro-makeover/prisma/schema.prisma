@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPERADMIN
+  OPS_DISPATCHER
+  TECHNICIAN
+  VENDOR_PRINTER
+  CUSTOMER
+}
+
+enum LeadStatus {
+  NEW
+  WHATSAPP_SENT
+  VAN_DISPATCHED
+  MEASURED
+  QUOTE_LOCKED
+  WON
+  LOST
+}
+
+enum OrderStage {
+  DEPOSIT_PENDING
+  DEPOSIT_PAID
+  MATERIAL_RELEASED
+  INSTALL_READY
+  POST_QA_UNLOCK_PENDING
+  COMPLETED
+}
+
+enum ItemCategory {
+  BOTANICAL
+  FLUTED_LOUVER
+  NEO_CLASSICAL
+  GEOMETRIC
+  TEMPLE_PICHWAI
+  SMART_BLINDS
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String?  @unique
+  name      String
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads     Lead[]
+  orders    Order[]
+}
+
+model SocietyLayout {
+  id                  String   @id @default(uuid())
+  societyName         String
+  tower               String
+  unitType            String // e.g., 2BHK, 3BHK
+  presetWallSpecs     Json     // { wallWidth, wallHeight, windowAspect, compassOrientation }
+  discountMultiplier  Float    @default(1.0) // For viral loop discounts
+  totalUnitsCompleted Int      @default(0) // Viral loop tracking
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  leads               Lead[]
+}
+
+model DesignItem {
+  id                    String       @id @default(uuid())
+  sku                   String       @unique
+  title                 String
+  category              ItemCategory
+  textureMapUrl         String?
+  highResPrintUrl       String?
+  baseRateSqFt          Float
+  patternRepeatHeightCm Float
+  rollWidthInches       Float?
+  isActive              Boolean      @default(true)
+  dyeLots               DyeLot[]
+}
+
+model DyeLot {
+  id             String     @id @default(uuid())
+  designItem     DesignItem @relation(fields: [designItemId], references: [id])
+  designItemId   String
+  cmykLotCode    String
+  substrateBatch String
+  rollSerial     String     @unique
+  stockMeters    Float
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  orderItems     OrderItem[]
+}
+
+model Lead {
+  id                    String         @id @default(uuid())
+  customer              User?          @relation(fields: [customerId], references: [id])
+  customerId            String?
+  customerName          String
+  phone                 String
+  society               SocietyLayout? @relation(fields: [societyId], references: [id])
+  societyId             String?
+  status                LeadStatus     @default(NEW)
+  moistureLevelPercent  Float?
+  wallSoundnessScore    Int? // 1-10
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  orders                Order[]
+}
+
+model Order {
+  id                  String     @id @default(uuid())
+  lead                Lead       @relation(fields: [leadId], references: [id])
+  leadId              String
+  customer            User       @relation(fields: [customerId], references: [id])
+  customerId          String
+  cutSheetUrl         String?
+  totalAmount         Float
+  escrowStage         OrderStage @default(DEPOSIT_PENDING)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  items               OrderItem[]
+  warranty            WarrantyVault?
+}
+
+model OrderItem {
+  id                  String   @id @default(uuid())
+  order               Order    @relation(fields: [orderId], references: [id])
+  orderId             String
+  dyeLot              DyeLot?  @relation(fields: [dyeLotId], references: [id])
+  dyeLotId            String?
+  wallWidthFt         Float
+  wallHeightFt        Float
+  computedSqFt        Float
+  nestingBufferSqFt   Float
+  price               Float
+}
+
+model WarrantyVault {
+  id                  String   @id @default(uuid())
+  order               Order    @relation(fields: [orderId], references: [id])
+  orderId             String   @unique
+  laserDimensionsJson Json     // Store exact finalized dimensions
+  rollSerials         String[] // Track dye lot serials used
+  status              String   @default("ACTIVE") // ACTIVE, CLAIMED, EXPIRED
+  expiresAt           DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

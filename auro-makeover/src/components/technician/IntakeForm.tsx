@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Camera, Droplets, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Camera, Droplets, AlertTriangle, ShieldCheck, CheckCircle } from 'lucide-react';
 
 export default function IntakeForm() {
   const [moisture, setMoisture] = useState<number>(0);
@@ -11,25 +11,30 @@ export default function IntakeForm() {
   const isMoistureHigh = moisture > 12;
 
   const handleSignOff = () => {
-    alert("QA Passed. Triggering 30% Escrow Release and 2-Year Warranty Activation.");
+    alert("QA Passed. Escrow unlocked. Customer received 30-day warranty & 2-year seam guarantee notification via WhatsApp.");
   };
 
   return (
     <div className="w-full max-w-md mx-auto bg-gray-50 min-h-screen text-gray-900 font-['Plus_Jakarta_Sans'] pb-20">
 
       {/* Header */}
-      <div className="bg-[#8A5836] text-white p-6 pt-12 shadow-md">
+      <div className="bg-[#8A5836] text-white p-6 pt-12 shadow-md relative overflow-hidden">
+        {/* Verification Badge */}
+        <div className="absolute top-4 right-4 bg-white/20 px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 backdrop-blur-sm border border-white/30">
+          <CheckCircle className="w-3 h-3 text-green-300" />
+          Aadhaar Verified
+        </div>
         <h1 className="text-2xl font-bold font-['Syne']">TechOps Workspace</h1>
         <p className="text-sm opacity-90">Site: My Home Bhooja, Tower A, 1402</p>
       </div>
 
       <div className="p-6 space-y-8">
 
-        {/* Step 1: Material Verification */}
+        {/* Step 1: Pre-Install Checklist */}
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#1C130B] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</div>
-            <h2 className="font-bold text-lg font-['Syne']">Dye-Lot Scan</h2>
+            <h2 className="font-bold text-lg font-['Syne']">Pre-Install Scan</h2>
           </div>
           <p className="text-sm text-gray-500 mb-3">Scan roll QR or enter serial to verify batch match.</p>
           <input
@@ -75,10 +80,10 @@ export default function IntakeForm() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#1C130B] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</div>
-            <h2 className="font-bold text-lg font-['Syne']">QA Sign-Off</h2>
+            <h2 className="font-bold text-lg font-['Syne']">QA & Trust Sign-Off</h2>
           </div>
 
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-4">
             <button
               onClick={() => setPhotosUploaded(p => p + 1)}
               className="w-full border-2 border-dashed border-gray-300 p-4 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-[#8A5836] hover:bg-[#8A5836]/5 transition-colors"
@@ -88,13 +93,22 @@ export default function IntakeForm() {
             </button>
           </div>
 
+          <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 mb-6">
+            <h4 className="text-sm font-bold text-blue-900 flex items-center gap-2 mb-1">
+              <ShieldCheck className="w-4 h-4" /> 30-Day Guarantee
+            </h4>
+            <p className="text-xs text-blue-800">
+              By signing off, you verify this installation meets AuroMakeover standards. Customer will receive their digital warranty card.
+            </p>
+          </div>
+
           <button
             disabled={photosUploaded < 3 || dyeLot === '' || isMoistureHigh}
             onClick={handleSignOff}
             className="w-full bg-[#1C130B] disabled:bg-gray-300 text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95"
           >
             <ShieldCheck className="w-5 h-5" />
-            Complete & Activate Warranty
+            Complete & Unlock Escrow
           </button>
         </div>
 

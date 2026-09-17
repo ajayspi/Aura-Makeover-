@@ -20,11 +20,21 @@ export function calculateRollNesting(input: RollNestingInput): RollNestingOutput
   // 1. Calculate number of vertical drops required
   const totalVerticalDrops = Math.ceil(wallWidthInches / input.rollWidthInches);
 
+  if (totalVerticalDrops === 0) {
+    return {
+      totalVerticalDrops: 0,
+      matchingWasteInches: 0,
+      requiredContinuousMeters: 0,
+      totalSqFtRequired: 0,
+      totalSqFtWithBuffer: 0
+    };
+  }
+
   // 2. Pattern Matching Waste:
   // Each drop (except the first) might need to be shifted down up to the repeat height to match the pattern.
   // We estimate average waste as half the repeat per drop, or max repeat for safety.
   // Standard practice: assume 1 full pattern repeat of waste per drop after the first.
-  const matchingWasteInches = (totalVerticalDrops - 1) * input.patternRepeatInches;
+  const matchingWasteInches = Math.max(0, (totalVerticalDrops - 1)) * input.patternRepeatInches;
 
   // 3. Required Continuous Linear Inches
   // Each drop requires wallHeightInches + 4 inches bleed (2 top, 2 bottom)
@@ -108,6 +118,18 @@ export function calculateDynamicPricing(input: PricingInput): PricingOutput {
   const PRIMER_COST_PER_SQFT = 15; // INR
   const INSTALL_LABOR_PER_SQFT = 25; // INR
   const MOTOR_ADDON_FLAT = 15000; // INR
+
+  if (input.totalSqFtRequired === 0) {
+    return {
+      materialCost: 0,
+      primerCost: 0,
+      installationLaborCost: 0,
+      subtotal: 0,
+      gstAmount: 0,
+      totalRetailPrice: 0,
+      escrowTranches: { deposit10: 0, materialRelease60: 0, postQAUnlock30: 0 }
+    };
+  }
 
   const materialCost = input.rawMaterialBasePerSqFt * input.totalSqFtRequired;
   const primerCost = PRIMER_COST_PER_SQFT * input.totalSqFtRequired;

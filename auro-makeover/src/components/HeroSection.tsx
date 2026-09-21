@@ -184,10 +184,10 @@ export default function HeroSection() {
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, delay: 1.3, ease: "easeOut" }}
           className="text-base sm:text-lg md:text-xl text-[#FAF8F5]/80 font-medium mb-10 max-w-2xl mx-auto leading-relaxed"
         >
-          No civil work. No dust. We bring the design studio to your sofa and install luxury wallpapers, acoustic louvers, and smart blinds in 48 hours.
+          No civil work. No dust. We bring the design studio to your sofa and install luxury wallpapers, acoustic louvers, and smart blinds in 48 Hours.
         </motion.p>
 
         {/* Floating Stat Pills with Stagger Delay */}
@@ -231,7 +231,7 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
+          transition={{ duration: 0.6, delay: 1.4, ease: "easeOut" }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <button
@@ -255,7 +255,7 @@ export default function HeroSection() {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 1.1, ease: "easeOut" }}
+        transition={{ duration: 0.7, delay: 1.5, ease: "easeOut" }}
         className="max-w-5xl mx-auto w-full mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 relative z-10 border-t border-[#FAF8F5]/10 pt-8"
       >
         {TRUST_BADGES.map((badge, idx) => {

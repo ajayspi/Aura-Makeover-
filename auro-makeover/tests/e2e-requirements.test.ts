@@ -41,8 +41,8 @@ export function runTestSuite(rootDir: string = process.cwd()): {
     try {
       fn();
       results.push({ tier, id, title, passed: true });
-    } catch (e: any) {
-      results.push({ tier, id, title, passed: false, error: e.message });
+    } catch (e: unknown) {
+      results.push({ tier, id, title, passed: false, error: e instanceof Error ? e.message : String(e) });
     }
   }
 

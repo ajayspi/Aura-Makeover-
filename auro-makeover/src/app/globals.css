@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap');
+
+@theme {
+  --font-syne: 'Syne', var(--font-syne), sans-serif;
+  --font-sans: 'Plus Jakarta Sans', var(--font-plus-jakarta-sans), sans-serif;
+  --font-jakarta: 'Plus Jakarta Sans', var(--font-plus-jakarta-sans), sans-serif;
+
+  --color-espresso: #1C130B;
+  --color-gold: #C5A880;
+  --color-terracotta: #8A5836;
+  --color-linen: #FAF8F5;
+  --color-whatsapp: #15803D;
+}
+
+:root {
+  --background: #FAF8F5;
+  --foreground: #1C130B;
+}
+
+body {
+  background-color: #FAF8F5;
+  color: #1C130B;
+  font-family: 'Plus Jakarta Sans', var(--font-plus-jakarta-sans), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Syne', var(--font-syne), sans-serif;
+}
+

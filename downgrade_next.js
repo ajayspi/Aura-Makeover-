@@ -1,0 +1,39 @@
+const { Client } = require('ssh2');
+
+const conn = new Client();
+conn.on('ready', () => {
+  conn.exec(`
+    export DEBIAN_FRONTEND=noninteractive
+    cd /root/Aura-Makeover-/auro-makeover
+    
+    # modify package.json to use next 15.0.3
+    sed -i 's/"next": "16.3.5"/"next": "15.0.3"/g' package.json
+    sed -i 's/"eslint-config-next": "16.3.5"/"eslint-config-next": "15.0.3"/g' package.json
+    
+    # remove .next and node_modules just in case
+    rm -rf .next node_modules package-lock.json
+    
+    npm install
+    npm run build
+    
+    pm2 stop aura || true
+    pm2 delete aura || true
+    PORT=3333 pm2 start npm --name "aura" -- run start -- -p 3333
+  `, (err, stream) => {
+    if (err) throw err;
+    stream.on('close', (code, signal) => {
+      conn.end();
+    }).on('data', (data) => {
+      process.stdout.write('STDOUT: ' + data);
+    }).stderr.on('data', (data) => {
+      process.stderr.write('STDERR: ' + data);
+    });
+  });
+}).on('error', (err) => {
+  console.error('Connection :: error', err);
+}).connect({
+  host: '172.236.176.251',
+  port: 22,
+  username: 'root',
+  password: '9700675637Ajkk'
+});

@@ -3,12 +3,17 @@ import BeforeAfterShowcase from '@/components/BeforeAfterShowcase';
 import DesignGallery from '@/components/DesignGallery';
 import SocietyPreMeasured from '@/components/SocietyPreMeasured';
 import StatsTicker from '@/components/StatsTicker';
+import HowItWorks from '@/components/HowItWorks';
+import OfferBanner from '@/components/OfferBanner';
+import Reviews from '@/components/Reviews';
+import PackageRecommender from '@/components/PackageRecommender';
 import EstimatorGateway from '@/components/EstimatorGateway';
 import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C130B] font-['Plus_Jakarta_Sans']">
+      <OfferBanner />
       <HeroSection />
       <BeforeAfterShowcase />
       <div id="gallery" className="bg-[#FAF8F5]">
@@ -16,6 +21,9 @@ export default function Home() {
       </div>
       <SocietyPreMeasured />
       <StatsTicker />
+      <Reviews />
+      <HowItWorks />
+      <PackageRecommender />
       <div id="estimator" className="py-20 px-6 bg-[#FAF8F5]">
         <div className="max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-black font-['Syne'] text-[#1C130B] mb-4 tracking-tight">

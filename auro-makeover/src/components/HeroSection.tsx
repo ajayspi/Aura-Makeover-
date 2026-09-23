@@ -1,95 +1,28 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Truck, Clock, ShieldCheck, ArrowRight, Star, Building2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { motion, type Variants } from 'framer-motion';
+import { ArrowRight, Palette, Clock, ShieldCheck, Truck } from 'lucide-react';
 
-const HEADLINE_WORDS = [
-  { text: "Premium", highlight: false },
-  { text: "Home", highlight: false },
-  { text: "Makeovers", highlight: false },
-  { text: "in", highlight: false },
-  { text: "48", highlight: true },
-  { text: "Hours.", highlight: true },
-];
+const HEADLINE = 'Premium Home Makeovers in 48 Hours.';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
+const headlineContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
 };
 
-const wordVariants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-    filter: "blur(6px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  },
+const headlineWord: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const STAT_PILLS = [
-  {
-    id: "flats",
-    icon: Building2,
-    label: "247 Flats Done",
-    sub: "Hyderabad West",
-    delay: 0.8,
-    duration: 5.2,
-    yOffset: [-4, 4, -4],
-  },
-  {
-    id: "rating",
-    icon: Star,
-    label: "4.9★ Rating",
-    sub: "Verified Residents",
-    delay: 1.0,
-    duration: 6.0,
-    yOffset: [4, -4, 4],
-  },
-  {
-    id: "guarantee",
-    icon: ShieldCheck,
-    label: "48hr Guarantee",
-    sub: "Zero Civil Work",
-    delay: 1.2,
-    duration: 5.6,
-    yOffset: [-3, 5, -3],
-  },
-];
-
-const TRUST_BADGES = [
-  {
-    icon: Clock,
-    title: "48-Hour Install",
-    desc: "From measurement to final QA sign-off.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Zero Civil Work",
-    desc: "100% dust-free, non-invasive, rental-safe.",
-  },
-  {
-    icon: Truck,
-    title: "Design-on-Wheels",
-    desc: "Mobile swatch vans come to your door.",
-  },
-];
+const STAT_PILLS = ['247 Flats Done', '4.9★ Rating', '48hr Guarantee'];
 
 export default function HeroSection() {
+  const router = useRouter();
+
   const scrollToEstimator = () => {
     document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -99,185 +32,146 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#1C130B] text-[#FAF8F5] pt-24 pb-14 px-6 font-['Plus_Jakarta_Sans'] rounded-b-[2.5rem] md:rounded-b-[3.5rem]">
-      {/* Animated Ambient Gold & Terracotta Gradient Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Top-Right Warm Gold Ambient Blob */}
-        <motion.div
-          animate={{
-            x: [0, 40, -20, 0],
-            y: [0, -35, 25, 0],
-            scale: [1, 1.18, 0.95, 1],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -top-32 -right-32 w-[520px] md:w-[680px] h-[520px] md:h-[680px] rounded-full bg-[#C5A880]/20 blur-[120px]"
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#1C130B]">
+      {/* Full-bleed background image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero.jpg"
+          alt="Luxury apartment living room with fluted walnut louvers and botanical wallpaper"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
-
-        {/* Bottom-Left Terracotta Ambient Blob */}
-        <motion.div
-          animate={{
-            x: [0, -35, 30, 0],
-            y: [0, 40, -20, 0],
-            scale: [1.1, 0.9, 1.15, 1.1],
-          }}
-          transition={{
-            duration: 16,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -bottom-32 -left-32 w-[480px] md:w-[620px] h-[480px] md:h-[620px] rounded-full bg-[#8A5836]/25 blur-[110px]"
-        />
-
-        {/* Center Subtle Gold Ambient Shimmer */}
-        <motion.div
-          animate={{
-            opacity: [0.25, 0.55, 0.25],
-            scale: [0.92, 1.1, 0.92],
-          }}
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] md:w-[480px] h-[340px] md:h-[480px] rounded-full bg-[#C5A880]/10 blur-[95px]"
-        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1C130B]/90 via-[#1C130B]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C130B]/80 via-transparent to-[#1C130B]/30" />
       </div>
 
-      {/* Hero Core Content */}
-      <div className="max-w-4xl mx-auto text-center relative z-10 my-auto">
-        {/* Service Corridor Eyebrow Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#8A5836]/20 border border-[#8A5836]/40 text-[#C5A880] text-xs sm:text-sm font-bold tracking-wide uppercase mb-8 backdrop-blur-sm"
-        >
-          <Truck className="w-4 h-4 text-[#C5A880]" />
-          <span>Now Serving Hyderabad West · Kokapet · Tellapur · Financial District</span>
-        </motion.div>
+      {/* Ambient gold gradient blobs */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 -right-32 w-[520px] h-[520px] rounded-full bg-[#C5A880]/25 blur-[110px] animate-pulse"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-48 left-1/4 w-[420px] h-[420px] rounded-full bg-[#8A5836]/30 blur-[90px] animate-pulse"
+      />
 
-        {/* Staggered Word-by-Word Reveal Headline */}
-        <motion.h1
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-['Syne'] leading-[1.08] tracking-tight mb-8"
-        >
-          {HEADLINE_WORDS.map((item, index) => (
-            <motion.span
-              key={`${item.text}-${index}`}
-              variants={wordVariants}
-              className={`inline-block mr-2.5 sm:mr-3.5 last:mr-0 ${
-                item.highlight ? 'text-[#C5A880]' : 'text-[#FAF8F5]'
-              }`}
-            >
-              {item.text}
-            </motion.span>
-          ))}
-        </motion.h1>
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-32">
+        <div className="max-w-2xl">
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-[#C5A880] text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase mb-6"
+          >
+            Now serving Hyderabad West
+          </motion.p>
 
-        {/* Narrative Subhead */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-          className="text-base sm:text-lg md:text-xl text-[#FAF8F5]/80 font-medium mb-10 max-w-2xl mx-auto leading-relaxed"
-        >
-          No civil work. No dust. We bring the design studio to your sofa and install luxury wallpapers, acoustic louvers, and smart blinds in 48 hours.
-        </motion.p>
-
-        {/* Floating Stat Pills with Stagger Delay */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10">
-          {STAT_PILLS.map((pill) => {
-            const Icon = pill.icon;
-            return (
-              <motion.div
-                key={pill.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: pill.delay, ease: "easeOut" }}
+          {/* Headline — word-by-word stagger reveal */}
+          <motion.h1
+            variants={headlineContainer}
+            initial="hidden"
+            animate="show"
+            className="font-['Syne'] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-[1.08] tracking-[-0.03em] mb-6"
+          >
+            {HEADLINE.split(' ').map((word, i) => (
+              <motion.span
+                key={`${word}-${i}`}
+                variants={headlineWord}
+                className={`inline-block mr-[0.3em] ${
+                  word === '48' || word.startsWith('Hours') ? 'text-[#C5A880]' : ''
+                }`}
               >
-                <motion.div
-                  animate={{ y: pill.yOffset }}
-                  transition={{
-                    duration: pill.duration,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="bg-[#FAF8F5]/10 border border-[#C5A880]/30 rounded-2xl px-4 py-2.5 backdrop-blur-md flex items-center gap-2.5 shadow-lg shadow-[#1C130B]/50 hover:border-[#C5A880] transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-2xl bg-[#C5A880]/20 flex items-center justify-center text-[#C5A880]">
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs sm:text-sm font-bold text-[#FAF8F5] leading-tight">
-                      {pill.label}
-                    </div>
-                    <div className="text-[10px] text-[#FAF8F5]/60 font-medium leading-tight">
-                      {pill.sub}
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
+                {word}
+              </motion.span>
+            ))}
+          </motion.h1>
 
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <button
-            onClick={scrollToEstimator}
-            className="w-full sm:w-auto bg-[#C5A880] hover:bg-[#8A5836] text-[#1C130B] hover:text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xl shadow-[#C5A880]/20 cursor-pointer"
+          {/* Subtext — one line, not a paragraph */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="font-['Plus_Jakarta_Sans'] text-base sm:text-lg text-[#FAF8F5]/70 font-normal leading-relaxed mb-10 max-w-md"
           >
-            <span>Get Instant Quote</span>
-            <ArrowRight className="w-5 h-5" />
-          </button>
+            Wallpapers, acoustic louvers &amp; smart blinds — installed with zero civil work and zero dust.
+          </motion.p>
 
-          <button
-            onClick={scrollToGallery}
-            className="w-full sm:w-auto bg-[#FAF8F5]/10 hover:bg-[#FAF8F5]/20 text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold text-lg transition-all border border-[#C5A880]/30 backdrop-blur-sm active:scale-95 cursor-pointer"
+          {/* CTA — primary + lookbook + quiz */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="flex flex-col sm:flex-row items-start gap-4 mb-16"
           >
-            View Lookbook
-          </button>
-        </motion.div>
-      </div>
-
-      {/* 3 Trust Badges in rounded-2xl Containers */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 1.1, ease: "easeOut" }}
-        className="max-w-5xl mx-auto w-full mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 relative z-10 border-t border-[#FAF8F5]/10 pt-8"
-      >
-        {TRUST_BADGES.map((badge, idx) => {
-          const BadgeIcon = badge.icon;
-          return (
-            <div
-              key={idx}
-              className="rounded-2xl bg-[#FAF8F5]/5 border border-[#C5A880]/20 p-5 flex flex-col items-center text-center backdrop-blur-sm transition-all hover:border-[#C5A880]/40 hover:bg-[#FAF8F5]/10"
+            <button
+              onClick={scrollToEstimator}
+              className="bg-[#C5A880] hover:bg-[#b8996f] text-[#1C130B] px-8 py-4 rounded-2xl font-semibold text-sm sm:text-base flex items-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#C5A880]/15 flex items-center justify-center mb-3">
-                <BadgeIcon className="w-6 h-6 text-[#C5A880]" />
-              </div>
-              <h3 className="font-bold text-lg mb-1 font-['Syne'] text-[#FAF8F5]">
-                {badge.title}
-              </h3>
-              <p className="text-sm text-[#FAF8F5]/70">
-                {badge.desc}
-              </p>
-            </div>
-          );
-        })}
-      </motion.div>
+              Get Instant Quote
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => router.push('/quiz')}
+              className="bg-[#FAF8F5]/10 hover:bg-[#FAF8F5]/20 text-[#FAF8F5] border border-[#C5A880]/30 px-8 py-4 rounded-2xl font-semibold text-sm sm:text-base flex items-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
+            >
+              <Palette className="w-4 h-4" />
+              Take Style Quiz
+            </button>
+            <button
+              onClick={scrollToGallery}
+              className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] px-4 py-4 font-medium text-sm sm:text-base transition-colors cursor-pointer"
+            >
+              View Lookbook →
+            </button>
+          </motion.div>
+
+          {/* Trust badges — responsive grid */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-[#FAF8F5]/50 text-xs sm:text-sm font-medium"
+          >
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]/60" />
+              Zero Civil Work
+            </span>
+            <span className="flex items-center gap-2">
+              <Truck className="w-3.5 h-3.5 text-[#C5A880]/60" />
+              Design-on-Wheels Swatch Van
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-3.5 h-3.5 text-[#C5A880]/60" />
+              2-Year Warranty
+            </span>
+          </motion.div>
+
+          {/* Floating stat pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.0 }}
+            className="flex flex-wrap gap-3 mt-10"
+          >
+            {STAT_PILLS.map((pill, i) => (
+              <motion.span
+                key={pill}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
+                className="bg-[#FAF8F5]/10 border border-[#C5A880]/30 text-[#FAF8F5]/90 text-xs sm:text-sm font-semibold px-4 py-2 rounded-full backdrop-blur-sm"
+              >
+                {pill}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

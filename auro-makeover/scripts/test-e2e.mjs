@@ -343,7 +343,7 @@ test('Tier 1', 'R5.5', 'Estimator price display animates counting up and WhatsAp
   const code = readProjectFile('src/components/EstimatorGateway.tsx');
   assert(code.includes('animate') || code.includes('AnimatedPrice') || code.includes('prevValue'), 'Price counter must animate when value changes');
   assert(code.includes('919700675637'), 'WhatsApp link must target +91 97006 75637');
-  assert(code.includes('wa.me/919700675637'), 'Must use official wa.me URL structure');
+  assert(code.includes('wa.me/'), 'Must use official wa.me URL structure');
 });
 
 // Feature R6: Footer & Layout
@@ -374,6 +374,113 @@ test('Tier 1', 'R6.4', 'Redesigned Footer includes 2-Year Warranty badge, 5 serv
     assert(code.includes(area), `Footer must list service area: ${area}`);
   }
   assert(code.includes('AuroMakeover'), 'Footer must show AuroMakeover brand');
+});
+
+// Feature R7: How-it-Works ("The 48-Hour Method") + Offer Banner
+test('Tier 1', 'R7.1', 'HowItWorks section mounted with 48-Hour Method steps and anchor', () => {
+  assert(fileExists('src/components/HowItWorks.tsx'), 'HowItWorks component must exist');
+  const code = readProjectFile('src/components/HowItWorks.tsx');
+  assert(code.includes('48-Hour Method'), 'Section must brand the process as 48-Hour Method');
+  assert(code.includes('how-it-works'), 'Section must expose the how-it-works anchor');
+  const steps = (code.match(/Step [1-4]/g) || []).length;
+  assert(steps >= 4, `Section must render 4 method steps, found ${steps}`);
+});
+
+test('Tier 1', 'R7.2', 'Sticky offer banner with estimator CTA and dismiss', () => {
+  assert(fileExists('src/components/OfferBanner.tsx'), 'OfferBanner component must exist');
+  const code = readProjectFile('src/components/OfferBanner.tsx');
+  assert(code.includes('sticky') || code.includes('fixed'), 'Banner must stick to viewport');
+  assert(code.includes('#estimator'), 'Banner CTA must target the estimator');
+  assert(code.includes('sessionStorage'), 'Banner dismiss must persist for the session');
+});
+
+test('Tier 1', 'R7.3', 'Footer quick link targets the how-it-works anchor (no dead links)', () => {
+  const code = readProjectFile('src/components/Footer.tsx');
+  assert(code.includes('#how-it-works'), 'Footer must link to the how-it-works anchor');
+  assert(!code.includes('#process'), 'Dead #process anchor must be gone');
+});
+
+// Feature R8: Reviews trust section (nav-level social proof, Decorilla/Havenly pattern)
+test('Tier 1', 'R8.1', 'Reviews section mounted with anchored grid of rated review cards', () => {
+  assert(fileExists('src/components/Reviews.tsx'), 'Reviews component must exist');
+  const code = readProjectFile('src/components/Reviews.tsx');
+  assert(code.includes('id="reviews"'), 'Section must expose the #reviews anchor');
+  assert(code.includes('aria-label') && code.includes('out of 5 stars'), 'Star rating must carry a 5-star aria-label template');
+  assert(code.includes('REVIEWS.map'), 'Review cards must be mapped over the reviews catalog');
+  const reviews = (code.match(/\{\n\s+name:/g) || []).length + (code.match(/name: '/g) || []).length;
+  assert(reviews >= 3, `Reviews catalog must hold >=3 entries, found ${reviews}`);
+  assert(code.includes('rounded-3xl') || code.includes('rounded-2xl'), 'Review cards must use token-compliant corner radii');
+});
+
+test('Tier 1', 'R8.2', 'Reviews section renders at least 3 distinct reviewer identities', () => {
+  const code = readProjectFile('src/components/Reviews.tsx');
+  const nameArgs = (code.match(/name:/g) || []).length;
+  const locArgs = (code.match(/location:/g) || []).length;
+  assert(nameArgs >= 3, `Reviews must define >=3 reviewer names, found ${nameArgs}`);
+  assert(locArgs >= 3, `Reviews must define >=3 reviewer locations, found ${locArgs}`);
+});
+
+test('Tier 1', 'R8.3', 'Footer quick link targets the reviews anchor (trust surface at nav level)', () => {
+  const code = readProjectFile('src/components/Footer.tsx');
+  assert(code.includes('#reviews'), 'Footer quick links must include the #reviews anchor');
+});
+
+// Feature R9: Package recommender (questionnaire → package mapping, livspace shape)
+test('Tier 3', 'R9.1', 'Package recommender core exists with scoring, budget guard and deterministic fallback', () => {
+  assert(fileExists('src/lib/package-recommender.ts'), 'Pure recommender module must exist');
+  const code = readProjectFile('src/lib/package-recommender.ts');
+  assert(code.includes('recommendPackage'), 'Must export recommendPackage');
+  assert(code.includes('PACKAGES') || code.includes('packages'), 'Must export a package catalog');
+  assert(code.includes('minBudget') || code.includes('budget'), 'Scoring must respect budget floors');
+  assert(code.includes('recommendToPrefill'), 'Must map a package to estimator prefill');
+});
+
+test('Tier 3', 'R9.2', 'Package recommender UI mounted with anchored questionnaire and token radii', () => {
+  assert(fileExists('src/components/PackageRecommender.tsx'), 'PackageRecommender component must exist');
+  const code = readProjectFile('src/components/PackageRecommender.tsx');
+  assert(code.includes('package-recommender'), 'Section must expose the #package-recommender anchor');
+  assert(code.includes('recommendPackage'), 'UI must call the pure recommender');
+  assert(code.includes('rounded-3xl') || code.includes('rounded-2xl'), 'Cards must use token-compliant radii');
+  const questions = (code.match(/(room|style|budget|scope)/gi) || []).length;
+  assert(questions >= 3, 'Questionnaire must cover >=3 dimensions (room/style/budget/scope)');
+});
+
+test('Tier 3', 'R9.3', 'Recommender feeds the shared estimator prefill channel between HowItWorks and estimator', () => {
+  const pageCode = readProjectFile('src/app/page.tsx');
+  const recommenderIdx = pageCode.indexOf('PackageRecommender');
+  const howItWorksIdx = pageCode.indexOf('HowItWorks');
+  const estimatorIdx = pageCode.indexOf('id="estimator"');
+  assert(recommenderIdx !== -1, 'Page must mount PackageRecommender');
+  assert(recommenderIdx > howItWorksIdx && recommenderIdx < estimatorIdx, 'Recommender must sit between HowItWorks and the estimator');
+  const code = readProjectFile('src/components/PackageRecommender.tsx');
+  assert(code.includes('estimator_prefill'), 'Recommender must write the shared estimator_prefill channel');
+  assert(code.includes('recommendToPrefill'), 'Recommender must delegate to the prefill mapping function');
+  const core = readProjectFile('src/lib/package-recommender.ts');
+  assert(core.includes('finishTier'), 'Prefill mapping must carry a finish tier for the estimator tierMap');
+});
+
+test('Tier 3', 'R9.4', 'Every referenced /images/ asset exists on disk (no dangling image refs)', () => {
+  const srcDir = path.join(ROOT, 'src');
+  const refs = new Set();
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else {
+        const text = fs.readFileSync(full, 'utf8');
+        const matches = text.match(/\/images\/[a-zA-Z0-9._-]+\.(jpg|jpeg|png|webp|svg)/g) || [];
+        for (const m of matches) refs.add(m);
+      }
+    }
+  };
+  walk(srcDir);
+  assert(refs.size >= 7, `Must reference >=7 distinct image assets, found ${refs.size}`);
+  for (const ref of refs) {
+    const abs = path.join(ROOT, 'public', ref);
+    assert(fs.existsSync(abs), `Referenced image missing on disk: ${ref}`);
+  }
+  const citiesCode = readProjectFile('src/lib/cities.ts');
+  assert(!citiesCode.includes("image: '/images/"), 'Dead society image refs must be removed from city config');
 });
 
 test('Tier 1', 'R6.5', 'Tailwind CSS v4 design tokens and palette are configured in globals.css', () => {
@@ -696,6 +803,69 @@ test('Tier 3', 'R-C6', 'Estimator 3-step wizard enforces sequential forward navi
   assert(estimatorCode.includes('disabled=') || estimatorCode.includes('cursor-not-allowed'), 'Future steps must be disabled until prerequisites are reached');
 });
 
+test('Tier 3', 'R-C7', 'Gallery Shop This Look prefills estimator via shared prefill channel', () => {
+  const galleryCode = readProjectFile('src/components/DesignGallery.tsx');
+  assert(galleryCode.includes('Shop This Look'), 'Gallery card must offer Shop This Look action');
+  assert(galleryCode.includes('estimator_prefill'), 'Shop action must write the shared estimator_prefill channel');
+  assert(galleryCode.includes('?prefill='), 'Shop action must navigate to estimator with prefill param');
+  const libCode = readProjectFile('src/lib/quiz-to-tags.ts');
+  assert(libCode.includes('designToEstimatorPrefill'), 'Design-to-prefill mapping must live in the shared tags lib');
+});
+
+test('Tier 3', 'R-C8', 'Quiz completion writes estimator prefill and navigates with prefill param', () => {
+  const quizCode = readProjectFile('src/app/quiz/page.tsx');
+  assert(quizCode.includes('estimator_prefill'), 'Quiz must write the shared estimator_prefill channel');
+  assert(quizCode.includes('?prefill='), 'Quiz must navigate to estimator with prefill param');
+  assert(quizCode.includes('tagsToEstimatorPrefill'), 'Quiz must build prefill via shared tags lib');
+});
+
+test('Tier 3', 'R-C9', 'Visualize Use This Look writes estimator prefill with restyled image', () => {
+  const galleryCode = readProjectFile('src/components/DesignGallery.tsx');
+  assert(galleryCode.includes('restyledImage'), 'Visualize handoff must carry the restyled image into prefill');
+  assert(galleryCode.includes('estimator_prefill'), 'Visualize handoff must write the shared estimator_prefill channel');
+});
+
+test('Tier 3', 'R-C10', 'City geo routes exist with city-aware landing', () => {
+  assert(fileExists('src/app/[city]/page.tsx'), 'Dynamic [city] route page must exist');
+  const landingCode = readProjectFile('src/app/[city]/CityLanding.tsx');
+  assert(landingCode.includes('CityLanding') || landingCode.includes('city'), 'City landing must consume city config');
+  const citiesCode = readProjectFile('src/lib/cities.ts');
+  assert(citiesCode.includes('societies') && citiesCode.includes('whatsappNumber'), 'City config must carry societies and WhatsApp numbers');
+});
+
+test('Tier 3', 'R-C11', 'Lead router assigns agents by city, weight and round-robin with fallback', () => {
+  assert(fileExists('src/lib/lead-router.ts'), 'Pure lead router module must exist');
+  const code = readProjectFile('src/lib/lead-router.ts');
+  assert(code.includes('routeLead'), 'Router must export routeLead');
+  assert(code.includes('SalesAgent'), 'Router must type the agent roster');
+  assert(code.includes('weight'), 'Router must respect agent weight priority');
+  assert(code.includes('isActive'), 'Router must skip inactive agents');
+});
+
+test('Tier 3', 'R-C12', 'Quiz lead persists assignment with real schema fields only', () => {
+  const code = readProjectFile('src/app/api/leads/quiz/route.ts');
+  assert(code.includes('assignedAgentId'), 'Quiz upsert must persist the routing assignment');
+  assert(code.includes('sessionId'), 'Quiz upsert must key on session id');
+  assert(code.includes("source"), 'Quiz upsert must tag the lead source');
+  assert(!code.includes('QUIZ_COMPLETED'), 'Must not write enum values absent from the Prisma schema');
+});
+
+test('Tier 3', 'R-C13', 'Estimator booking captures intent before opening WhatsApp', () => {
+  assert(fileExists('src/app/api/leads/estimator/route.ts'), 'Estimator intent endpoint must exist');
+  const gatewayCode = readProjectFile('src/components/EstimatorGateway.tsx');
+  assert(gatewayCode.includes('/api/leads/estimator'), 'Gateway must POST booking intent before WhatsApp open');
+  assert(gatewayCode.includes('assignedAgentNumber') || gatewayCode.includes('assignedWhatsapp'), 'Gateway must retarget WhatsApp to the assigned agent number');
+});
+
+test('Tier 4', 'R-W5', 'Scenario E: Quiz lead routed to city agent end to end', () => {
+  const quizCode = readProjectFile('src/app/quiz/page.tsx');
+  assert(quizCode.includes('/api/leads/quiz'), 'Quiz must persist the lead via the leads API');
+  const routerCode = readProjectFile('src/lib/lead-router.ts');
+  assert(routerCode.includes('routeLead'), 'Router must resolve the assigned agent');
+  const estimatorCode = readProjectFile('src/components/EstimatorGateway.tsx');
+  assert(estimatorCode.includes('estimator_prefill') || estimatorCode.includes('prefill'), 'Estimator must still honor the shared prefill channel');
+});
+
 // ============================================================================
 // TIER 4: REAL-WORLD APPLICATION SCENARIOS (4 TESTS)
 // ============================================================================
@@ -842,6 +1012,6 @@ if (failures.length > 0) {
   });
   process.exit(1);
 } else {
-  console.log(bold(green('\nALL 70 OPAQUE-BOX E2E TESTS PASSED WITH 100% SUCCESS!\n')));
+  console.log(bold(green(`\nALL ${totalTests} OPAQUE-BOX E2E TESTS PASSED WITH 100% SUCCESS!\n`)));
   process.exit(0);
 }

@@ -8,20 +8,18 @@ import {
   ArrowUpRight,
   Truck,
 } from 'lucide-react';
+import { CityConfig } from '@/lib/cities';
 
-const SERVICE_AREAS = [
-  'Kokapet',
-  'Tellapur',
-  'Financial District',
-  'Nallagandla',
-  'Gachibowli',
-];
+interface FooterProps {
+  city?: CityConfig;
+}
 
 const QUICK_LINKS = [
   { label: 'Instant Price Estimator', href: '#estimator' },
   { label: 'Design Lookbook', href: '#gallery' },
   { label: 'Pre-Measured Societies', href: '#societies' },
-  { label: 'The 48-Hour Process', href: '#process' },
+  { label: 'Client Reviews', href: '#reviews' },
+  { label: 'The 48-Hour Process', href: '#how-it-works' },
 ];
 
 const DESIGN_COLLECTIONS = [
@@ -69,9 +67,14 @@ function LinkedinIcon({ className = 'w-4 h-4' }: { className?: string }) {
   );
 }
 
-export default function Footer() {
-  const whatsappUrl = `https://wa.me/919700675637?text=${encodeURIComponent(
-    'Hi AuroMakeover! 👋 I would like to inquire about a 48-hour premium makeover for my home in Hyderabad West.'
+export default function Footer({ city }: FooterProps) {
+  const serviceAreas = city?.serviceAreas || ['Kokapet', 'Tellapur', 'Financial District', 'Nallagandla', 'Gachibowli'];
+  const whatsappNumber = city?.whatsappNumber || '919700675637';
+  const cityName = city?.name || 'Hyderabad';
+  const cityRegion = city?.region || 'West';
+
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    `Hi AuroMakeover! 👋 I would like to inquire about a 48-hour premium makeover for my home in ${cityName}.`
   )}`;
 
   return (
@@ -90,7 +93,7 @@ export default function Footer() {
                 Auro<span className="text-[#C5A880]">Makeover</span>
               </h3>
               <p className="text-sm text-[#FAF8F5]/70 font-medium leading-relaxed max-w-sm">
-                Cinematic 48-Hour Micro-Makeovers for Hyderabad&apos;s Marquee High-Rises. Zero civil work. Engineered acoustic louvers, museum wallpapers &amp; smart blinds.
+                Cinematic 48-Hour Micro-Makeovers for {cityName}&apos;s Marquee High-Rises. Zero civil work. Engineered acoustic louvers, museum wallpapers & smart blinds.
               </p>
             </div>
 
@@ -108,7 +111,7 @@ export default function Footer() {
                     </span>
                   </div>
                   <p className="text-xs text-[#FAF8F5]/70 font-medium mt-1 leading-relaxed">
-                    Guaranteed zero-peel German adhesive bonding, bubble-free laser alignment &amp; mechanical hardware QA vault.
+                    Guaranteed zero-peel German adhesive bonding, bubble-free laser alignment & mechanical hardware QA vault.
                   </p>
                 </div>
               </div>
@@ -123,7 +126,7 @@ export default function Footer() {
                 className="inline-flex items-center gap-3 bg-[#15803D] hover:bg-[#166534] text-[#FAF8F5] px-6 py-3.5 rounded-2xl font-bold font-['Syne'] text-sm transition-all active:scale-95 shadow-lg shadow-[#15803D]/25"
               >
                 <MessageCircle className="w-5 h-5 text-white" />
-                <span>WhatsApp Hotline: +91 97006 75637</span>
+                <span>WhatsApp Hotline: +91 {whatsappNumber.slice(2, 4)} {whatsappNumber.slice(4, 9)} {whatsappNumber.slice(9)}</span>
               </a>
             </div>
           </div>
@@ -131,13 +134,13 @@ export default function Footer() {
           {/* Service Areas Column */}
           <div className="md:col-span-3 space-y-4">
             <h4 className="text-sm font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
-              Service Areas (Hyderabad West)
+              Service Areas ({cityName} {cityRegion})
             </h4>
             <p className="text-xs text-[#FAF8F5]/60 font-medium">
               48-hour dedicated mobile van dispatches to:
             </p>
             <ul className="space-y-2.5">
-              {SERVICE_AREAS.map((area) => (
+              {serviceAreas.map((area) => (
                 <li key={area} className="flex items-center gap-2 text-sm text-[#FAF8F5]/85 font-medium">
                   <MapPin className="w-4 h-4 text-[#C5A880] shrink-0" />
                   <span>{area}</span>
@@ -211,7 +214,9 @@ export default function Footer() {
             </a>
 
             <a
-              href={whatsappUrl}
+              href={`https://wa.me/${city?.whatsappNumber || '919700675637'}?text=${encodeURIComponent(
+                `Hi AuroMakeover! 👋 I would like to inquire about a 48-hour premium makeover for my home in ${city?.name || 'Hyderabad'}.`
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="AuroMakeover on WhatsApp"

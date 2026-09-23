@@ -16,9 +16,6 @@ import {
   calculateRollNesting,
   calculateDynamicPricing,
   analyzeSolarLux,
-  RollNestingInput,
-  PricingInput,
-  SolarLuxInput,
 } from '../src/lib/engines';
 
 export interface TestResult {
@@ -41,8 +38,8 @@ export function runTestSuite(rootDir: string = process.cwd()): {
     try {
       fn();
       results.push({ tier, id, title, passed: true });
-    } catch (e: any) {
-      results.push({ tier, id, title, passed: false, error: e.message });
+    } catch (e) {
+      results.push({ tier, id, title, passed: false, error: e instanceof Error ? e.message : String(e) });
     }
   }
 

@@ -107,9 +107,30 @@ model Lead {
   status                LeadStatus     @default(NEW)
   moistureLevelPercent  Float?
   wallSoundnessScore    Int? // 1-10
+  // Lead auto-routing (spec-lead-auto-routing): anonymous web captures
+  sessionId             String?        @unique
+  quizAnswers           Json?
+  source                String?        // quiz|estimator|visualize|shop-look
+  assignedAgent         SalesAgent?    @relation(fields: [assignedAgentId], references: [id])
+  assignedAgentId       String?
+  routedAt              DateTime?
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
   orders                Order[]
+}
+
+model SalesAgent {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  phone     String
+  cities    String[]
+  societies String[]
+  isActive  Boolean  @default(true)
+  weight    Int      @default(1)
+  isDemo    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  leads     Lead[]
 }
 
 model Order {

@@ -18,11 +18,14 @@ import {
   ShieldCheck,
   Check,
   Clock,
-  Layers,
   CheckCircle2,
-  PhoneCall,
   MessageCircle,
 } from 'lucide-react';
+import { CityConfig } from '@/lib/cities';
+
+interface EstimatorGatewayProps {
+  city?: CityConfig;
+}
 
 export const QUALITIES = [
   {
@@ -105,12 +108,74 @@ const ROOM_PRESETS = [
   { label: 'Grand Foyer', width: 12, height: 12 },
 ];
 
-export default function EstimatorGateway() {
+type PrefillData = {
+  roomType?: string;
+  finishTier?: string;
+  categories?: string[];
+  features?: string[];
+  designId?: number;
+  designTitle?: string;
+};
+
+function getPrefillFromStorage(): PrefillData | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    // 1. URL param (from quiz redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPrefill = urlParams.get('prefill');
+    if (urlPrefill) {
+      const parsed = JSON.parse(decodeURIComponent(urlPrefill));
+      sessionStorage.setItem('estimator_prefill', JSON.stringify(parsed));
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+      return parsed;
+    }
+    // 2. sessionStorage (from quiz or society click)
+    const stored = sessionStorage.getItem('estimator_prefill');
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return null;
+}
+
+export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
+  // Initialize state from prefill to avoid setState in effect
+  const initialPrefill = typeof window !== 'undefined' ? getPrefillFromStorage() : null;
+  
+  const roomPresets: Record<string, { width: number; height: number }> = {
+    'living': { width: 18, height: 10 },
+    'bedroom': { width: 14, height: 10 },
+    'dining': { width: 12, height: 10 },
+    'office': { width: 12, height: 10 },
+    'pooja': { width: 10, height: 10 },
+    'full-home': { width: 24, height: 12 },
+  };
+  
+  const tierMap: Record<string, string> = {
+    'essential': 'standard',
+    'premium': 'belgian',
+    'luxury': 'motorized',
+  };
+  
+  const initialWidth = initialPrefill?.roomType && roomPresets[initialPrefill.roomType] 
+    ? roomPresets[initialPrefill.roomType].width : 10;
+  const initialHeight = initialPrefill?.roomType && roomPresets[initialPrefill.roomType] 
+    ? roomPresets[initialPrefill.roomType].height : 10;
+  const initialQuality = initialPrefill?.finishTier && tierMap[initialPrefill.finishTier]
+    ? QUALITIES.find(q => q.id === tierMap[initialPrefill.finishTier!]) || QUALITIES[0]
+    : QUALITIES[0];
+
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
-  const [widthFt, setWidthFt] = useState(10);
-  const [heightFt, setHeightFt] = useState(10);
-  const [quality, setQuality] = useState(QUALITIES[0]);
-  const [society, setSociety] = useState(SOCIETIES[0]);
+  const [widthFt, setWidthFt] = useState(initialWidth);
+  const [heightFt, setHeightFt] = useState(initialHeight);
+  const [quality, setQuality] = useState(initialQuality);
+  const [society, setSociety] = useState('');
+  const [assignedAgentNumber, setAssignedAgentNumber] = useState<string | null>(null);
+
+  // City-specific data
+  const citySocieties = city?.societies?.map(s => s.name) || SOCIETIES;
+  const whatsappNumber = city?.whatsappNumber || '919700675637';
+  const cityRegion = city?.region || 'West Corridor';
+  const cityName = city?.name || 'Hyderabad';
 
   // Listen for custom event from Society Cards or other sections
   useEffect(() => {
@@ -153,7 +218,8 @@ export default function EstimatorGateway() {
 
   const exactWallArea = widthFt * heightFt;
 
-  const buildWhatsAppUrl = () => {
+  const buildWhatsAppUrl = (numberOverride?: string) => {
+    const targetNumber = numberOverride || assignedAgentNumber || whatsappNumber;
     const priceFormatted = Math.round(pricing.totalRetailPrice).toLocaleString('en-IN');
     const depositFormatted = Math.round(pricing.escrowTranches.deposit10).toLocaleString('en-IN');
     const billedSqFt = Math.round(pricing.sqft);
@@ -161,10 +227,10 @@ export default function EstimatorGateway() {
     const messageLines = [
       'Hi AuroMakeover! 👋',
       '',
-      `I would like to book a Free Swatch Van Visit to *${society}*.`,
+      `I would like to book a Free Swatch Van Visit to *${society || cityName}*.`,
       '',
       '*Configured Estimate Summary:*',
-      `• Target Society: ${society}`,
+      `• Target Location: ${society || cityName}`,
       `• Wall Dimensions: ${widthFt}ft (W) × ${heightFt}ft (H)`,
       `• Net Wall Area: ${exactWallArea} sqft`,
       `• Billed Material Area (incl. 11% safety buffer & pattern repeat): ${billedSqFt} sqft`,
@@ -176,11 +242,33 @@ export default function EstimatorGateway() {
       'Please confirm the earliest slot for your mobile swatch van!',
     ];
 
-    return `https://wa.me/919700675637?text=${encodeURIComponent(messageLines.join('\n'))}`;
+    return `https://wa.me/${targetNumber}?text=${encodeURIComponent(messageLines.join('\n'))}`;
   };
 
-  const handleWhatsAppBooking = () => {
-    window.open(buildWhatsAppUrl(), '_blank');
+  const handleWhatsAppBooking = async () => {
+    let assigned: string | null = null;
+    try {
+      const res = await fetch('/api/leads/estimator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          society: society || undefined,
+          citySlug: city?.slug ?? null,
+          widthFt,
+          heightFt,
+          quality: quality.id,
+          total: Math.round(pricing.totalRetailPrice),
+        }),
+      });
+      const data = await res.json();
+      if (data?.assignedWhatsapp) {
+        assigned = data.assignedWhatsapp as string;
+        setAssignedAgentNumber(assigned);
+      }
+    } catch {
+      /* fall through to default number */
+    }
+    window.open(buildWhatsAppUrl(assigned || undefined), '_blank');
   };
 
   return (
@@ -663,14 +751,14 @@ export default function EstimatorGateway() {
                 {/* Society Selection */}
                 <div className="bg-[#FAF8F5] border border-[#C5A880]/30 p-6 rounded-3xl space-y-3">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#8A5836] block">
-                    Your High-Rise Society (Hyderabad West Corridor)
+                    Your High-Rise Society ({cityName} {cityRegion})
                   </label>
                   <select
                     value={society}
                     onChange={(e) => setSociety(e.target.value)}
                     className="w-full p-4 rounded-2xl bg-[#FAF8F5] border-2 border-[#C5A880]/40 outline-none focus:border-[#8A5836] font-bold text-base text-[#1C130B] transition-all cursor-pointer"
                   >
-                    {SOCIETIES.map((soc) => (
+                    {citySocieties.map((soc) => (
                       <option key={soc} value={soc}>
                         {soc}
                       </option>

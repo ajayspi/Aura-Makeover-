@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local-only tooling & scratch (untracked; not part of the app):
+    "tools/**",
+    ".kilo/**",
   ]),
 ]);
 

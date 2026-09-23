@@ -2,15 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, init-auromakeover-16081128185176046364]
   pull_request:
-    branches: [main]
+    branches: [main, init-auromakeover-16081128185176046364]
 
-# The Next.js app lives in auro-makeover/ beneath the repo root.
-defaults:
-  run:
-    working-directory: auro-makeover
-
+# The Next.js app lives at the repo root (flattened 2026-09-23).
 jobs:
   ci:
     name: Acceptance gates
@@ -25,7 +21,7 @@ jobs:
         with:
           node-version: '20'
           cache: npm
-          cache-dependency-path: auro-makeover/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci

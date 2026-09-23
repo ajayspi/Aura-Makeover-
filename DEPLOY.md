@@ -1,10 +1,10 @@
 # Deploy Runbook — AuroMakeover
 
-Short ops guide for deploying auro-makeover (Next.js 16, App Router, React 19, Tailwind v4).
+Short ops guide for deploying auro-makeover (Next.js 16, App Router, React 19, Tailwind v4). The app lives at the repo root (flattened 2026-09-23).
 
 ## 1. CI / Deploy flow
 
-- **CI (GitHub Actions, `.github/workflows/ci.yml`)** — runs on every push/PR to `main` inside `auro-makeover/` (Node 20, npm). Gates run in order and fail fast:
+- **CI (GitHub Actions, `.github/workflows/ci.yml`)** — runs on every push/PR to `main` from the repo root (Node 20, npm). Gates run in order and fail fast:
   1. `node scripts/test-e2e.mjs` — opaque-box E2E suite (exit 0 = pass; NOT an npm script)
   2. `npx tsc --noEmit`
   3. `npm run lint`
@@ -12,7 +12,7 @@ Short ops guide for deploying auro-makeover (Next.js 16, App Router, React 19, T
 - **Vercel** auto-detects the Next.js framework; `vercel.json` only sets `cleanUrls`.
   - Preview deployments are created for PRs; the production deployment is promoted/created on merge to `main`.
   - A deploy should only go out after the CI gates are green.
-- **Local sanity before any deploy:** `node scripts/test-e2e.mjs` && `npx tsc --noEmit` && `npm run lint` && `npm run build` (all from `auro-makeover/`).
+- **Local sanity before any deploy:** `node scripts/test-e2e.mjs` && `npx tsc --noEmit` && `npm run lint` && `npm run build` (all from the repo root).
 
 ## 2. Prisma migration — PENDING REVIEW ⚠️
 

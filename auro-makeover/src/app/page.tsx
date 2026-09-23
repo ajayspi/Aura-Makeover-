@@ -6,6 +6,7 @@ import StatsTicker from '@/components/StatsTicker';
 import HowItWorks from '@/components/HowItWorks';
 import OfferBanner from '@/components/OfferBanner';
 import Reviews from '@/components/Reviews';
+import GoldDivider from '@/components/GoldDivider';
 import PackageRecommender from '@/components/PackageRecommender';
 import EstimatorGateway from '@/components/EstimatorGateway';
 import Footer from '@/components/Footer';
@@ -22,7 +23,9 @@ export default function Home() {
       <SocietyPreMeasured />
       <StatsTicker />
       <Reviews />
+      <GoldDivider />
       <HowItWorks />
+      <GoldDivider />
       <PackageRecommender />
       <div id="estimator" className="py-20 px-6 bg-[#FAF8F5]">
         <div className="max-w-4xl mx-auto text-center mb-12">

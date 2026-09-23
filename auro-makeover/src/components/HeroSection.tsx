@@ -1,10 +1,12 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion, type Variants } from 'framer-motion';
 import { ArrowRight, Palette, Clock, ShieldCheck, Truck } from 'lucide-react';
+import { useGSAP } from '@gsap/react';
+import { gsap, registerGsap } from '@/lib/gsap';
 
 const HEADLINE = 'Premium Home Makeovers in 48 Hours.';
 
@@ -22,6 +24,40 @@ const STAT_PILLS = ['247 Flats Done', '4.9★ Rating', '48hr Guarantee'];
 
 export default function HeroSection() {
   const router = useRouter();
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+
+  // GSAP scroll parallax: background image sinks slower than the page,
+  // ambient blobs drift in the opposite direction for depth.
+  useGSAP(
+    () => {
+      if (!sectionRef.current || !bgRef.current) return;
+      registerGsap();
+
+      const st = {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      };
+
+      gsap.to(bgRef.current, {
+        yPercent: 8,
+        ease: 'none',
+        scrollTrigger: st,
+      });
+
+      const blobs = gsap.utils.toArray<HTMLElement>('[data-hero-blob]', sectionRef.current);
+      if (blobs.length > 0) {
+        gsap.to(blobs, {
+          yPercent: -18,
+          ease: 'none',
+          scrollTrigger: st,
+        });
+      }
+    },
+    { scope: sectionRef },
+  );
 
   const scrollToEstimator = () => {
     document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' });
@@ -34,7 +70,7 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-[#1C130B]">
       {/* Full-bleed background image */}
-      <div className="absolute inset-0">
+      <div ref={bgRef} className="absolute inset-0">
         <Image
           src="/images/hero.jpg"
           alt="Luxury apartment living room with fluted walnut louvers and botanical wallpaper"
@@ -51,10 +87,12 @@ export default function HeroSection() {
       {/* Ambient gold gradient blobs */}
       <div
         aria-hidden="true"
+        data-hero-blob
         className="pointer-events-none absolute -top-40 -right-32 w-[520px] h-[520px] rounded-full bg-[#C5A880]/25 blur-[110px] animate-pulse"
       />
       <div
         aria-hidden="true"
+        data-hero-blob
         className="pointer-events-none absolute -bottom-48 left-1/4 w-[420px] h-[420px] rounded-full bg-[#8A5836]/30 blur-[90px] animate-pulse"
       />
 

@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
+import AnimatedCounter from '@/components/AnimatedCounter';
 
 export interface Review {
   name: string;
@@ -114,7 +115,7 @@ export default function Reviews() {
           <div className="flex items-center gap-3">
             <StarRow rating={5} />
             <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-sm">
-              4.9 / 5 across 200+ 48-hour makeovers
+              4.9 / 5 across <AnimatedCounter value={200} suffix="+" /> 48-hour makeovers
             </p>
           </div>
         </motion.div>

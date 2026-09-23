@@ -994,6 +994,50 @@ test('Tier 4', 'R-W4', 'Scenario D: Prestige High Fields Full Customer Journey S
 });
 
 // ============================================================================
+// TIER 3 EXTENSION: GSAP INTERACTION LAYER (R10.x — animated numbers, gold lines, scroll motion)
+// ============================================================================
+
+test('Tier 3', 'R10.1', 'GSAP installed and ScrollTrigger registered once in a client-safe setup module', () => {
+  const pkg = readProjectFile('package.json');
+  assert(pkg.includes('"gsap"'), 'gsap must be a dependency in package.json');
+  assert(fileExists('src/lib/gsap.ts'), 'Client-safe GSAP setup module must exist');
+  const code = readProjectFile('src/lib/gsap.ts');
+  assert(code.includes('registerPlugin'), 'Setup module must register GSAP plugins');
+  assert(code.includes('ScrollTrigger'), 'Setup module must wire ScrollTrigger');
+  assert(code.includes('typeof window'), 'Setup module must guard against SSR (no window on server)');
+});
+
+test('Tier 3', 'R10.2', 'AnimatedCounter counts up on scroll into view with Warm Gold digits', () => {
+  assert(fileExists('src/components/AnimatedCounter.tsx'), 'AnimatedCounter component must exist');
+  const code = readProjectFile('src/components/AnimatedCounter.tsx');
+  assert(code.includes('useGSAP'), 'Counter must drive its tween via useGSAP');
+  assert(code.includes('gsap.to'), 'Counter must animate a numeric tween object');
+  assert(code.includes('#C5A880'), 'Counter digits must carry the Warm Gold accent');
+  assert(code.includes('ScrollTrigger'), 'Counter must fire when scrolled into view');
+});
+
+test('Tier 3', 'R10.3', 'GoldDivider draws an animated gold divider line on scroll', () => {
+  assert(fileExists('src/components/GoldDivider.tsx'), 'GoldDivider component must exist');
+  const code = readProjectFile('src/components/GoldDivider.tsx');
+  assert(code.includes('strokeDash'), 'Divider must draw itself via stroke dash animation');
+  assert(code.includes('#C5A880'), 'Divider line must use the Warm Gold palette token');
+  assert(code.includes('ScrollTrigger') || code.includes('scrollTrigger'), 'Divider draw must be scroll-triggered');
+});
+
+test('Tier 3', 'R10.4', 'GSAP layer wired into page seams and Reviews heading stat', () => {
+  const pageCode = readProjectFile('src/app/page.tsx');
+  assert(pageCode.includes('GoldDivider'), 'page.tsx must mount the animated gold divider');
+  const reviewsCode = readProjectFile('src/components/Reviews.tsx');
+  assert(reviewsCode.includes('AnimatedCounter'), 'Reviews must animate its 200+ stat with the counter');
+});
+
+test('Tier 3', 'R10.5', 'Hero gains scrubbed scroll parallax on the background image', () => {
+  const code = readProjectFile('src/components/HeroSection.tsx');
+  assert(code.includes('useGSAP') || code.includes('gsap'), 'Hero must drive motion via GSAP');
+  assert(code.includes('yPercent') || code.includes('scrub'), 'Hero must apply scrubbed vertical parallax');
+});
+
+// ============================================================================
 // SUMMARY & READINESS REPORT
 // ============================================================================
 console.log(bold(cyan('\n========================================================================')));

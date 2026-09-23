@@ -5,12 +5,12 @@
 - `npm run build` — Next.js build
 - `npm run start` — Next.js start production server
 - `npm run lint` — ESLint (runs before typecheck/build)
-- `node scripts/test-e2e.mjs` — opaque-box E2E suite (88 tests, **not** an npm script; exit 0 = all pass)
+- `node scripts/test-e2e.mjs` — opaque-box E2E suite (93 tests, **not** an npm script; exit 0 = all pass)
 - `npx tsc --noEmit` — typecheck; together with `build` + the E2E suite these are the three acceptance gates
 - CI: `.github/workflows/ci.yml` (repo root `Aura/`) runs all 4 gates on push/PR to `main`; `DEPLOY.md` has the deploy runbook (migration PENDING REVIEW, `SALES_AGENTS_JSON` seeding, demo purge, `919700675637` fallback)
 
 ## Verification — trust the runner, not the reports
-- **E2E suite is green**: `node scripts/test-e2e.mjs` → **88/88** (verified 2026-09-23: 70/70 → 74/74 → 77/77 → 81/81 → 84/84 → 88/88). `TEST_READY.md`/`PROJECT.md` milestone statuses are planning-time snapshots — ignore their claims, run the suite.
+- **E2E suite is green**: `node scripts/test-e2e.mjs` → **93/93** (verified 2026-09-23: 70/70 → 74/74 → 77/77 → 81/81 → 84/84 → 88/88 → 93/93 w/ R10 GSAP layer). `TEST_READY.md`/`PROJECT.md` milestone statuses are planning-time snapshots — ignore their claims, run the suite.
 - Fonts load via `next/font/google` in `layout.tsx` (`Syne` + `Plus_Jakarta_Sans`, weights 400–800, variables `--font-syne`/`--font-plus-jakarta`). A redundant Google-Fonts `@import` also sits at the top of `globals.css` and triggers a LightningCSS `@import order` build warning — harmless, but the `@import` line can be deleted; do NOT remove the `next/font` imports (test R6.3 asserts on them).
 - `next build` warns about duplicate lockfiles (workspace root inferred as `C:/Users/vigilare/Aura`); set `turbopack.root` or remove the root lockfile to silence it.
 - Notion docs hub (status, research, roadmap live here): https://app.notion.com/p/AuroMakeover-Project-Documentation-3e38162475868186b45cf59f63907290
@@ -23,6 +23,7 @@
   - `Footer.tsx` (R6) plus admin/technician subfolders
   - Phase 2: `StyleQuiz.tsx` (quiz stepper), `VisualizeRoom.tsx` (AI restyle modal)
   - Phase 3+: `HowItWorks.tsx` (R7, 48-Hour Method), `OfferBanner.tsx` (R7, sticky+dismiss), `Reviews.tsx` (R8, trust section), `PackageRecommender.tsx` (R9, questionnaire→package)
+  - GSAP layer (R10, additive over framer-motion): `AnimatedCounter.tsx` (count-up figures, Warm Gold digits), `GoldDivider.tsx` (self-drawing gold seam line), `src/lib/gsap.ts` (singleton: registers ScrollTrigger once, SSR-guarded, re-exports `gsap`/`ScrollTrigger`/`useGSAP`)
 - `src/lib/engines.ts` — Pure calculation engines (see below); **do not alter function signatures** without updating callers
 - `src/lib/` Phase 2: `quiz-to-tags.ts` (quiz answers → WhatsApp/estimator payload), `cities.ts` (city configs: societies, WhatsApp numbers, service areas), `lead-router.ts` (pure routeLead: city→weight→24h round-robin), `lead-assign.ts` (server assignment w/ fail-closed fallback), `package-recommender.ts` (pure scoring + recommendToPrefill)
 
@@ -46,6 +47,13 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 ## Framer Motion 13 Animations
 - Stagger entries, spring animations, marquee tickers, 3D tilt transformations
 - `motion` components from `framer-motion` are used throughout; preserve animation props when refactoring
+
+## GSAP 3 Interaction Layer (R10)
+- Deps: `gsap@^3.15` + `@gsap/react@^2` (free since GSAP 3.13 — no license concerns).
+- **Always import through `src/lib/gsap.ts`** (`gsap`, `ScrollTrigger`, `useGSAP`, `registerGsap`) — it registers ScrollTrigger exactly once and guards SSR via `typeof window`. Call `registerGsap()` at the top of every `useGSAP` callback.
+- All GSAP work lives inside `useGSAP` in `"use client"` components; scope with `{ scope: ref }` and return a cleanup (kill tweens/triggers).
+- R10 tests (opaque, `scripts/test-e2e.mjs`): R10.1 gsap dep + setup module · R10.2 AnimatedCounter (`useGSAP`, `gsap.to`, `#C5A880`, ScrollTrigger) · R10.3 GoldDivider (`strokeDash`, gold palette, scroll-trigger) · R10.4 page seams + Reviews counter · R10.5 hero parallax (`yPercent`/`scrub`).
+- Don't touch hero stat-pill literals (R1.4 pins `247 Flats Done` etc.) — GSAP additions around them are additive only.
 
 ## Tailwind CSS v4
 - Configured via `tailwind.config.ts`; PostCSS plugin `@tailwindcss/postcss` v4

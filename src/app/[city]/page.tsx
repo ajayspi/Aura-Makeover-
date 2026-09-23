@@ -1,13 +1,13 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Syne, Plus_Jakarta_Sans } from 'next/font/google';
+import { Space_Grotesk, Plus_Jakarta_Sans } from 'next/font/google';
 import CityLanding from './CityLanding';
 import { getCity, getAllCitySlugs } from '@/lib/cities';
 
-const syne = Syne({
-  variable: '--font-syne',
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -54,7 +54,7 @@ export default async function CityPage({ params }: CityPageProps) {
   }
 
   return (
-    <html lang="en" className={`${syne.variable} ${plusJakarta.variable} h-full antialiased scroll-smooth`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} h-full antialiased scroll-smooth`}>
       <body className="min-h-full flex flex-col">
         <CityLanding city={cityConfig} />
       </body>

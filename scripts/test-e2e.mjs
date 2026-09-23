@@ -154,7 +154,7 @@ test('Tier 1', 'R1.1', 'Hero section implements full-screen layout with dark #1C
   const code = readProjectFile('src/components/HeroSection.tsx');
   assert(code.includes('#1C130B'), 'HeroSection must use #1C130B dark espresso background');
   assert(code.includes('min-h-screen') || code.includes('py-20') || code.includes('py-28') || code.includes('min-h-['), 'HeroSection must be a prominent full-height section');
-  assert(code.includes('Syne'), 'HeroSection must employ Syne font for headings');
+  assert(code.includes('Space_Grotesk'), 'HeroSection must employ Space Grotesk font for headings');
   assert(code.includes('Plus_Jakarta_Sans'), 'HeroSection must employ Plus Jakarta Sans font for body text');
 });
 
@@ -359,9 +359,9 @@ test('Tier 1', 'R6.2', 'Root layout uses proper React typing with children and n
   assert(code.includes('children: React.ReactNode') || code.includes('children: ReactNode'), 'Must use standard React children typing');
 });
 
-test('Tier 1', 'R6.3', 'Google Fonts Syne and Plus Jakarta Sans are properly imported and loaded', () => {
+test('Tier 1', 'R6.3', 'Google Fonts Space Grotesk and Plus Jakarta Sans are properly imported and loaded', () => {
   const code = readProjectFile('src/app/layout.tsx');
-  assert(code.includes('Syne') && code.includes('next/font/google'), 'Syne must be imported from next/font/google');
+  assert(code.includes('Space_Grotesk') && code.includes('next/font/google'), 'Space Grotesk must be imported from next/font/google');
   assert(code.includes('Plus_Jakarta_Sans') && code.includes('next/font/google'), 'Plus_Jakarta_Sans must be imported from next/font/google');
 });
 
@@ -1083,6 +1083,188 @@ test('Tier 3', 'R11.6', 'Shared lead-details lib normalizes and validates Indian
   assert(code.includes('isValidLeadPhone'), 'Lib must export isValidLeadPhone');
   assert(code.includes('isValidLeadName'), 'Lib must export isValidLeadName');
   assert(code.includes('+91') || code.includes('91'), 'Lib must handle the +91 India country code');
+});
+
+// ============================================================================
+// TIER 3 EXTENSION: AWARD-WINNING HOMEPAGE EXPANSION (R12.x — R1–R11 all green 2026-09-23)
+// ============================================================================
+
+test('Tier 3', 'R12.1', 'ProductShowcase mounted with royalty-free finish imagery and foil gradient cards', () => {
+  assert(fileExists('src/components/ProductShowcase.tsx'), 'ProductShowcase component must exist');
+  const code = readProjectFile('src/components/ProductShowcase.tsx');
+  assert(code.includes('id="showcase"'), 'Showcase must expose an anchor');
+  const images = (code.match(/\/images\/showcase-[a-z-]+\.jpg/g) || []).length;
+  assert(images >= 6, `Showcase must reference at least 6 royalty-free category images, found ${images}`);
+  const fsImages = fs.readdirSync(path.join(ROOT, 'public/images')).filter((f) => f.startsWith('showcase-'));
+  assert(fsImages.length >= 6, 'Royalty-free showcase images must be downloaded into public/images');
+  assert(code.includes('rounded-3xl'), 'Showcase cards must use token-compliant corner radii');
+});
+
+test('Tier 3', 'R12.2', 'ProductShowcase cards carry metallic foil styling on the royal bronze section', () => {
+  const code = readProjectFile('src/components/ProductShowcase.tsx');
+  assert(code.includes('#3E2C1E'), 'Showcase section must sit on the royal deep-bronze token');
+  assert(code.includes('text-foil') || code.includes('bg-foil-card'), 'Showcase must apply the metallic foil utilities');
+  assert(code.includes('#C5A880'), 'Showcase must carry the Warm Gold palette token');
+});
+
+test('Tier 3', 'R12.3', 'SocietyRegionBand maps pre-measured corridors with progress bars', () => {
+  assert(fileExists('src/components/SocietyRegionBand.tsx'), 'SocietyRegionBand component must exist');
+  const code = readProjectFile('src/components/SocietyRegionBand.tsx');
+  assert(code.includes('id="corridors"'), 'Band must expose a corridors anchor');
+  assert(code.includes('progressbar'), 'Corridor rows must expose ARIA progressbar roles');
+  assert(code.includes('247'), 'Band must reconcile with the pinned 247-flats stat');
+  assert(code.includes('rounded-2xl') || code.includes('rounded-full'), 'Band must use token-compliant radii');
+});
+
+test('Tier 3', 'R12.4', 'FAQSection renders an accessible accordion with escrow and warranty answers', () => {
+  assert(fileExists('src/components/FAQSection.tsx'), 'FAQSection component must exist');
+  const code = readProjectFile('src/components/FAQSection.tsx');
+  assert(code.includes('id="faq"'), 'FAQ must expose an anchor');
+  assert(code.includes('aria-expanded'), 'Accordion toggles must expose aria-expanded');
+  assert(code.includes('10/60/30'), 'FAQ must explain the escrow protection plan');
+  assert(code.includes('2-year') || code.includes('2-Year'), 'FAQ must cover the warranty term');
+  assert(code.includes('rounded-2xl'), 'FAQ cards must use token-compliant radii');
+});
+
+test('Tier 3', 'R12.5', 'UrgencyBanner48 runs a live booking-window countdown with shimmer and estimator CTA', () => {
+  assert(fileExists('src/components/UrgencyBanner48.tsx'), 'UrgencyBanner48 component must exist');
+  const code = readProjectFile('src/components/UrgencyBanner48.tsx');
+  assert(code.includes('setInterval') || code.includes('Countdown'), 'Banner must run a live countdown');
+  assert(code.includes('shimmer-bar'), 'Banner must carry the shimmer utility');
+  assert(code.includes('#estimator'), 'Banner CTA must target the estimator');
+  assert(code.includes('midnight'), 'Banner must tie urgency to the booking-window close');
+});
+
+test('Tier 3', 'R12.6', 'TestimonialMarquee auto-scrolls the single REVIEWS catalog without duplicating data', () => {
+  assert(fileExists('src/components/TestimonialMarquee.tsx'), 'TestimonialMarquee component must exist');
+  const code = readProjectFile('src/components/TestimonialMarquee.tsx');
+  assert(code.includes("from './Reviews'") || code.includes("from '@/components/Reviews'"), 'Marquee must import the shared Reviews catalog');
+  assert(code.includes('REVIEWS'), 'Marquee must render from the REVIEWS catalog');
+  assert(code.includes('repeat: Infinity') || code.includes('Infinity'), 'Marquee must animate continuously');
+  assert(!code.includes('name: '), 'Marquee must NOT paste duplicate reviewer markup');
+});
+
+test('Tier 3', 'R12.7', 'Homepage interleaves the expanded sections with alternating backgrounds', () => {
+  const pageCode = readProjectFile('src/app/page.tsx');
+  const order = ['ProductShowcase', 'SocietyPreMeasured', 'SocietyRegionBand', 'StatsTicker', 'TestimonialMarquee', 'HowItWorks', 'PackageRecommender', 'FAQSection', 'UrgencyBanner48'];
+  let prev = -1;
+  for (const comp of order) {
+    const idx = pageCode.indexOf(comp);
+    assert(idx > prev, `${comp} must follow the alternating section order in page.tsx`);
+    prev = idx;
+  }
+  assert(pageCode.includes('GoldDivider'), 'Alternating dividers must remain mounted');
+});
+
+test('Tier 3', 'R12.8', 'Space Grotesk replaces Syne site-wide as the heading typeface', () => {
+  const layout = readProjectFile('src/app/layout.tsx');
+  assert(layout.includes('Space_Grotesk') && layout.includes('next/font/google'), 'Layout must load Space Grotesk via next/font');
+  const css = readProjectFile('src/app/globals.css');
+  assert(css.includes('Space Grotesk'), 'Global heading family must be Space Grotesk');
+  const hero = readProjectFile('src/components/HeroSection.tsx');
+  assert(hero.includes('Space_Grotesk') && !hero.includes("font-['Syne']"), 'Hero headings must use Space Grotesk, not Syne');
+});
+
+test('Tier 3', 'R12.9', 'Silver and deep-bronze tokens extend the palette, guarded by reduced-motion for shimmer', () => {
+  const css = readProjectFile('src/app/globals.css');
+  assert(css.includes('#C9CDD4') || css.includes('silver'), 'CSS must define the silver token');
+  assert(css.includes('#3E2C1E') || css.includes('royal'), 'CSS must define the royal deep-bronze token');
+  assert(css.includes('prefers-reduced-motion'), 'Metallic animation must respect prefers-reduced-motion');
+});
+
+// ============================================================================
+// TIER 3 EXTENSION: R13 — BEFORE/AFTER GRID (TRUE SAME-SPACE PAIRED IMAGES)
+// Additive 16-cell (4x4) grid: cells 1-15 = paired same-space before->after
+// image cells across 7 categories (2-3 variants each), cell 16 = estimator CTA.
+// The flagship BeforeAfterShowcase stays pinned and untouched; R13 is additive
+// ONLY. Image breadth (15 distinct true same-space pairs) is a KEYED step:
+// generation reads keys from gitignored .secrets/image-keys.json (never inline),
+// so tests grade the contract, not binaries that require keys absent here.
+// ============================================================================
+
+test('Tier 3', 'R13.1', 'BeforeAfterGrid component exists exposing a 16-cell 4x4 grid anchor', () => {
+  assert(fileExists('src/components/BeforeAfterGrid.tsx'), 'BeforeAfterGrid component must exist');
+  const code = readProjectFile('src/components/BeforeAfterGrid.tsx');
+  assert(code.includes('id="before-after-grid"'), 'Grid must expose a before-after-grid anchor');
+  assert((code.match(/grid-cols-4/g) || []).length >= 1, 'Grid must use a 4-column responsive layout');
+  assert(code.includes('grid gap'), 'Grid must use gap-based spacing between cells');
+});
+
+test('Tier 3', 'R13.2', 'Grid renders 16 cells totaling 15 paired-image cells plus 1 estimator CTA cell', () => {
+  const code = readProjectFile('src/components/BeforeAfterGrid.tsx');
+  assert(code.includes('PAIRS') && (code.includes('PAIRS.length') || code.includes('.length + 1')), 'Grid cell count must derive from the catalog (pairs + 1 CTA)');
+  assert(code.includes('length + 1') || code.includes('TotalCells') || code.includes('CELL_COUNT'), 'Grid must render catalog pairs plus one CTA cell');
+  assert(code.includes('#C5A880') || code.includes('gold') || code.includes('CTA'), 'CTA cell must carry the Warm Gold identification');
+});
+
+test('Tier 3', 'R13.3', 'Paired-image catalog defines 15 same-space pairs across 7 categories (2-3 variants each)', () => {
+  assert(fileExists('src/data/before-after-pairs.ts'), 'Paired-image catalog module must exist');
+  const code = readProjectFile('src/data/before-after-pairs.ts');
+  assert(code.includes('BEFORE_AFTER_PAIRS'), 'Catalog must export BEFORE_AFTER_PAIRS');
+  assert(code.includes('GRID_CATEGORIES'), 'Catalog must export GRID_CATEGORIES');
+  const categoryNames = ['living', 'bedroom', 'kitchen', 'bathroom', 'pooja', 'kids', 'balcony'];
+  for (const cat of categoryNames) {
+    assert(code.includes(cat), `Catalog must include category "${cat}"`);
+  }
+  const pairCount = (code.match(/\{\s*id:/g) || []).length;
+  assert(pairCount >= 15, `Catalog must define >=15 paired entries (found ${pairCount})`);
+});
+
+test('Tier 3', 'R13.4', 'Each catalog pair declares same-space before and after image references', () => {
+  const code = readProjectFile('src/data/before-after-pairs.ts');
+  const beforeCount = (code.match(/before:/g) || []).length;
+  const afterCount = (code.match(/after:/g) || []).length;
+  assert(beforeCount >= 15, `Each pair must carry a before reference (found ${beforeCount})`);
+  assert(afterCount >= 15, `Each pair must carry an after reference (found ${afterCount})`);
+  assert(code.includes('variant'), 'Each pair must declare a variant identifier');
+});
+
+test('Tier 3', 'R13.5', 'Grid cell 16 is a CTA card deep-linking to the estimator anchor', () => {
+  const code = readProjectFile('src/components/BeforeAfterGrid.tsx');
+  assert(code.includes('#estimator') || code.includes("'#estimator'"), 'CTA cell must deep-link to the estimator');
+  assert(code.includes('scrollIntoView') || code.includes('href="#estimator"') || code.includes('getElementById'), 'CTA cell must drive scroll/deep-link to the estimator section');
+  assert(code.includes('rounded-2xl') || code.includes('rounded-3xl'), 'CTA cell must use token-compliant corner radii');
+});
+
+test('Tier 3', 'R13.6', 'Flagship BeforeAfterShowcase stays pinned and untouched with its transformation anchor', () => {
+  assert(fileExists('src/components/BeforeAfterShowcase.tsx'), 'Flagship showcase must still exist');
+  const code = readProjectFile('src/components/BeforeAfterShowcase.tsx');
+  assert(code.includes('id="transformation"'), 'Flagship showcase must keep its transformation anchor');
+  assert(code.includes('ROOMS') || code.includes('Living Room'), 'Flagship showcase must retain its room slider catalog');
+});
+
+test('Tier 3', 'R13.7', 'Homepage wires BeforeAfterGrid additively, mounting the flagship showcase BEFORE the grid', () => {
+  const page = readProjectFile('src/app/page.tsx');
+  assert(page.includes('BeforeAfterShowcase'), 'Flagship showcase must stay mounted');
+  assert(page.includes('BeforeAfterGrid'), 'BeforeAfterGrid must be mounted');
+  const showcaseIdx = page.indexOf('BeforeAfterShowcase');
+  const gridIdx = page.indexOf('BeforeAfterGrid');
+  assert(gridIdx > showcaseIdx, 'Flagship showcase must remain mounted before the additive grid');
+});
+
+test('Tier 3', 'R13.8', 'Paired-image generation is a keyed Pollinations edits script; keys read from gitignored .secrets, never inlined', () => {
+  assert(fileExists('scripts/generate-before-after.mjs'), 'Keyed pair-generation script must exist');
+  const code = readProjectFile('scripts/generate-before-after.mjs');
+  assert(code.includes('/v1/images/edits') || code.includes('images/edits'), 'Generation script must use the keyed Pollinations edits route');
+  assert(code.includes('.secrets') || code.includes('image-keys'), 'Generation script must read keys from the gitignored .secrets path');
+  assert(!code.includes('process.env.POLLINATIONS') && (code.match(/sk-[A-Za-z0-9]{16,}/g) || []).length === 0, 'Script must never inline a raw API key');
+  assert(code.includes('FFD8') || code.includes('ffd8') || code.includes('verify'), 'Generation script must include a paired-image verification gate');
+});
+
+test('Tier 3', 'R13.9', 'Secrets stay out of version control: .gitignore covers .secrets and no src/ file hardcodes an image key', () => {
+  const gitignore = readProjectFile('.gitignore');
+  assert(gitignore.includes('.secrets'), '.gitignore must ignore the .secrets key directory');
+  const roots = ['src/components', 'src/data', 'src/lib', 'src/app'];
+  for (const dir of roots) {
+    if (!fileExists(dir)) continue;
+    const entries = fs.readdirSync(path.join(ROOT, dir));
+    for (const entry of entries) {
+      const full = path.join(ROOT, dir, entry);
+      if (!fs.statSync(full).isFile() || !/\.(ts|tsx)$/.test(entry)) continue;
+      const code = fs.readFileSync(full, 'utf-8');
+      assert(!/(sk-[A-Za-z0-9]{16,}|pk-[A-Za-z0-9]{16,})/.test(code), `${dir}/${entry} must not inline a Pollinations/API key`);
+    }
+  }
 });
 
 // ============================================================================

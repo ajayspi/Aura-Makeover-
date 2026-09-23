@@ -26,7 +26,7 @@ function formatValue(n: number, decimals: number): string {
 /**
  * GSAP-powered count-up figure. Renders the final value immediately
  * (SSR/no-JS safe) and, when scrolled into view, tweens a numeric object
- * up to `value` with Warm Gold digits in Syne.
+ * up to `value` with Warm Gold digits in Space Grotesk.
  */
 export default function AnimatedCounter({
   value,
@@ -75,7 +75,7 @@ export default function AnimatedCounter({
     <span
       ref={rootRef}
       aria-label={`${prefix}${value}${suffix}`}
-      className={`inline-block tabular-nums font-['Syne'] font-bold text-[#C5A880] ${className}`}
+      className={`inline-block tabular-nums font-['Space_Grotesk'] font-bold text-[#C5A880] ${className}`}
     >
       {prefix}
       {display}

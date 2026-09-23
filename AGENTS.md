@@ -5,13 +5,13 @@
 - `npm run build` — Next.js build
 - `npm run start` — Next.js start production server
 - `npm run lint` — ESLint (runs before typecheck/build)
-- `node scripts/test-e2e.mjs` — opaque-box E2E suite (93 tests, **not** an npm script; exit 0 = all pass)
+- `node scripts/test-e2e.mjs` — opaque-box E2E suite (108 tests, **not** an npm script; exit 0 = all pass)
 - `npx tsc --noEmit` — typecheck; together with `build` + the E2E suite these are the three acceptance gates
 - CI: `.github/workflows/ci.yml` (repo root `Aura/`) runs all 4 gates on push/PR to `main`; `DEPLOY.md` has the deploy runbook (migration PENDING REVIEW, `SALES_AGENTS_JSON` seeding, demo purge, `919700675637` fallback)
 
 ## Verification — trust the runner, not the reports
-- **E2E suite is green**: `node scripts/test-e2e.mjs` → **99/99** (verified 2026-09-23: 70/70 → 74/74 → 77/77 → 81/81 → 84/84 → 88/88 → 93/93 w/ R10 GSAP layer → 99/99 w/ R11 WhatsApp-handoff lead capture). `TEST_READY.md`/`PROJECT.md` milestone statuses are planning-time snapshots — ignore their claims, run the suite.
-- Fonts load via `next/font/google` in `layout.tsx` (`Syne` + `Plus_Jakarta_Sans`, weights 400–800, variables `--font-syne`/`--font-plus-jakarta`). A redundant Google-Fonts `@import` also sits at the top of `globals.css` and triggers a LightningCSS `@import order` build warning — harmless, but the `@import` line can be deleted; do NOT remove the `next/font` imports (test R6.3 asserts on them).
+- **E2E suite is green**: `node scripts/test-e2e.mjs` → **108/108** (verified 2026-09-23: 70/70 → 74/74 → 77/77 → 81/81 → 84/84 → 88/88 → 93/93 w/ R10 GSAP layer → 99/99 w/ R11 WhatsApp-handoff lead capture → 108/108 w/ R12 homepage-expansion R1–R11 all green). `TEST_READY.md`/`PROJECT.md` milestone statuses are planning-time snapshots — ignore their claims, run the suite.
+- Fonts load via `next/font/google` in `layout.tsx` (`Space_Grotesk` + `Plus_Jakarta_Sans` + `Yeseva_One`, variables `--font-space-grotesk`/`--font-plus-jakarta`/`--font-yeseva`). Space Grotesk replaced Syne as the heading font site-wide (decision D1, spec-homepage-expansion); test R6.3 asserts on the `next/font` imports, and R1.1/R12.8 assert Hero/global headings use Space Grotesk. The redundant Google-Fonts `@import` was REMOVED from `globals.css` — do NOT re-add it (its families are loaded via `next/font`); do NOT remove the `next/font` imports.
 - `next build` warns about duplicate lockfiles (workspace root inferred as `C:/Users/vigilare/Aura`); set `turbopack.root` or remove the root lockfile to silence it.
 - Notion docs hub (status, research, roadmap live here): https://app.notion.com/p/AuroMakeover-Project-Documentation-3e38162475868186b45cf59f63907290
 
@@ -22,7 +22,8 @@
   - `SocietyPreMeasured.tsx` (R4), `StatsTicker.tsx` (R5), `EstimatorGateway.tsx` (R5)
   - `Footer.tsx` (R6) plus admin/technician subfolders
   - Phase 2: `StyleQuiz.tsx` (quiz stepper), `VisualizeRoom.tsx` (AI restyle modal)
-  - Phase 3+: `HowItWorks.tsx` (R7, 48-Hour Method), `OfferBanner.tsx` (R7, sticky+dismiss), `Reviews.tsx` (R8, trust section), `PackageRecommender.tsx` (R9, questionnaire→package)
+  - Phase 3+: `HowItWorks.tsx` (R7, 48-Hour Method, metallic timeline), `OfferBanner.tsx` (R7, sticky+dismiss), `Reviews.tsx` (R8, trust section; exports `REVIEWS` catalog used by TestimonialMarquee), `PackageRecommender.tsx` (R9, questionnaire→package)
+  - R12 homepage expansion (award-winning metallic redesign, 2026-09-23): `ProductShowcase.tsx` (6-category showroom on deep-royal `#3E2C1E` using royalty-free `public/images/showcase-*.jpg`), `SocietyRegionBand.tsx` (West-Hyderabad corridor belt w/ ARIA progressbars, `id="corridors"`), `FAQSection.tsx` (accordion, `id="faq"`), `UrgencyBanner48.tsx` (midnight countdown + `.shimmer-bar` + `#estimator` CTA), `TestimonialMarquee.tsx` (auto-scroll strip reusing `REVIEWS` — no data duplication)
   - GSAP layer (R10, additive over framer-motion): `AnimatedCounter.tsx` (count-up figures, Warm Gold digits), `GoldDivider.tsx` (self-drawing gold seam line), `src/lib/gsap.ts` (singleton: registers ScrollTrigger once, SSR-guarded, re-exports `gsap`/`ScrollTrigger`/`useGSAP`)
 - `src/lib/engines.ts` — Pure calculation engines (see below); **do not alter function signatures** without updating callers
 - `src/lib/` Phase 2: `quiz-to-tags.ts` (quiz answers → WhatsApp/estimator payload), `cities.ts` (city configs: societies, WhatsApp numbers, service areas), `lead-router.ts` (pure routeLead: city→weight→24h round-robin), `lead-assign.ts` (server assignment w/ fail-closed fallback), `package-recommender.ts` (pure scoring + recommendToPrefill)
@@ -41,10 +42,10 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 
 ## Design System Tokens (from `src/app/globals.css` and `PROJECT.md`)
 - **Palette**: Dark Espresso `#1C130B`, Warm Gold `#C5A880`, Terracotta Brown `#8A5836`, Linen Off-White `#FAF8F5`, WhatsApp Green `#15803D`
-- **Typography**: Headings → `font-['Syne']` bold/black 700-800; Body → `font-['Plus_Jakarta_Sans']` regular/medium/semibold 400-700
-  - Exception (2026-09-23): the "Your Society, Pre-Measured" h2 (R4) uses `font-['Yeseva_One']` (curvy display serif, weight 400 only — no `font-black` on it). Loaded via `next/font/google` in `layout.tsx` as `--font-yeseva`. R6.3 still requires Syne + Plus Jakarta in layout — keep all three.
+- **Typography**: Headings → `font-['Space_Grotesk']` (Space Grotesk, weights 400–700; `font-black`/800 clamps to 700 — fine); Body → `font-['Plus_Jakarta_Sans']` regular/medium/semibold 400-700
+  - Exception (2026-09-23): the "Your Society, Pre-Measured" h2 (R4) uses `font-['Yeseva_One']` (curvy display serif, weight 400 only — no `font-black` on it). Loaded via `next/font/google` in `layout.tsx` as `--font-yeseva`. Keep all three fonts in layout.
 - **Corners**: Only `rounded-2xl`, `rounded-3xl`, or `rounded-full`. Zero `rounded-sm` or basic `rounded`.
-- **Colors CSS vars**: `--color-espresso`, `--color-gold`, `--color-terracotta`, `--color-linen`, `--color-whatsapp`
+- **Colors CSS vars**: `--color-espresso`, `--color-gold`, `--color-terracotta`, `--color-linen`, `--color-whatsapp`, plus R12 additions `--color-silver` (`#C9CDD4`) + `--color-royal` (`#3E2C1E`, deep bronze). Metallic utilities in `globals.css`: `.text-foil` (gold-foil gradient text w/ drifting `foil-sheen` keyframe), `.bg-foil-card` (bronze→gold card surfacing), `.shimmer-bar` (animated gold/silver rule) — all animation disabled under `prefers-reduced-motion`.
 
 ## Framer Motion 13 Animations
 - Stagger entries, spring animations, marquee tickers, 3D tilt transformations
@@ -89,3 +90,13 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 - **Engines function purity**: `src/lib/engines.ts` functions are pure — no side effects, no DB calls. Treat as utility library; do not convert to async unless needed
 - **Runtime-verifying client flows without a browser**: SSR HTML contains React `<!-- -->` comment markers at every expression boundary (so `Contains('Step 1 of 6')` fails on `Step <!-- -->1<!-- --> of <!-- -->6`) and em-dashes in JSX text render as `-`. Match with tolerant regexes/stripped whitespace, not literals. Node 24 runs erasable-TS modules directly (type stripping) — `node -e`/`.mjs` can `import` `src/lib/*.ts` for pure-logic behavior tests (used for R11 validators, 16/16).
 - **Local lead APIs fail by design**: no local `prisma generate`, so `/api/leads/{quiz,estimator}` 503/500 locally — the quiz page's `.catch()` opens WhatsApp with default `919700675637` and the estimator falls through to the default number. Expected locally; real name/phone persistence happens on Vercel after the deploy runbook (migration PENDING REVIEW).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

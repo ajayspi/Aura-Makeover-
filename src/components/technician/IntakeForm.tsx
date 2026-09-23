@@ -19,7 +19,7 @@ export default function IntakeForm() {
 
       {/* Header */}
       <div className="bg-[#8A5836] text-white p-6 pt-12 shadow-md">
-        <h1 className="text-2xl font-bold font-['Syne']">TechOps Workspace</h1>
+        <h1 className="text-2xl font-bold font-['Space_Grotesk']">TechOps Workspace</h1>
         <p className="text-sm opacity-90">Site: My Home Bhooja, Tower A, 1402</p>
       </div>
 
@@ -29,7 +29,7 @@ export default function IntakeForm() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#1C130B] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</div>
-            <h2 className="font-bold text-lg font-['Syne']">Dye-Lot Scan</h2>
+            <h2 className="font-bold text-lg font-['Space_Grotesk']">Dye-Lot Scan</h2>
           </div>
           <p className="text-sm text-gray-500 mb-3">Scan roll QR or enter serial to verify batch match.</p>
           <input
@@ -45,7 +45,7 @@ export default function IntakeForm() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#1C130B] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</div>
-            <h2 className="font-bold text-lg font-['Syne']">Moisture Pin Check</h2>
+            <h2 className="font-bold text-lg font-['Space_Grotesk']">Moisture Pin Check</h2>
           </div>
 
           <div className="flex items-center gap-4">
@@ -75,7 +75,7 @@ export default function IntakeForm() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#1C130B] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</div>
-            <h2 className="font-bold text-lg font-['Syne']">QA Sign-Off</h2>
+            <h2 className="font-bold text-lg font-['Space_Grotesk']">QA Sign-Off</h2>
           </div>
 
           <div className="space-y-3 mb-6">

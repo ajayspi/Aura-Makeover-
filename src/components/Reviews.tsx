@@ -13,7 +13,7 @@ export interface Review {
   project: string;
 }
 
-const REVIEWS: Review[] = [
+export const REVIEWS: Review[] = [
   {
     name: 'Ananya Reddy',
     location: 'Kokapet · Hyderabad',
@@ -89,7 +89,7 @@ function InitialsAvatar({ name }: { name: string }) {
     .join('')
     .toUpperCase();
   return (
-    <span className="w-11 h-11 rounded-full bg-[#1C130B] text-[#C5A880] flex items-center justify-center font-['Syne'] font-bold text-sm shrink-0">
+    <span className="w-11 h-11 rounded-full bg-[#1C130B] text-[#C5A880] flex items-center justify-center font-['Space_Grotesk'] font-bold text-sm shrink-0">
       {initials}
     </span>
   );
@@ -109,7 +109,7 @@ export default function Reviews() {
           <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Reviews
           </p>
-          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
             Homes we finished, people we made happy
           </h2>
           <div className="flex items-center gap-3">
@@ -149,7 +149,7 @@ export default function Reviews() {
               <div className="flex items-center gap-3 pt-3 border-t border-[#1C130B]/10">
                 <InitialsAvatar name={r.name} />
                 <div>
-                  <p className="font-['Syne'] font-bold text-[#1C130B] text-sm">{r.name}</p>
+                  <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm">{r.name}</p>
                   <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/50 text-xs">
                     {r.location}
                   </p>

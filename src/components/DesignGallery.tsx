@@ -104,7 +104,7 @@ export default function DesignGallery({ city }: DesignGalleryProps) {
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-12">
           <div className="max-w-lg">
             <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">Collections</p>
-            <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15]">Architectural finishes</h2>
+            <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15]">Architectural finishes</h2>
             <p className="mt-3 text-[#1C130B]/50 text-sm font-normal leading-relaxed font-['Plus_Jakarta_Sans']">Pre-tested for {city?.name || 'Hyderabad'} high-rise drywall. Installed in 48 hours.</p>
           </div>
           <div className="flex gap-1.5 flex-wrap">

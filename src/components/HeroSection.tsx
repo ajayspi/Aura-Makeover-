@@ -114,7 +114,7 @@ export default function HeroSection() {
             variants={headlineContainer}
             initial="hidden"
             animate="show"
-            className="font-['Syne'] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-[1.08] tracking-[-0.03em] mb-6"
+            className="font-['Space_Grotesk'] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-[1.08] tracking-[-0.03em] mb-6"
           >
             {HEADLINE.split(' ').map((word, i) => (
               <motion.span

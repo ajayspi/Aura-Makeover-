@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Syne, Plus_Jakarta_Sans, Yeseva_One } from "next/font/google";
+import { Space_Grotesk, Plus_Jakarta_Sans, Yeseva_One } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${plusJakarta.variable} ${yesevaOne.variable} h-full antialiased scroll-smooth`}
+      className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${yesevaOne.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col">
         {children}

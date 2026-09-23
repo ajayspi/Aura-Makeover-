@@ -97,7 +97,7 @@ export default function PackageRecommender() {
           <p className="text-[#C5A880] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Package recommender
           </p>
-          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-[1.15] mb-4">
             Tell us your space, get a package
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/60 text-base leading-relaxed">
@@ -116,19 +116,19 @@ export default function PackageRecommender() {
           >
             <div className="bg-[#FAF8F5] rounded-3xl p-6 flex flex-col gap-4">
               <div>
-                <p className="font-['Syne'] font-bold text-[#1C130B] text-sm mb-2">
+                <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm mb-2">
                   Which room are we transforming?
                 </p>
                 <Chips options={ROOM_OPTIONS} selected={roomType} onSelect={setRoomType} />
               </div>
               <div>
-                <p className="font-['Syne'] font-bold text-[#1C130B] text-sm mb-2">
+                <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm mb-2">
                   What is your style?
                 </p>
                 <Chips options={STYLE_OPTIONS} selected={style} onSelect={setStyle} />
               </div>
               <div>
-                <p className="font-['Syne'] font-bold text-[#1C130B] text-sm mb-2">
+                <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm mb-2">
                   Rough budget band
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -151,7 +151,7 @@ export default function PackageRecommender() {
                 </div>
               </div>
               <div>
-                <p className="font-['Syne'] font-bold text-[#1C130B] text-sm mb-2">
+                <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm mb-2">
                   Project scope
                 </p>
                 <Chips options={SCOPE_OPTIONS} selected={scope} onSelect={setScope} />
@@ -171,11 +171,11 @@ export default function PackageRecommender() {
                 <span className="inline-flex items-center gap-1.5 text-[#8A5836] text-[11px] font-bold uppercase tracking-wider bg-[#8A5836]/10 border border-[#8A5836]/25 px-2.5 py-1 rounded-full">
                   <Sparkles className="w-3 h-3" /> Best match
                 </span>
-                <span className="font-['Syne'] text-[#8A5836] text-xs font-bold uppercase tracking-widest">
+                <span className="font-['Space_Grotesk'] text-[#8A5836] text-xs font-bold uppercase tracking-widest">
                   {result.package.tier}
                 </span>
               </div>
-              <h3 className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
+              <h3 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1C130B]">
                 {result.package.name}
               </h3>
               <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-sm leading-relaxed">

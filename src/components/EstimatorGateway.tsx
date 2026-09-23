@@ -301,7 +301,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                 <span className="text-[#C5A880] text-xs font-bold uppercase tracking-widest block mb-1">
                   Step {currentStep} of 3 • 48-Hour Price Architect
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black font-['Syne'] tracking-tight">
+                <h3 className="text-2xl sm:text-3xl font-black font-['Space_Grotesk'] tracking-tight">
                   Instant Custom Estimator
                 </h3>
               </div>
@@ -312,7 +312,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <div className="text-[10px] uppercase font-bold text-[#C5A880] tracking-wider">
                     Live Total (GST Incl.)
                   </div>
-                  <div className="text-lg sm:text-xl font-bold font-['Syne'] text-[#FAF8F5]">
+                  <div className="text-lg sm:text-xl font-bold font-['Space_Grotesk'] text-[#FAF8F5]">
                     <AnimatedPrice value={pricing.totalRetailPrice} />
                   </div>
                 </div>
@@ -363,7 +363,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                       )}
                     </div>
                     <div>
-                      <div className="text-xs sm:text-sm font-bold font-['Syne'] text-[#FAF8F5]">
+                      <div className="text-xs sm:text-sm font-bold font-['Space_Grotesk'] text-[#FAF8F5]">
                         {item.title}
                       </div>
                       <div className="hidden sm:block text-[11px] text-[#FAF8F5]/70">
@@ -393,7 +393,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Ruler className="text-[#8A5836] w-5 h-5" />
-                    <h4 className="text-xl font-bold font-['Syne'] text-[#1C130B]">
+                    <h4 className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B]">
                       Step 1: Set Your Wall Dimensions
                     </h4>
                   </div>
@@ -440,7 +440,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                         Wall Width
                         <span className="text-xs font-normal text-[#1C130B]/60">(Horizontal)</span>
                       </label>
-                      <span className="text-lg font-black font-['Syne'] text-[#8A5836] bg-[#8A5836]/10 px-3 py-1 rounded-2xl">
+                      <span className="text-lg font-black font-['Space_Grotesk'] text-[#8A5836] bg-[#8A5836]/10 px-3 py-1 rounded-2xl">
                         {widthFt} ft
                       </span>
                     </div>
@@ -466,7 +466,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                         Wall Height
                         <span className="text-xs font-normal text-[#1C130B]/60">(Vertical Slab)</span>
                       </label>
-                      <span className="text-lg font-black font-['Syne'] text-[#8A5836] bg-[#8A5836]/10 px-3 py-1 rounded-2xl">
+                      <span className="text-lg font-black font-['Space_Grotesk'] text-[#8A5836] bg-[#8A5836]/10 px-3 py-1 rounded-2xl">
                         {heightFt} ft
                       </span>
                     </div>
@@ -492,7 +492,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                     <div className="text-[11px] font-bold text-[#8A5836] uppercase tracking-wider">
                       Net Wall Area
                     </div>
-                    <div className="text-xl font-bold font-['Syne'] text-[#1C130B] mt-1">
+                    <div className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B] mt-1">
                       {exactWallArea} <span className="text-xs font-normal">sqft</span>
                     </div>
                   </div>
@@ -501,7 +501,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                     <div className="text-[11px] font-bold text-[#8A5836] uppercase tracking-wider">
                       Vertical Drops
                     </div>
-                    <div className="text-xl font-bold font-['Syne'] text-[#1C130B] mt-1">
+                    <div className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B] mt-1">
                       {nesting.totalVerticalDrops} <span className="text-xs font-normal">strips (42&quot;)</span>
                     </div>
                   </div>
@@ -510,7 +510,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                     <div className="text-[11px] font-bold text-[#8A5836] uppercase tracking-wider">
                       Fabric Length
                     </div>
-                    <div className="text-xl font-bold font-['Syne'] text-[#1C130B] mt-1">
+                    <div className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B] mt-1">
                       {nesting.requiredContinuousMeters.toFixed(1)} <span className="text-xs font-normal">m</span>
                     </div>
                   </div>
@@ -519,7 +519,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                     <div className="text-[11px] font-bold text-[#8A5836] uppercase tracking-wider">
                       Billed (11% Buffer)
                     </div>
-                    <div className="text-xl font-bold font-['Syne'] text-[#1C130B] mt-1">
+                    <div className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B] mt-1">
                       {Math.round(pricing.sqft)} <span className="text-xs font-normal">sqft</span>
                     </div>
                   </div>
@@ -530,7 +530,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(2)}
-                    className="w-full sm:w-auto bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold font-['Syne'] text-base flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95"
+                    className="w-full sm:w-auto bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold font-['Space_Grotesk'] text-base flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95"
                   >
                     Next: Choose Finish Tier
                     <ArrowRight className="w-5 h-5 text-[#C5A880]" />
@@ -552,7 +552,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Palette className="text-[#8A5836] w-5 h-5" />
-                    <h4 className="text-xl font-bold font-['Syne'] text-[#1C130B]">
+                    <h4 className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B]">
                       Step 2: Select Finish Tier & Review Cost Breakdown
                     </h4>
                   </div>
@@ -585,7 +585,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                           <div className="text-xs font-bold uppercase tracking-wider text-[#8A5836] mb-1">
                             {q.smart ? 'Smart Motorized' : 'Handcrafted Wall'}
                           </div>
-                          <div className="text-lg font-black font-['Syne'] text-[#1C130B] mb-1">
+                          <div className="text-lg font-black font-['Space_Grotesk'] text-[#1C130B] mb-1">
                             {q.name}
                           </div>
                           <p className="text-xs text-[#1C130B]/75 font-medium leading-relaxed mb-4">
@@ -594,7 +594,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                         </div>
                         <div className="pt-3 border-t border-[#C5A880]/20 flex items-baseline justify-between">
                           <div>
-                            <span className="text-2xl font-black font-['Syne'] text-[#1C130B]">
+                            <span className="text-2xl font-black font-['Space_Grotesk'] text-[#1C130B]">
                               ₹{q.rate}
                             </span>
                             <span className="text-xs text-[#1C130B]/60 font-semibold ml-1">/sqft</span>
@@ -620,13 +620,13 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                         <span className="text-[#C5A880] text-xs font-bold uppercase tracking-wider block">
                           Transparent Cost Architecture
                         </span>
-                        <h5 className="text-xl font-bold font-['Syne'] text-[#FAF8F5]">
+                        <h5 className="text-xl font-bold font-['Space_Grotesk'] text-[#FAF8F5]">
                           Full Price Breakdown ({Math.round(pricing.sqft)} sqft Billed)
                         </h5>
                       </div>
                       <div className="text-right">
                         <span className="text-xs text-[#FAF8F5]/60 font-medium block">Total Retail Price</span>
-                        <div className="text-3xl font-black font-['Syne'] text-[#C5A880]">
+                        <div className="text-3xl font-black font-['Space_Grotesk'] text-[#C5A880]">
                           <AnimatedPrice value={pricing.totalRetailPrice} />
                         </div>
                       </div>
@@ -721,7 +721,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(1)}
-                    className="order-2 sm:order-1 bg-[#FAF8F5] hover:bg-[#8A5836]/10 text-[#1C130B] border border-[#C5A880]/40 px-6 py-4 rounded-2xl font-bold font-['Syne'] text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
+                    className="order-2 sm:order-1 bg-[#FAF8F5] hover:bg-[#8A5836]/10 text-[#1C130B] border border-[#C5A880]/40 px-6 py-4 rounded-2xl font-bold font-['Space_Grotesk'] text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
                   >
                     <ArrowLeft className="w-4 h-4 text-[#8A5836]" />
                     Back: Room Size
@@ -730,7 +730,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(3)}
-                    className="order-1 sm:order-2 bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold font-['Syne'] text-base flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95"
+                    className="order-1 sm:order-2 bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-8 py-4 rounded-2xl font-bold font-['Space_Grotesk'] text-base flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95"
                   >
                     Next: Finalize & Book Swatch Van
                     <ArrowRight className="w-5 h-5 text-[#C5A880]" />
@@ -752,7 +752,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Truck className="text-[#8A5836] w-5 h-5" />
-                    <h4 className="text-xl font-bold font-['Syne'] text-[#1C130B]">
+                    <h4 className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B]">
                       Step 3: Select Your Society & Dispatch Swatch Van
                     </h4>
                   </div>
@@ -838,13 +838,13 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                       <span className="text-[11px] font-bold uppercase tracking-wider text-[#8A5836]">
                         Executive Configuration Review
                       </span>
-                      <h5 className="text-xl font-bold font-['Syne'] text-[#1C130B]">
+                      <h5 className="text-xl font-bold font-['Space_Grotesk'] text-[#1C130B]">
                         {society}
                       </h5>
                     </div>
                     <div className="text-right">
                       <span className="text-xs text-[#1C130B]/60 font-semibold block">Total Investment</span>
-                      <div className="text-2xl sm:text-3xl font-black font-['Syne'] text-[#8A5836]">
+                      <div className="text-2xl sm:text-3xl font-black font-['Space_Grotesk'] text-[#8A5836]">
                         <AnimatedPrice value={pricing.totalRetailPrice} />
                       </div>
                     </div>
@@ -919,7 +919,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                     type="button"
                     onClick={handleWhatsAppBooking}
                     disabled={!detailsValid}
-                    className="w-full bg-[#15803D] hover:bg-[#166534] text-white p-5 sm:p-6 rounded-2xl font-bold font-['Syne'] text-base sm:text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-xl shadow-[#15803D]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#15803D]"
+                    className="w-full bg-[#15803D] hover:bg-[#166534] text-white p-5 sm:p-6 rounded-2xl font-bold font-['Space_Grotesk'] text-base sm:text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-xl shadow-[#15803D]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#15803D]"
                   >
                     <MessageCircle className="w-6 h-6 text-white" />
                     Confirm & Book Swatch Van on WhatsApp
@@ -939,7 +939,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(2)}
-                    className="bg-[#FAF8F5] hover:bg-[#8A5836]/10 text-[#1C130B] border border-[#C5A880]/40 px-6 py-4 rounded-2xl font-bold font-['Syne'] text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
+                    className="bg-[#FAF8F5] hover:bg-[#8A5836]/10 text-[#1C130B] border border-[#C5A880]/40 px-6 py-4 rounded-2xl font-bold font-['Space_Grotesk'] text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
                   >
                     <ArrowLeft className="w-4 h-4 text-[#8A5836]" />
                     Back: Finish & Cost Breakdown

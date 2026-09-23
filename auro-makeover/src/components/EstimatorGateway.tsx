@@ -20,8 +20,10 @@ import {
   Clock,
   CheckCircle2,
   MessageCircle,
+  Phone,
 } from 'lucide-react';
 import { CityConfig } from '@/lib/cities';
+import { isValidLeadName, isValidLeadPhone, normalizeLeadPhone } from '@/lib/lead-details';
 
 interface EstimatorGatewayProps {
   city?: CityConfig;
@@ -169,7 +171,12 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
   const [heightFt, setHeightFt] = useState(initialHeight);
   const [quality, setQuality] = useState(initialQuality);
   const [society, setSociety] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [phone, setPhone] = useState('');
   const [assignedAgentNumber, setAssignedAgentNumber] = useState<string | null>(null);
+
+  // R11: contact details must be valid before the WhatsApp handoff unlocks
+  const detailsValid = isValidLeadName(customerName) && isValidLeadPhone(phone);
 
   // City-specific data
   const citySocieties = city?.societies?.map(s => s.name) || SOCIETIES;
@@ -231,6 +238,8 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
       '',
       '*Configured Estimate Summary:*',
       `• Target Location: ${society || cityName}`,
+      `• Customer Name: ${customerName}`,
+      `• Contact Number: +91 ${normalizeLeadPhone(phone) ?? ''}`,
       `• Wall Dimensions: ${widthFt}ft (W) × ${heightFt}ft (H)`,
       `• Net Wall Area: ${exactWallArea} sqft`,
       `• Billed Material Area (incl. 11% safety buffer & pattern repeat): ${billedSqFt} sqft`,
@@ -246,6 +255,8 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
   };
 
   const handleWhatsAppBooking = async () => {
+    // R11: never hand off to WhatsApp without captured contact details
+    if (!detailsValid) return;
     let assigned: string | null = null;
     try {
       const res = await fetch('/api/leads/estimator', {
@@ -258,6 +269,8 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
           heightFt,
           quality: quality.id,
           total: Math.round(pricing.totalRetailPrice),
+          customerName: customerName.trim(),
+          phone: normalizeLeadPhone(phone) ?? '',
         }),
       });
       const data = await res.json();
@@ -769,6 +782,55 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   </p>
                 </div>
 
+                {/* Contact Details Capture (R11): required before WhatsApp handoff */}
+                <div className="bg-[#FAF8F5] border border-[#C5A880]/30 p-6 rounded-3xl space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Phone className="text-[#8A5836] w-4 h-4" />
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#8A5836]">
+                      Your Contact Details
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="estimator-name" className="text-xs font-bold text-[#1C130B] uppercase tracking-wider block">
+                        Your Name
+                      </label>
+                      <input
+                        id="estimator-name"
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="e.g. Priya Sharma"
+                        className="w-full p-4 rounded-2xl bg-[#FAF8F5] border-2 border-[#C5A880]/40 outline-none focus:border-[#8A5836] font-bold text-base text-[#1C130B] transition-all"
+                      />
+                      {customerName !== '' && !isValidLeadName(customerName) && (
+                        <p className="text-xs text-[#8A5836] font-semibold">Please enter your name (2+ characters)</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="estimator-phone" className="text-xs font-bold text-[#1C130B] uppercase tracking-wider block">
+                        Phone Number
+                      </label>
+                      <input
+                        id="estimator-phone"
+                        type="tel"
+                        inputMode="numeric"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="e.g. 98765 43210"
+                        className="w-full p-4 rounded-2xl bg-[#FAF8F5] border-2 border-[#C5A880]/40 outline-none focus:border-[#8A5836] font-bold text-base text-[#1C130B] transition-all"
+                      />
+                      {phone !== '' && !isValidLeadPhone(phone) && (
+                        <p className="text-xs text-[#8A5836] font-semibold">Enter a valid 10-digit Indian mobile (e.g. 98765 43210)</p>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#1C130B]/60 font-medium">
+                    We only use this to call you about your swatch van slot — no spam, no card needed.
+                  </p>
+                </div>
+
                 {/* Executive Review Card */}
                 <div className="bg-[#FAF8F5] border-2 border-[#C5A880]/40 p-6 sm:p-8 rounded-3xl space-y-6 shadow-sm">
                   <div className="flex justify-between items-center border-b border-[#C5A880]/20 pb-4">
@@ -856,14 +918,19 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                   <button
                     type="button"
                     onClick={handleWhatsAppBooking}
-                    className="w-full bg-[#15803D] hover:bg-[#166534] text-white p-5 sm:p-6 rounded-2xl font-bold font-['Syne'] text-base sm:text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-xl shadow-[#15803D]/20 cursor-pointer"
+                    disabled={!detailsValid}
+                    className="w-full bg-[#15803D] hover:bg-[#166534] text-white p-5 sm:p-6 rounded-2xl font-bold font-['Syne'] text-base sm:text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-xl shadow-[#15803D]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#15803D]"
                   >
                     <MessageCircle className="w-6 h-6 text-white" />
                     Confirm & Book Swatch Van on WhatsApp
                   </button>
 
                   <p className="text-center text-xs text-[#1C130B]/70 font-medium">
-                    Direct line to concierge hotline <span className="font-bold">+91 97006 75637</span>. No card needed. We verify exact apartment wall condition in person.
+                    {!detailsValid ? (
+                      <>Enter your <span className="font-bold">name</span> & <span className="font-bold">10-digit phone</span> above to unlock booking.</>
+                    ) : (
+                      <>Direct line to concierge hotline <span className="font-bold">+91 97006 75637</span>. No card needed. We verify exact apartment wall condition in person.</>
+                    )}
                   </p>
                 </div>
 

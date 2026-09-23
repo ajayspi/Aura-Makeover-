@@ -1038,6 +1038,54 @@ test('Tier 3', 'R10.5', 'Hero gains scrubbed scroll parallax on the background i
 });
 
 // ============================================================================
+// TIER 3 EXTENSION: LEAD CAPTURE BEFORE WHATSAPP HANDOFF (R11.x — name + phone)
+// ============================================================================
+
+test('Tier 3', 'R11.1', 'Style quiz ends with a validated "Your Details" step capturing name and phone', () => {
+  const code = readProjectFile('src/components/StyleQuiz.tsx');
+  assert(code.includes('Your Details'), 'Quiz must end with a "Your Details" step');
+  assert(code.includes('customerName') && code.includes('phone'), 'Details step must capture name and phone fields');
+  assert(code.includes('isValidLeadPhone') || code.includes('isValidLeadName'), 'Details step must validate contact input');
+});
+
+test('Tier 3', 'R11.2', 'Quiz completion persists customer name and phone to the leads API', () => {
+  const pageCode = readProjectFile('src/app/quiz/page.tsx');
+  assert(pageCode.includes('customerName') && pageCode.includes('phone'), 'Quiz page must send name and phone with the lead');
+  const routeCode = readProjectFile('src/app/api/leads/quiz/route.ts');
+  assert(routeCode.includes('customerName') && routeCode.includes('phone'), 'Quiz route must persist customer name and phone');
+});
+
+test('Tier 3', 'R11.3', 'Estimator Step 3 collects contact details and gates the WhatsApp CTA until valid', () => {
+  const code = readProjectFile('src/components/EstimatorGateway.tsx');
+  assert(code.includes('customerName') && code.includes('phone'), 'Step 3 must collect customer name and phone');
+  assert(code.includes('isValidLeadPhone') || code.includes('isValidLeadName'), 'Contact details must be validated before booking');
+  assert(code.includes('disabled'), 'WhatsApp confirm must be gated until details are valid');
+});
+
+test('Tier 3', 'R11.4', 'Estimator booking persists contact details to the leads API', () => {
+  const gatewayCode = readProjectFile('src/components/EstimatorGateway.tsx');
+  assert(gatewayCode.includes('customerName') && gatewayCode.includes('phone'), 'Estimator POST must carry name and phone');
+  const routeCode = readProjectFile('src/app/api/leads/estimator/route.ts');
+  assert(routeCode.includes('customerName') && routeCode.includes('phone'), 'Estimator route must persist customer name and phone');
+});
+
+test('Tier 3', 'R11.5', 'WhatsApp handoff message includes the customer name', () => {
+  const gatewayCode = readProjectFile('src/components/EstimatorGateway.tsx');
+  assert(gatewayCode.includes('customerName'), 'Estimator WhatsApp message must mention the customer name');
+  const tagsCode = readProjectFile('src/lib/quiz-to-tags.ts');
+  assert(tagsCode.includes('customerName') || tagsCode.includes('Name:'), 'Quiz WhatsApp message must include the customer name');
+});
+
+test('Tier 3', 'R11.6', 'Shared lead-details lib normalizes and validates Indian phone numbers', () => {
+  assert(fileExists('src/lib/lead-details.ts'), 'Shared lead-details module must exist');
+  const code = readProjectFile('src/lib/lead-details.ts');
+  assert(code.includes('normalizeLeadPhone'), 'Lib must export normalizeLeadPhone');
+  assert(code.includes('isValidLeadPhone'), 'Lib must export isValidLeadPhone');
+  assert(code.includes('isValidLeadName'), 'Lib must export isValidLeadName');
+  assert(code.includes('+91') || code.includes('91'), 'Lib must handle the +91 India country code');
+});
+
+// ============================================================================
 // SUMMARY & READINESS REPORT
 // ============================================================================
 console.log(bold(cyan('\n========================================================================')));

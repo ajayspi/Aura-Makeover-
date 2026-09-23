@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ArrowLeft, Check, Palette, Home, Sparkles, DollarSign, Loader2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, Palette, Home, Sparkles, DollarSign, Loader2, User } from 'lucide-react';
+import { isValidLeadName, isValidLeadPhone } from '@/lib/lead-details';
 
 const STEPS = [
   { key: 'roomType', label: 'Room', icon: Home },
@@ -9,11 +10,15 @@ const STEPS = [
   { key: 'colorPreference', label: 'Colors', icon: Palette },
   { key: 'mustHaves', label: 'Must-haves', icon: Check },
   { key: 'budgetTier', label: 'Budget', icon: DollarSign },
+  { key: 'details', label: 'Your Details', icon: User },
 ] as const;
 
 type StepKey = typeof STEPS[number]['key'];
+type AnswerKey = Exclude<StepKey, 'details'>;
 
-const OPTIONS: Record<StepKey, { value: string; label: string; icon?: React.ReactNode; description?: string }[]> = {
+type Option = { value: string; label: string; icon?: React.ReactNode; description?: string };
+
+const OPTIONS: Record<AnswerKey, Option[]> = {
   roomType: [
     { value: 'living', label: 'Living Room', description: 'Main gathering space' },
     { value: 'bedroom', label: 'Bedroom', description: 'Personal retreat' },
@@ -58,6 +63,8 @@ export type QuizAnswers = {
   colorPreference?: string;
   mustHaves?: string[];
   budgetTier?: string;
+  customerName?: string;
+  phone?: string;
 };
 
 const OptionCard = memo(function OptionCard({
@@ -105,9 +112,9 @@ const StepContent = memo(function StepContent({
   answers,
   handleSelect,
 }: {
-  stepKey: StepKey;
+  stepKey: AnswerKey;
   answers: QuizAnswers;
-  handleSelect: (stepKey: StepKey, value: string, multi: boolean) => void;
+  handleSelect: (stepKey: AnswerKey, value: string, multi: boolean) => void;
 }) {
   const options = OPTIONS[stepKey];
   const multi = stepKey === 'mustHaves';
@@ -142,6 +149,73 @@ const StepContent = memo(function StepContent({
   );
 });
 
+const DetailsForm = memo(function DetailsForm({
+  answers,
+  onChange,
+}: {
+  answers: QuizAnswers;
+  onChange: (field: 'customerName' | 'phone', value: string) => void;
+}) {
+  const nameValid = isValidLeadName(answers.customerName ?? '');
+  const phoneValid = isValidLeadPhone(answers.phone ?? '');
+
+  return (
+    <motion.div
+      key="details"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.25 }}
+      className="w-full"
+    >
+      <p className="text-[#1C130B]/50 text-sm mb-6 text-center max-w-lg mx-auto">
+        Where should our concierge reach you? Your name & phone go straight to your assigned style agent — no spam, no card needed.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label htmlFor="quiz-name" className="text-xs font-bold uppercase tracking-wider text-[#8A5836] block">
+            Your Name
+          </label>
+          <input
+            id="quiz-name"
+            type="text"
+            value={answers.customerName ?? ''}
+            onChange={(e) => onChange('customerName', e.target.value)}
+            placeholder="e.g. Priya Sharma"
+            className="w-full p-4 rounded-2xl bg-[#FAF8F5] border-2 border-[#C5A880]/40 outline-none focus:border-[#8A5836] font-bold text-base text-[#1C130B] transition-all"
+          />
+          {answers.customerName !== undefined && answers.customerName !== '' && !nameValid && (
+            <p className="text-xs text-[#8A5836] font-semibold">Please enter your name (2+ characters)</p>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="quiz-phone" className="text-xs font-bold uppercase tracking-wider text-[#8A5836] block">
+            Phone Number
+          </label>
+          <input
+            id="quiz-phone"
+            type="tel"
+            inputMode="numeric"
+            value={answers.phone ?? ''}
+            onChange={(e) => onChange('phone', e.target.value)}
+            placeholder="e.g. 98765 43210"
+            className="w-full p-4 rounded-2xl bg-[#FAF8F5] border-2 border-[#C5A880]/40 outline-none focus:border-[#8A5836] font-bold text-base text-[#1C130B] transition-all"
+          />
+          {answers.phone !== undefined && answers.phone !== '' && !phoneValid && (
+            <p className="text-xs text-[#8A5836] font-semibold">Enter a valid 10-digit Indian mobile (e.g. 98765 43210)</p>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center gap-2 text-xs text-[#1C130B]/60 font-medium">
+        <Check className="w-4 h-4 text-[#15803D]" />
+        Your answers are stored securely — we only call about your swatch van slot & estimate.
+      </div>
+    </motion.div>
+  );
+});
+
 export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAnswers) => void }) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
@@ -160,7 +234,7 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
     localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
   }, [answers]);
 
-  const handleSelect = useCallback((stepKey: StepKey, value: string, multi = false) => {
+  const handleSelect = useCallback((stepKey: AnswerKey, value: string, multi = false) => {
     setAnswers((prev) => {
       if (multi) {
         const current = (prev[stepKey] as string[]) || [];
@@ -174,6 +248,9 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
   }, []);
 
   const isStepComplete = (stepKey: StepKey) => {
+    if (stepKey === 'details') {
+      return isValidLeadName(answers.customerName ?? '') && isValidLeadPhone(answers.phone ?? '');
+    }
     const val = answers[stepKey];
     if (stepKey === 'mustHaves') return Array.isArray(val) && val.length > 0;
     return !!val;
@@ -181,6 +258,7 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
 
   const canGoNext = isStepComplete(STEPS[currentStep].key);
   const isLastStep = currentStep === STEPS.length - 1;
+  const currentStepKey = STEPS[currentStep].key;
 
   const handleNext = () => {
     if (!canGoNext) return;
@@ -193,6 +271,10 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
   };
 
   const handleBack = () => setCurrentStep((s) => Math.max(0, s - 1));
+
+  const handleDetailsChange = (field: 'customerName' | 'phone', value: string) => {
+    setAnswers((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col">
@@ -236,12 +318,20 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
           </div>
 
           <AnimatePresence mode="wait">
-            <StepContent
-              key={STEPS[currentStep].key}
-              stepKey={STEPS[currentStep].key}
-              answers={answers}
-              handleSelect={handleSelect}
-            />
+            {currentStepKey === 'details' ? (
+              <DetailsForm
+                key="details"
+                answers={answers}
+                onChange={handleDetailsChange}
+              />
+            ) : (
+              <StepContent
+                key={currentStepKey}
+                stepKey={currentStepKey}
+                answers={answers}
+                handleSelect={handleSelect}
+              />
+            )}
           </AnimatePresence>
 
           {/* Navigation */}

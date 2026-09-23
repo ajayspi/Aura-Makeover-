@@ -26,6 +26,8 @@ interface EstimatorIntentBody {
   quality?: string;
   total?: number;
   sessionId?: string;
+  customerName?: string;
+  phone?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -37,6 +39,10 @@ export async function POST(request: NextRequest) {
       society: body.society,
     });
 
+    // Lead capture (R11): real name + phone when provided; keep legacy fallbacks
+    const customerName = body.customerName?.trim() || 'Walk-in (estimator)';
+    const phone = body.phone?.trim() || 'UNKNOWN';
+
     const detail = {
       widthFt: body.widthFt,
       heightFt: body.heightFt,
@@ -46,8 +52,8 @@ export async function POST(request: NextRequest) {
 
     const lead = await prisma.lead.create({
       data: {
-        customerName: 'Walk-in (estimator)',
-        phone: 'UNKNOWN',
+        customerName,
+        phone,
         source: 'estimator',
         quizAnswers: detail,
         sessionId: body.sessionId || undefined,

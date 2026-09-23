@@ -68,9 +68,10 @@ export function answersToTags(answers: QuizAnswers): QuizTags {
   };
 }
 
-export function tagsToWhatsAppMessage(tags: QuizTags, society?: string): string {
+export function tagsToWhatsAppMessage(tags: QuizTags, society?: string, customerName?: string): string {
   const lines = [
     'Hi AuroMakeover, I\'d like a quote based on my style quiz.',
+    customerName ? `Name: ${customerName}` : '',
     '',
     `Room: ${tags.roomType.replace('-', ' ')}`,
     `Style categories: ${tags.categories.join(', ')}`,

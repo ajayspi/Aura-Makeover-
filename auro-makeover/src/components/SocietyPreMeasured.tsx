@@ -60,7 +60,7 @@ export default function SocietyPreMeasured({ city }: SocietyPreMeasuredProps) {
             <Building2 className="w-4 h-4 text-[#C5A880]" />
             <span>Precision Pre-Engineered Floor Plans</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-['Syne'] text-[#1C130B] tracking-tight leading-[1.1]">Your Society, Pre-Measured</h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-['Yeseva_One'] text-[#1C130B] tracking-tight leading-[1.1]">Your Society, Pre-Measured</h2>
           <p className="mt-3 text-[#1C130B]/70 text-sm md:text-base font-normal leading-relaxed">
             We have pre-mapped CAD dimensions for {city?.name || 'Hyderabad West'} marquee towers. Choose your society for verified wall nesting, guaranteed fit, and zero on-site measurement delays.
           </p>

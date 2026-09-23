@@ -41,6 +41,7 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 ## Design System Tokens (from `src/app/globals.css` and `PROJECT.md`)
 - **Palette**: Dark Espresso `#1C130B`, Warm Gold `#C5A880`, Terracotta Brown `#8A5836`, Linen Off-White `#FAF8F5`, WhatsApp Green `#15803D`
 - **Typography**: Headings → `font-['Syne']` bold/black 700-800; Body → `font-['Plus_Jakarta_Sans']` regular/medium/semibold 400-700
+  - Exception (2026-09-23): the "Your Society, Pre-Measured" h2 (R4) uses `font-['Yeseva_One']` (curvy display serif, weight 400 only — no `font-black` on it). Loaded via `next/font/google` in `layout.tsx` as `--font-yeseva`. R6.3 still requires Syne + Plus Jakarta in layout — keep all three.
 - **Corners**: Only `rounded-2xl`, `rounded-3xl`, or `rounded-full`. Zero `rounded-sm` or basic `rounded`.
 - **Colors CSS vars**: `--color-espresso`, `--color-gold`, `--color-terracotta`, `--color-linen`, `--color-whatsapp`
 

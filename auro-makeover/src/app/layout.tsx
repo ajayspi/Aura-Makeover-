@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Syne, Plus_Jakarta_Sans } from "next/font/google";
+import { Syne, Plus_Jakarta_Sans, Yeseva_One } from "next/font/google";
 import "./globals.css";
 
 const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+// Curvy display serif for the "Your Society, Pre-Measured" headline (R4 hero accent).
+const yesevaOne = Yeseva_One({
+  variable: "--font-yeseva",
+  subsets: ["latin"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -30,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${plusJakarta.variable} h-full antialiased scroll-smooth`}
+      className={`${syne.variable} ${plusJakarta.variable} ${yesevaOne.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

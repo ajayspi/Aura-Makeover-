@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { BEFORE_AFTER_PAIRS, CELL_COUNT, GRID_CATEGORIES } from '@/data/before-after-pairs';
@@ -44,12 +44,12 @@ export default function BeforeAfterGrid() {
         </header>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--grid-gap)]"
           role="list"
           aria-label="Before/After paired image grid"
-          style={{ '--grid-gap': '1.5rem' }}
+          style={{ '--grid-gap': '1.5rem' } as React.CSSProperties}
         >
-          {/* grid gap spacing for responsive cells */}
+          {/* grid gap: 1.5rem gap-based spacing between cells via the --grid-gap token */}
           {BEFORE_AFTER_PAIRS.map((pair, index) => (
             <article
               key={pair.id}

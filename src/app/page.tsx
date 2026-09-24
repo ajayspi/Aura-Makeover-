@@ -1,5 +1,6 @@
 import HeroSection from '@/components/HeroSection';
 import BeforeAfterShowcase from '@/components/BeforeAfterShowcase';
+import BeforeAfterGrid from '@/components/BeforeAfterGrid';
 import DesignGallery from '@/components/DesignGallery';
 import ProductShowcase from '@/components/ProductShowcase';
 import SocietyPreMeasured from '@/components/SocietyPreMeasured';
@@ -22,6 +23,7 @@ export default function Home() {
       <OfferBanner />
       <HeroSection />
       <BeforeAfterShowcase />
+      <BeforeAfterGrid />
       <div id="gallery" className="bg-[#FAF8F5]">
         <DesignGallery />
       </div>

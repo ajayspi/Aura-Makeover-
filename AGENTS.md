@@ -42,8 +42,9 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 
 ## Design System Tokens (from `src/app/globals.css` and `PROJECT.md`)
 - **Palette**: Dark Espresso `#1C130B`, Warm Gold `#C5A880`, Terracotta Brown `#8A5836`, Linen Off-White `#FAF8F5`, WhatsApp Green `#15803D`
-- **Typography**: Headings → `font-['Space_Grotesk']` (Space Grotesk, weights 400–700; `font-black`/800 clamps to 700 — fine); Body → `font-['Plus_Jakarta_Sans']` regular/medium/semibold 400-700
-  - Exception (2026-09-23): the "Your Society, Pre-Measured" h2 (R4) uses `font-['Yeseva_One']` (curvy display serif, weight 400 only — no `font-black` on it). Loaded via `next/font/google` in `layout.tsx` as `--font-yeseva`. Keep all three fonts in layout.
+- **Typography (V2)**: Headings MUST use `DM Sans` (`font-heading`) for a mature, editorial feel. Body MUST use `Inter` (`font-body`). Never use playful, bouncy, or overly geometric display fonts (e.g., Syne) for luxury brands.
+- **Imagery Rule**: NEVER use CSS gradients, blobs, or solid color blocks as placeholders for interior design projects. Always use high-quality, photorealistic images (or generate them via tools). Luxury sells on visual proof.
+- **Layout Philosophy**: Employ "Luxury Restraint". Use massive white space (120px+ section padding), minimal text overlays, and avoid crowding sections with too many stat pills, badges, or CTAs. Let the photography speak.
 - **Corners**: Only `rounded-2xl`, `rounded-3xl`, or `rounded-full`. Zero `rounded-sm` or basic `rounded`.
 - **Colors CSS vars**: `--color-espresso`, `--color-gold`, `--color-terracotta`, `--color-linen`, `--color-whatsapp`, plus R12 additions `--color-silver` (`#C9CDD4`) + `--color-royal` (`#3E2C1E`, deep bronze). Metallic utilities in `globals.css`: `.text-foil` (gold-foil gradient text w/ drifting `foil-sheen` keyframe), `.bg-foil-card` (bronze→gold card surfacing), `.shimmer-bar` (animated gold/silver rule) — all animation disabled under `prefers-reduced-motion`.
 

@@ -91,6 +91,7 @@ Three pure functions with fixed interfaces; any changes require updating all cal
 - **Engines function purity**: `src/lib/engines.ts` functions are pure — no side effects, no DB calls. Treat as utility library; do not convert to async unless needed
 - **Runtime-verifying client flows without a browser**: SSR HTML contains React `<!-- -->` comment markers at every expression boundary (so `Contains('Step 1 of 6')` fails on `Step <!-- -->1<!-- --> of <!-- -->6`) and em-dashes in JSX text render as `-`. Match with tolerant regexes/stripped whitespace, not literals. Node 24 runs erasable-TS modules directly (type stripping) — `node -e`/`.mjs` can `import` `src/lib/*.ts` for pure-logic behavior tests (used for R11 validators, 16/16).
 - **Local lead APIs fail by design**: no local `prisma generate`, so `/api/leads/{quiz,estimator}` 503/500 locally — the quiz page's `.catch()` opens WhatsApp with default `919700675637` and the estimator falls through to the default number. Expected locally; real name/phone persistence happens on Vercel after the deploy runbook (migration PENDING REVIEW).
+- **CSS custom props in React `style` (2026-09-24)**: `style={{ '--grid-gap': '1.5rem' }}` fails `next build`/tsc with TS2353 (`'--grid-gap' does not exist in type Properties`) — cast it `as React.CSSProperties`. R13.1 opaque test asserts `code.includes('grid gap')` **case-sensitive** on `BeforeAfterGrid.tsx` — keep a lowercase `grid gap` class/comment or the gate fails (Vercel prod deploy + CI Gate 2 both broke on this at f787caf).
 
 <!-- BEGIN:nextjs-agent-rules -->
 

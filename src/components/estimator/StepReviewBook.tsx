@@ -179,10 +179,10 @@ Address/Flat No: ${address}
                 <div className="w-8 h-8 rounded-full bg-[#FAF8F5]/10 flex items-center justify-center font-bold font-['Plus_Jakarta_Sans'] shrink-0 text-sm">
                   1
                 </div>
-                <div>
-                  <div className="flex justify-between items-center mb-1">
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1">
                     <span className="font-bold text-sm sm:text-base font-['Syne']">10% Advance</span>
-                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{pricingDetails.escrowTranches.deposit10.toLocaleString('en-IN')}</span>
+                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{Math.round(pricingDetails.escrowTranches.deposit10).toLocaleString('en-IN')}</span>
                   </div>
                   <p className="text-xs text-[#FAF8F5]/60 font-['Plus_Jakarta_Sans']">To book the design consultation and swatch van visit.</p>
                 </div>
@@ -192,10 +192,10 @@ Address/Flat No: ${address}
                 <div className="w-8 h-8 rounded-full bg-[#FAF8F5]/10 flex items-center justify-center font-bold font-['Plus_Jakarta_Sans'] shrink-0 text-sm">
                   2
                 </div>
-                <div>
-                  <div className="flex justify-between items-center mb-1">
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1">
                     <span className="font-bold text-sm sm:text-base font-['Syne']">60% Material</span>
-                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{pricingDetails.escrowTranches.materialRelease60.toLocaleString('en-IN')}</span>
+                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{Math.round(pricingDetails.escrowTranches.materialRelease60).toLocaleString('en-IN')}</span>
                   </div>
                   <p className="text-xs text-[#FAF8F5]/60 font-['Plus_Jakarta_Sans']">Released when materials arrive securely at your society gate.</p>
                 </div>
@@ -205,10 +205,10 @@ Address/Flat No: ${address}
                 <div className="w-8 h-8 rounded-full bg-[#C5A880] text-[#1C130B] flex items-center justify-center font-bold font-['Plus_Jakarta_Sans'] shrink-0 text-sm">
                   3
                 </div>
-                <div>
-                  <div className="flex justify-between items-center mb-1">
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1">
                     <span className="font-bold text-sm sm:text-base font-['Syne']">30% Handover</span>
-                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{pricingDetails.escrowTranches.postQAUnlock30.toLocaleString('en-IN')}</span>
+                    <span className="font-bold text-sm sm:text-base text-[#C5A880] font-['Syne']">₹{Math.round(pricingDetails.escrowTranches.postQAUnlock30).toLocaleString('en-IN')}</span>
                   </div>
                   <p className="text-xs text-[#FAF8F5]/60 font-['Plus_Jakarta_Sans']">Released ONLY when you approve the final 48-hour handover.</p>
                 </div>

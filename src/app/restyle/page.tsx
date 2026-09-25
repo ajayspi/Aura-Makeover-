@@ -154,26 +154,26 @@ export default function AIRestyleStudio() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#1C130B] flex flex-col text-[#FAF8F5] font-['Plus_Jakarta_Sans']">
+    <main className="min-h-screen pt-[88px] md:pt-[104px] bg-[#1C130B] flex flex-col text-[#FAF8F5] font-['Plus_Jakarta_Sans']">
       
       {/* Header */}
-      <header className="p-6 flex items-center justify-between border-b border-[#C5A880]/10 shrink-0">
+      <header className="p-4 sm:p-6 flex items-center justify-between border-b border-[#C5A880]/10 shrink-0">
         <Link href="/" className="flex items-center gap-2 text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-          <span className="font-semibold text-sm">Back to Home</span>
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="font-semibold text-xs sm:text-sm">Back to Home</span>
         </Link>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#FAF8F5] flex items-center justify-center">
-            <span className="text-[#1C130B] font-bold font-['Syne']">A</span>
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#FAF8F5] flex items-center justify-center">
+            <span className="text-[#1C130B] font-bold font-['Syne'] text-sm sm:text-base">A</span>
           </div>
-          <span className="font-['Syne'] font-black text-xl tracking-tight">
+          <span className="font-['Syne'] font-black text-lg sm:text-xl tracking-tight">
             AI <span className="text-[#C5A880]">Studio</span>
           </span>
         </div>
       </header>
 
       {/* Main Workspace */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 relative">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 relative">
         <AnimatePresence mode="wait">
           
           {/* UPLOAD STATE */}
@@ -183,10 +183,10 @@ export default function AIRestyleStudio() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-2xl text-center"
+              className="w-full max-w-2xl text-center mt-8 sm:mt-0"
             >
-              <h1 className="font-['Syne'] text-4xl sm:text-5xl font-black mb-4">See the Future of your Space</h1>
-              <p className="text-[#FAF8F5]/60 mb-10">Upload a photo of your raw or builder-finish room. Our AI will instantly map luxury finishes to your exact walls.</p>
+              <h1 className="font-['Syne'] text-3xl sm:text-5xl font-black mb-3 sm:mb-4">See the Future of your Space</h1>
+              <p className="text-[#FAF8F5]/60 mb-8 sm:mb-10 text-sm sm:text-base px-2">Upload a photo of your raw or builder-finish room. Our AI will instantly map luxury finishes to your exact walls.</p>
               
               <label 
                 onDragOver={(e) => e.preventDefault()}

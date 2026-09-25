@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { AuroBrand } from './AuroLogo';
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,13 +37,8 @@ export default function NavBar() {
         <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between">
           
           {/* Logo */}
-          <Link href="/" className="relative z-50 flex items-center gap-2 group">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1C130B] rounded-full flex items-center justify-center transition-transform group-hover:scale-105">
-              <span className="text-[#C5A880] font-bold font-['Syne'] text-lg sm:text-xl leading-none">A</span>
-            </div>
-            <span className="font-['Syne'] font-black text-xl sm:text-2xl text-[#1C130B] tracking-tight">
-              Auro<span className="text-[#8A5836]">Makeover</span>
-            </span>
+          <Link href="/" className="relative z-50">
+            <AuroBrand />
           </Link>
 
           {/* Desktop Nav */}

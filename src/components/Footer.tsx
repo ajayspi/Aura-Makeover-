@@ -9,6 +9,7 @@ import {
   Truck,
 } from 'lucide-react';
 import { CityConfig } from '@/lib/cities';
+import { AuroBrand } from './AuroLogo';
 
 interface FooterProps {
   city?: CityConfig;
@@ -89,8 +90,8 @@ export default function Footer({ city }: FooterProps) {
           {/* Brand Column & 2-Year Warranty Badge */}
           <div className="md:col-span-5 space-y-6">
             <div>
-              <h3 className="text-3xl font-black font-['Syne'] tracking-tight mb-2 text-[#FAF8F5]">
-                Auro<span className="text-[#C5A880]">Makeover</span>
+              <h3 className="mb-2">
+                <AuroBrand variant="light" className="text-3xl" />
               </h3>
               <p className="text-sm text-[#FAF8F5]/70 font-medium leading-relaxed max-w-sm">
                 Cinematic 48-Hour Micro-Makeovers for {cityName}&apos;s Marquee High-Rises. Zero civil work. Engineered acoustic louvers, museum wallpapers & smart blinds.

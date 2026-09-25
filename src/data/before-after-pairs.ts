@@ -20,8 +20,8 @@ export interface BeforeAfterPair {
 export const GRID_CATEGORIES = [
   'living',
   'bedroom',
-  'kitchen',
-  'bathroom',
+  'dining',
+  'office',
   'pooja',
   'kids',
   'balcony',
@@ -72,40 +72,40 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     after: '/images/pichwai.jpg',
   },
 
-  // Kitchen (2 variants)
-  {
-    id: 'kitchen-1',
-    category: 'kitchen',
+  // Dining (2 variants)
+    {
+    id: 'dining-1',
+    category: 'dining',
     variant: 1,
-    label: 'Kitchen — Fluted Slat Cabinetry',
-    before: '/images/before.jpg',
+    label: 'Dining Room — Tinted Bronze Mirror Paneling',
+    before: '/images/before-dining.jpg',
+    after: '/images/after-dining-mirror.jpg',
+  },
+    {
+    id: 'dining-2',
+    category: 'dining',
+    variant: 2,
+    label: 'Dining Room — Fluted Slat Feature',
+    before: '/images/before-dining.jpg',
     after: '/images/showcase-slats.jpg',
   },
-  {
-    id: 'kitchen-2',
-    category: 'kitchen',
-    variant: 2,
-    label: 'Kitchen — Terracotta Backsplash Glow',
-    before: '/images/before.jpg',
-    after: '/images/showcase-pooja.jpg',
-  },
 
-  // Bathroom (2 variants)
-  {
-    id: 'bathroom-1',
-    category: 'bathroom',
+  // Office (2 variants)
+    {
+    id: 'office-1',
+    category: 'office',
     variant: 1,
-    label: 'Bathroom — Botanical Tile Feature',
-    before: '/images/before.jpg',
-    after: '/images/botanical.jpg',
+    label: 'Guest Office — Executive Walnut Bookshelves',
+    before: '/images/before-office.jpg',
+    after: '/images/after-office-wood.jpg',
   },
-  {
-    id: 'bathroom-2',
-    category: 'bathroom',
+    {
+    id: 'office-2',
+    category: 'office',
     variant: 2,
-    label: 'Bathroom — Gold Fixtures + Linen Tones',
-    before: '/images/before.jpg',
-    after: '/images/showcase-drapes.jpg',
+    label: 'Guest Office — Bright Fluted Minimalism',
+    before: '/images/before-office.jpg',
+    after: '/images/after-office-bright.jpg',
   },
 
   // Pooja Room (2 variants)

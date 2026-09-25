@@ -47,7 +47,7 @@ export default function FAQSection() {
           <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Questions, answered
           </p>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
             Everything you&rsquo;d ask the site supervisor
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-base leading-relaxed">
@@ -77,7 +77,7 @@ export default function FAQSection() {
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-4 text-left cursor-pointer"
                 >
-                  <span className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm sm:text-base">
+                  <span className="font-['Syne'] font-bold text-[#1C130B] text-sm sm:text-base">
                     {f.q}
                   </span>
                   <ChevronDown

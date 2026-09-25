@@ -27,7 +27,7 @@ export default function OfferBanner() {
   if (dismissed) return null;
 
   return (
-    <div className="sticky top-0 z-50 bg-[#1C130B] border-b border-[#C5A880]/30">
+    <div className="relative z-50 bg-[#1C130B] border-b border-[#C5A880]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-center gap-3 sm:gap-4">
         <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/90 text-xs sm:text-sm font-medium truncate">
           <span className="text-[#C5A880] font-bold">48-hour slots open</span>

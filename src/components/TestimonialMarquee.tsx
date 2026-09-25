@@ -42,7 +42,7 @@ export default function TestimonialMarquee() {
               </p>
               <figcaption className="mt-1 flex items-center gap-2">
                 <Star className="w-3 h-3 text-[#C5A880] fill-[#C5A880]" aria-hidden="true" />
-                <span className="font-['Space_Grotesk'] text-[#C5A880] text-[11px] font-bold tracking-wide">
+                <span className="font-['Syne'] text-[#C5A880] text-[11px] font-bold tracking-wide">
                   {r.name} · {r.project}
                 </span>
               </figcaption>

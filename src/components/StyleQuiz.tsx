@@ -312,7 +312,7 @@ export default function StyleQuiz({ onComplete }: { onComplete: (answers: QuizAn
             <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-2">
               Style Quiz — Step {currentStep + 1} of {STEPS.length}
             </p>
-            <h2 className="font-['Space_Grotesk'] text-2xl sm:text-3xl font-bold text-[#1C130B]">
+            <h2 className="font-['Syne'] text-2xl sm:text-3xl font-bold text-[#1C130B]">
               {STEPS[currentStep].label}
             </h2>
           </div>

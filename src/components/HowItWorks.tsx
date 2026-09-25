@@ -51,7 +51,7 @@ export default function HowItWorks() {
           <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             How it works
           </p>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
             The 48-Hour Method
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-base leading-relaxed">
@@ -73,18 +73,18 @@ export default function HowItWorks() {
               className="bg-foil-card rounded-3xl p-6 flex flex-col gap-4 border border-[#C5A880]/20"
             >
               <div className="flex items-center justify-between">
-                <span className="bg-[#C5A880] text-[#1C130B] font-['Space_Grotesk'] text-xs font-black tracking-widest uppercase px-3 py-1.5 rounded-full">
+                <span className="bg-[#C5A880] text-[#1C130B] font-['Syne'] text-xs font-black tracking-widest uppercase px-3 py-1.5 rounded-full">
                   {s.when}
                 </span>
                 <s.icon className="w-5 h-5 text-[#C5A880]" />
               </div>
-              <h3 className="font-['Space_Grotesk'] text-[#FAF8F5] text-xl font-bold tracking-[-0.01em]">
+              <h3 className="font-['Syne'] text-[#FAF8F5] text-xl font-bold tracking-[-0.01em]">
                 {s.title}
               </h3>
               <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/60 text-sm leading-relaxed">
                 {s.copy}
               </p>
-              <span aria-hidden="true" className="mt-auto text-[#C5A880]/40 text-xs font-['Space_Grotesk'] font-bold tracking-[0.2em] uppercase">
+              <span aria-hidden="true" className="mt-auto text-[#C5A880]/40 text-xs font-['Syne'] font-bold tracking-[0.2em] uppercase">
                 {s.n}
               </span>
             </motion.li>
@@ -99,11 +99,11 @@ export default function HowItWorks() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="rounded-3xl bg-[#3E2C1E] border border-[#C5A880]/40 p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6 mb-8"
         >
-          <span className="font-['Space_Grotesk'] text-5xl sm:text-6xl font-black text-foil leading-none">
+          <span className="font-['Syne'] text-5xl sm:text-6xl font-black text-foil leading-none">
             48H
           </span>
           <div className="text-center sm:text-left">
-            <p className="font-['Space_Grotesk'] text-[#FAF8F5] text-lg font-bold tracking-[-0.01em]">
+            <p className="font-['Syne'] text-[#FAF8F5] text-lg font-bold tracking-[-0.01em]">
               The clock starts at first measure — and it stops at handover.
             </p>
             <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/65 text-sm leading-relaxed mt-1">

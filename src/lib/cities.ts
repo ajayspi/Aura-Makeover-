@@ -41,6 +41,17 @@ export const CITIES: Record<string, CityConfig> = {
       { id: 'sarovar', name: 'Aparna Sarovar Zenith', flatsDone: 62, unitTypes: ['3BHK'], priceRange: 'Est. ₹42,000–₹58,000' },
       { id: 'provincia', name: 'Rajapushpa Provincia', flatsDone: 38, unitTypes: ['3BHK', '4BHK'], priceRange: 'Est. ₹45,000–₹62,000' },
       { id: 'prestige', name: 'Prestige High Fields', flatsDone: 54, unitTypes: ['3BHK'], priceRange: 'Est. ₹40,000–₹55,000' },
+
+      { id: 'avatar', name: 'My Home Avatar', flatsDone: 41, unitTypes: ['2BHK', '3BHK'], priceRange: 'Est. 35,000-48,000' },
+      { id: 'tarkshya', name: 'My Home Tarkshya', flatsDone: 29, unitTypes: ['3BHK', '4BHK'], priceRange: 'Est. 42,000-60,000' },
+      { id: 'mangala', name: 'My Home Mangala', flatsDone: 22, unitTypes: ['3BHK'], priceRange: 'Est. 38,000-55,000' },
+      { id: 'cyberlife', name: 'Aparna CyberLife', flatsDone: 33, unitTypes: ['3BHK'], priceRange: 'Est. 40,000-52,000' },
+      { id: 'atria', name: 'Rajapushpa Atria', flatsDone: 45, unitTypes: ['3BHK', '4BHK'], priceRange: 'Est. 43,000-58,000' },
+      { id: 'lanco', name: 'Lanco Hills', flatsDone: 76, unitTypes: ['3BHK', '4BHK'], priceRange: 'Est. 45,000-65,000' },
+      { id: 'silicon', name: 'Jayabheri Silicon County', flatsDone: 51, unitTypes: ['3BHK'], priceRange: 'Est. 40,000-55,000' },
+      { id: 'tranquil', name: 'Prestige Tranquil', flatsDone: 19, unitTypes: ['3BHK'], priceRange: 'Est. 42,000-58,000' },
+      { id: 'beverly', name: 'Prestige Beverly Hills', flatsDone: 14, unitTypes: ['3BHK', '4BHK'], priceRange: 'Est. 48,000-68,000' },
+
     ],
     serviceAreas: ['Kokapet', 'Tellapur', 'Financial District', 'Nallagandla', 'Gachibowli'],
     whatsappNumber: '919700675637',

@@ -82,7 +82,7 @@ export default function ProductShowcase() {
           <p className="text-[#C5A880] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             The Showroom
           </p>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-[1.15] mb-4">
             Six finishes. <span className="text-foil">One 48-hour crew.</span>
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/70 text-base leading-relaxed">
@@ -110,18 +110,18 @@ export default function ProductShowcase() {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C130B] via-[#1C130B]/20 to-transparent" />
-                <span className="absolute top-4 left-4 font-['Space_Grotesk'] text-[#C5A880] text-xs font-bold tracking-widest uppercase bg-[#1C130B]/70 border border-[#C5A880]/40 rounded-full px-3 py-1">
+                <span className="absolute top-4 left-4 font-['Syne'] text-[#C5A880] text-xs font-bold tracking-widest uppercase bg-[#1C130B]/70 border border-[#C5A880]/40 rounded-full px-3 py-1">
                   {f.tag}
                 </span>
                 <span
                   aria-hidden="true"
-                  className="absolute top-4 right-4 font-['Space_Grotesk'] text-[#C9CDD4] text-xs font-bold tracking-widest"
+                  className="absolute top-4 right-4 font-['Syne'] text-[#C9CDD4] text-xs font-bold tracking-widest"
                 >
                   {f.n}
                 </span>
               </div>
               <div className="p-5">
-                <h3 className="font-['Space_Grotesk'] text-[#FAF8F5] text-lg font-bold tracking-[-0.01em] mb-2">
+                <h3 className="font-['Syne'] text-[#FAF8F5] text-lg font-bold tracking-[-0.01em] mb-2">
                   {f.title}
                 </h3>
                 <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/60 text-sm leading-relaxed">

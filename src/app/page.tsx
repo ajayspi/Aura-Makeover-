@@ -13,44 +13,90 @@ import GoldDivider from '@/components/GoldDivider';
 import PackageRecommender from '@/components/PackageRecommender';
 import FAQSection from '@/components/FAQSection';
 import UrgencyBanner48 from '@/components/UrgencyBanner48';
-import OfferBanner from '@/components/OfferBanner';
 import EstimatorGateway from '@/components/EstimatorGateway';
 import Footer from '@/components/Footer';
+import FeaturesGrid from '@/components/FeaturesGrid';
+import AIRestyleBanner from '@/components/AIRestyleBanner';
+
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1C130B] font-['Plus_Jakarta_Sans']">
-      <OfferBanner />
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1C130B] font-['Plus_Jakarta_Sans'] overflow-x-hidden">
       <HeroSection />
-      <BeforeAfterShowcase />
-      <BeforeAfterGrid />
-      <div id="gallery" className="bg-[#FAF8F5]">
-        <DesignGallery />
-      </div>
-      {/* Showroom band — royal bronze against the linen gallery (alternating rhythm) */}
-      <ProductShowcase />
-      <SocietyPreMeasured />
-      <SocietyRegionBand />
-      <StatsTicker />
-      <Reviews />
-      <TestimonialMarquee />
+      
+      <ScrollReveal>
+        <BeforeAfterGrid />
+      </ScrollReveal>
+
+      <AIRestyleBanner />
+      
+      <ScrollReveal>
+        <ProductShowcase />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <SocietyPreMeasured />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <SocietyRegionBand />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <StatsTicker />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <Reviews />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <TestimonialMarquee />
+      </ScrollReveal>
+      
       <GoldDivider />
-      <HowItWorks />
-      <GoldDivider />
-      <PackageRecommender />
-      <FAQSection />
-      <UrgencyBanner48 />
-      <div id="estimator" className="py-20 px-6 bg-[#FAF8F5]">
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-black font-['Space_Grotesk'] text-[#1C130B] mb-4 tracking-tight">
-            Instant 48-Hour Estimator
-          </h2>
-          <p className="text-base sm:text-lg text-[#1C130B]/70 font-medium max-w-2xl mx-auto leading-relaxed">
-            No waiting for contractor site visits. Adjust your dimensions, choose your architectural tier, and reserve our mobile swatch van instantly.
-          </p>
+
+      <ScrollReveal>
+        <div id="gallery" className="bg-[#FAF8F5]">
+          <DesignGallery />
         </div>
-        <EstimatorGateway />
-      </div>
+      </ScrollReveal>
+      
+      <FeaturesGrid />
+      
+      <ScrollReveal>
+        <HowItWorks />
+      </ScrollReveal>
+      
+      <GoldDivider />
+      
+      <ScrollReveal>
+        <PackageRecommender />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <FAQSection />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <UrgencyBanner48 />
+      </ScrollReveal>
+      
+      <ScrollReveal>
+        <div id="estimator" className="py-20 px-6 bg-[#FAF8F5]">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-black font-['Syne'] text-[#1C130B] mb-4 tracking-tight">
+              Instant 48-Hour Estimator
+            </h2>
+            <p className="text-base sm:text-lg text-[#1C130B]/70 font-medium max-w-2xl mx-auto leading-relaxed">
+              No waiting for contractor site visits. Adjust your dimensions, choose your architectural tier, and reserve our mobile swatch van instantly.
+            </p>
+          </div>
+          <EstimatorGateway />
+        </div>
+      </ScrollReveal>
+      
       <Footer />
     </main>
   );

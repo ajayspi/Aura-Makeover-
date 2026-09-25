@@ -94,7 +94,7 @@ export default function BeforeAfterShowcase({ city }: BeforeAfterShowcaseProps) 
           <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Before & after
           </p>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
             The AuroMakeover Difference
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-base leading-relaxed">

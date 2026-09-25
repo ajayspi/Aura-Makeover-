@@ -51,7 +51,7 @@ export default function CityLanding({ city }: CityLandingProps) {
                 hidden: {},
                 show: { transition: { staggerChildren: 0.08 } },
               }}
-              className="font-['Space_Grotesk'] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-[1.08] tracking-[-0.03em] mb-6"
+              className="font-['Syne'] text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-[1.08] tracking-[-0.03em] mb-6"
             >
               {city.hero.headline.split(' ').map((word, i) => (
                 <motion.span

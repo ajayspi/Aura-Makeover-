@@ -33,7 +33,7 @@ export default function SocietyRegionBand() {
           <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             West Hyderabad Belt
           </p>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
+          <h2 className="font-['Syne'] text-3xl sm:text-4xl font-bold text-[#1C130B] tracking-[-0.02em] leading-[1.15] mb-4">
             Pre-measured across every corridor
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/60 text-base leading-relaxed">
@@ -51,7 +51,7 @@ export default function SocietyRegionBand() {
                 <span className="w-11 h-11 rounded-full bg-[#3E2C1E] border border-[#C5A880] flex items-center justify-center shadow-sm">
                   <MapPin className="w-4 h-4 text-[#C5A880]" />
                 </span>
-                <span className="font-['Space_Grotesk'] text-[#1C130B] text-xs font-bold text-center max-w-[13rem]">
+                <span className="font-['Syne'] text-[#1C130B] text-xs font-bold text-center max-w-[13rem]">
                   {c.name}
                 </span>
               </div>
@@ -71,7 +71,7 @@ export default function SocietyRegionBand() {
                 <div className="sm:w-64 shrink-0 flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-[#8A5836] lg:hidden shrink-0" />
                   <div>
-                    <p className="font-['Space_Grotesk'] font-bold text-[#1C130B] text-sm">
+                    <p className="font-['Syne'] font-bold text-[#1C130B] text-sm">
                       {c.name}
                     </p>
                     <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/50 text-xs">
@@ -98,7 +98,7 @@ export default function SocietyRegionBand() {
                   </div>
                 </div>
                 <div className="sm:w-40 shrink-0 sm:text-right">
-                  <p className="font-['Space_Grotesk'] font-bold text-[#8A5836] text-sm">
+                  <p className="font-['Syne'] font-bold text-[#8A5836] text-sm">
                     {c.flats} flats done
                   </p>
                   <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/50 text-xs">

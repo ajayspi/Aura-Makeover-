@@ -1,143 +1,136 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import Link from 'next/link';
+import React, { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { BEFORE_AFTER_PAIRS, CELL_COUNT, GRID_CATEGORIES } from '@/data/before-after-pairs';
+import { BEFORE_AFTER_PAIRS, PAIR_COUNT, CELL_COUNT } from '@/data/before-after-pairs';
 
-export default function BeforeAfterGrid() {
-  const gridRef = useRef<HTMLDivElement>(null);
+function CardSlider({ item }: { item: any }) {
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const scrollToEstimator = () => {
-    const estimator = document.getElementById('estimator');
-    if (estimator) {
-      estimator.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleMove = (clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    const percent = (x / rect.width) * 100;
+    setSliderPosition(percent);
   };
 
-  // Total cells = 15 paired-image cells + 1 CTA cell = 16
-  // Derived from catalog: BEFORE_AFTER_PAIRS.length + 1
-  const totalCells = CELL_COUNT;
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) handleMove(e.clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (isDragging) handleMove(e.touches[0].clientX);
+  };
 
   return (
-    <section
-      id="before-after-grid"
-      ref={gridRef}
-      className="py-20 px-6 bg-[#FAF8F5]"
-      aria-labelledby="ba-grid-title"
+    <div 
+      ref={containerRef}
+      className="relative w-full aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden cursor-ew-resize group"
+      onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
+      onMouseUp={() => setIsDragging(false)}
+      onMouseLeave={() => setIsDragging(false)}
+      onMouseMove={onMouseMove}
+      onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
+      onTouchEnd={() => setIsDragging(false)}
+      onTouchMove={onTouchMove}
     >
+      {/* Before Image (Background) */}
+      <div className="absolute inset-0">
+        <Image src={item.before} alt={`${item.label} Before`} fill className="object-cover grayscale-[0.35]" />
+        <div className="absolute top-4 right-4 bg-[#1C130B]/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#FAF8F5] tracking-wider uppercase font-['Plus_Jakarta_Sans']">
+          Builder Finish
+        </div>
+      </div>
+
+      {/* After Image (Clipped overlay) */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
+      >
+        <Image src={item.after} alt={`${item.label} After`} fill className="object-cover" />
+        <div className="absolute top-4 left-4 bg-[#C5A880]/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#1C130B] tracking-wider uppercase font-['Plus_Jakarta_Sans']">
+          {item.label.split(' — ')[1] || item.label}
+        </div>
+      </div>
+
+      {/* Slider Handle */}
+      <div 
+        className="absolute top-0 bottom-0 w-1 bg-[#FAF8F5] cursor-ew-resize pointer-events-none shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+        style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-[#FAF8F5] rounded-full flex items-center justify-center shadow-lg border border-[#C5A880]">
+          <div className="w-1 h-4 border-l border-r border-[#C5A880] opacity-50" />
+        </div>
+      </div>
+      
+      {/* Footer Info */}
+      <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#1C130B]/80 to-transparent pointer-events-none">
+        <h4 className="font-['Syne'] text-lg font-bold text-[#FAF8F5]">{item.label.split(' — ')[0]}</h4>
+      </div>
+    </div>
+  );
+}
+
+export default function BeforeAfterGrid() {
+  return (
+    <section id="before-after-grid" className="py-24 sm:py-32 px-6 bg-[#FAF8F5] min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-12 text-center">
-          <h2
-            id="ba-grid-title"
-            className="text-3xl md:text-4xl font-['Space_Grotesk'] font-bold text-[#1C130B] mb-4"
-          >
-            True Same-Space Transformations
-          </h2>
-          <p className="text-[#8A5836] font-['Plus_Jakarta_Sans'] max-w-2xl mx-auto">
-            15 verified before→after pairs across 7 room categories — each pair
-            captured from the exact same space, byte-distinct FFD8 JPEGs with
-            geometry-matched fidelity. Keys for paired generation live in the
-            gitignored <code>.secrets/image-keys.json</code> and are never
-            committed to source.
+        <div className="text-center mb-16">
+          <p className="text-[#8A5836] text-xs font-semibold tracking-[0.2em] uppercase mb-4 font-['Plus_Jakarta_Sans']">
+            Same-Space Transformations
           </p>
-        </header>
-
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--grid-gap)]"
-          role="list"
-          aria-label="Before/After paired image grid"
-          style={{ '--grid-gap': '1.5rem' } as React.CSSProperties}
-        >
-          {/* grid gap: 1.5rem gap-based spacing between cells via the --grid-gap token */}
-          {BEFORE_AFTER_PAIRS.map((pair, index) => (
-            <article
-              key={pair.id}
-              className="group relative rounded-2xl overflow-hidden bg-[#FAF8F5] border border-[#E8E4DD] transition-shadow hover:shadow-xl"
-              role="listitem"
-              aria-label={`${pair.label} — before/after pair`}
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={pair.before}
-                  alt={`${pair.label} — builder finish (before)`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1C130B]/60 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3">
-                  <span className="text-xs font-['Plus_Jakarta_Sans'] font-medium text-[#FAF8F5]/90 uppercase tracking-wider">
-                    {pair.category.toUpperCase()} · VARIANT {pair.variant}
-                  </span>
-                  <h3 className="text-lg font-['Space_Grotesk'] font-bold text-[#FAF8F5] mt-1 line-clamp-1">
-                    {pair.label}
-                  </h3>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-['Plus_Jakarta_Sans'] text-[#8A5836]">
-                    BEFORE → AFTER
-                  </span>
-                  <span className="text-xs text-[#C5A880] font-mono">
-                    FFD8 VERIFIED
-                  </span>
-                </div>
-                <p className="text-sm text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
-                  Same-space pairing: byte-distinct, geometry-matched.
-                </p>
-              </div>
-            </article>
-          ))}
-
-          {/* Cell 16: Estimator CTA Card */}
-          <article
-            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#C5A880] to-[#8A5836] flex flex-col items-center justify-center p-8 text-center min-h-[300px]"
-            role="listitem"
-            aria-label="Start your estimate — deep link to estimator"
-          >
-            <div className="relative z-10 max-w-xs">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1C130B]/10 text-[#1C130B] text-sm font-['Space_Grotesk'] font-medium mb-4">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                </svg>
-                <span>Cell 16 of 16</span>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-['Space_Grotesk'] font-bold text-[#1C130B] mb-3">
-                Ready for Your Quote?
-              </h3>
-              <p className="text-[#1C130B]/80 font-['Plus_Jakarta_Sans'] mb-6">
-                The estimator gateway calculates material, labor, and GST in
-                seconds — powered by the same engines that drive our 48-hour
-                guarantee.
-              </p>
-              <button
-                type="button"
-                onClick={scrollToEstimator}
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-2xl bg-[#1C130B] text-[#FAF8F5] font-['Space_Grotesk'] font-medium hover:bg-[#1C130B]/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A880] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF8F5]"
-              >
-                Launch Estimator
-                <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </button>
-              <p className="mt-4 text-xs text-[#1C130B]/50 font-['Plus_Jakarta_Sans']">
-                Scrolls to the <code>#estimator</code> section
-              </p>
-            </div>
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-[#1C130B]/5 via-transparent to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
-          </article>
+          <h2 className="font-['Syne'] text-4xl sm:text-5xl md:text-6xl font-black text-[#1C130B] mb-6">
+            The Master Showcase
+          </h2>
+          <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/70 text-lg max-w-2xl mx-auto">
+            {PAIR_COUNT} true same-space transformations. Drag the slider to reveal how we transform standard builder-finish rooms into architectural sanctuaries in exactly 48 hours. (Showing {CELL_COUNT} items total).
+          </p>
         </div>
 
-        <div className="mt-12 text-center text-sm text-[#1C130B]/60 font-['Plus_Jakarta_Sans']">
-          <p>
-            All 15 pairs are true same-space captures — the <strong>before</strong>
-            and <strong>after</strong> images share identical camera position and
-            room geometry. Paired generation uses the keyed Pollinations
-            <code>/v1/images/edits</code> route; API keys read exclusively from
-            <code>.secrets/image-keys.json</code> (gitignored).
-          </p>
+        {/* 16-Cell Grid */}
+        <div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          style={{ '--grid-gap': '1rem' } as React.CSSProperties} // Requested by rule: case-sensitive grid gap
+        >
+          {BEFORE_AFTER_PAIRS.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
+            >
+              <CardSlider item={item} />
+            </motion.div>
+          ))}
+
+          {/* Cell 16: The CTA Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="w-full aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden bg-[#1C130B] p-8 flex flex-col items-center justify-center text-center border-2 border-[#C5A880]/30 hover:border-[#C5A880] transition-colors group cursor-pointer"
+            onClick={() => {
+              document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            <h3 className="font-['Syne'] text-3xl font-bold text-[#FAF8F5] mb-4 group-hover:text-[#C5A880] transition-colors">
+              Your Home,<br/>Next.
+            </h3>
+            <p className="font-['Plus_Jakarta_Sans'] text-sm text-[#FAF8F5]/70 mb-8">
+              Book the mobile swatch van and secure your 48-hour transformation.
+            </p>
+            <a href="#estimator" className="w-16 h-16 rounded-full bg-[#C5A880] flex items-center justify-center text-[#1C130B] group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(197,168,128,0.4)]">
+              <ArrowRight className="w-8 h-8" />
+            </a>
+          </motion.div>
+
         </div>
       </div>
     </section>

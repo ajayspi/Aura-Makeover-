@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Plus_Jakarta_Sans, Yeseva_One } from "next/font/google";
+import { Syne, Plus_Jakarta_Sans, Yeseva_One } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import NavBar from "@/components/NavBar";
+import OfferBanner from "@/components/OfferBanner";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -39,9 +41,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${yesevaOne.variable} h-full antialiased scroll-smooth`}
+      className={`${syne.variable} ${plusJakarta.variable} ${yesevaOne.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col">
+        <OfferBanner />
+        <NavBar />
         {children}
         <SpeedInsights />
       </body>

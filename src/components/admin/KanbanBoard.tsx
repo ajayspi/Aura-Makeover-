@@ -14,7 +14,7 @@ export default function KanbanBoard() {
     <div className="min-h-screen bg-gray-100 p-8 font-['Plus_Jakarta_Sans']">
       <header className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-black font-['Space_Grotesk'] text-[#1C130B]">AuroOps Command</h1>
+          <h1 className="text-3xl font-black font-['Syne'] text-[#1C130B]">AuroOps Command</h1>
           <p className="text-gray-500 font-medium mt-1">Live Fleet & Lead Tracking (Hyderabad West)</p>
         </div>
         <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 flex gap-4">

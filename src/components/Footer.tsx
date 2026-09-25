@@ -89,7 +89,7 @@ export default function Footer({ city }: FooterProps) {
           {/* Brand Column & 2-Year Warranty Badge */}
           <div className="md:col-span-5 space-y-6">
             <div>
-              <h3 className="text-3xl font-black font-['Space_Grotesk'] tracking-tight mb-2 text-[#FAF8F5]">
+              <h3 className="text-3xl font-black font-['Syne'] tracking-tight mb-2 text-[#FAF8F5]">
                 Auro<span className="text-[#C5A880]">Makeover</span>
               </h3>
               <p className="text-sm text-[#FAF8F5]/70 font-medium leading-relaxed max-w-sm">
@@ -104,7 +104,7 @@ export default function Footer({ city }: FooterProps) {
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold font-['Space_Grotesk'] text-[#FAF8F5] flex items-center gap-2">
+                  <div className="text-sm font-bold font-['Syne'] text-[#FAF8F5] flex items-center gap-2">
                     2-Year Comprehensive Warranty
                     <span className="text-[10px] bg-[#C5A880] text-[#1C130B] font-bold px-2 py-0.5 rounded-full uppercase">
                       Included
@@ -123,7 +123,7 @@ export default function Footer({ city }: FooterProps) {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-[#15803D] hover:bg-[#166534] text-[#FAF8F5] px-6 py-3.5 rounded-2xl font-bold font-['Space_Grotesk'] text-sm transition-all active:scale-95 shadow-lg shadow-[#15803D]/25"
+                className="inline-flex items-center gap-3 bg-[#15803D] hover:bg-[#166534] text-[#FAF8F5] px-6 py-3.5 rounded-2xl font-bold font-['Syne'] text-sm transition-all active:scale-95 shadow-lg shadow-[#15803D]/25"
               >
                 <MessageCircle className="w-5 h-5 text-white" />
                 <span>WhatsApp Hotline: +91 {whatsappNumber.slice(2, 4)} {whatsappNumber.slice(4, 9)} {whatsappNumber.slice(9)}</span>
@@ -133,7 +133,7 @@ export default function Footer({ city }: FooterProps) {
 
           {/* Service Areas Column */}
           <div className="md:col-span-3 space-y-4">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-[#C5A880] font-['Space_Grotesk']">
+            <h4 className="text-sm font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
               Service Areas ({cityName} {cityRegion})
             </h4>
             <p className="text-xs text-[#FAF8F5]/60 font-medium">
@@ -156,7 +156,7 @@ export default function Footer({ city }: FooterProps) {
           {/* Quick Links & Collections */}
           <div className="md:col-span-4 grid grid-cols-2 gap-6">
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Space_Grotesk']">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
                 Navigation
               </h4>
               <ul className="space-y-2 text-xs font-medium">
@@ -175,7 +175,7 @@ export default function Footer({ city }: FooterProps) {
             </div>
 
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Space_Grotesk']">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
                 Collections
               </h4>
               <ul className="space-y-2 text-xs font-medium">

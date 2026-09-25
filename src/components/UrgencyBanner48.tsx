@@ -55,7 +55,7 @@ export default function UrgencyBanner48() {
           <p className="text-[#C5A880] text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             48-Hour Window
           </p>
-          <h2 className="font-['Space_Grotesk'] text-2xl sm:text-3xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-tight mb-2">
+          <h2 className="font-['Syne'] text-2xl sm:text-3xl font-bold text-[#FAF8F5] tracking-[-0.02em] leading-tight mb-2">
             Book by midnight, <span className="text-foil">install tomorrow.</span>
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/65 text-sm leading-relaxed max-w-xl">
@@ -68,12 +68,12 @@ export default function UrgencyBanner48() {
           {cells.map(({ k, label }, i) => (
             <React.Fragment key={k}>
               {i > 0 && (
-                <span aria-hidden="true" className="font-['Space_Grotesk'] text-[#C5A880] text-2xl font-bold">
+                <span aria-hidden="true" className="font-['Plus_Jakarta_Sans'] text-[#C5A880] text-2xl font-bold">
                   :
                 </span>
               )}
               <div className="w-16 sm:w-20 rounded-2xl bg-[#3E2C1E] border border-[#C5A880]/40 px-2 py-3 text-center">
-                <p className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-black text-foil tabular-nums">
+                <p className="font-['Plus_Jakarta_Sans'] text-3xl sm:text-4xl font-extrabold text-foil tabular-nums tracking-tight">
                   {left ? left[k] : '--'}
                 </p>
                 <p className="font-['Plus_Jakarta_Sans'] text-[#C9CDD4] text-[10px] font-semibold tracking-widest uppercase mt-1">

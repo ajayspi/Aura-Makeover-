@@ -78,7 +78,7 @@ export default function SocietyPreMeasured({ city }: SocietyPreMeasuredProps) {
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#8A5836]/10 border border-[#8A5836]/25 text-[#8A5836] font-bold text-xs">{society.flatsDone}</span>
                 <span className="px-3 py-1 rounded-full bg-[#1C130B]/5 border border-[#1C130B]/10 text-xs font-semibold text-[#1C130B]">{society.unitType}</span>
               </div>
-              <h3 className="text-2xl font-black font-['Space_Grotesk'] text-[#1C130B] mb-1 group-hover:text-[#8A5836] transition-colors">{society.name}</h3>
+              <h3 className="text-2xl font-black font-['Syne'] text-[#1C130B] mb-1 group-hover:text-[#8A5836] transition-colors">{society.name}</h3>
               <p className="text-xs text-[#1C130B]/60 font-medium mb-5">{society.corridor}</p>
               <div className="p-3 rounded-2xl bg-white/70 border border-[#C5A880]/20 mb-5">
                 <div className="text-[11px] font-bold text-[#8A5836] uppercase tracking-wider mb-1 flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" /><span>Pre-Mapped Scope</span></div>
@@ -90,7 +90,7 @@ export default function SocietyPreMeasured({ city }: SocietyPreMeasuredProps) {
             </div>
             <div className="pt-5 border-t border-[#C5A880]/20">
               <div className="flex items-baseline justify-between mb-4">
-                <div><span className="text-[11px] font-bold uppercase tracking-wider text-[#8A5836] block">Fixed Estimate</span><div className="text-xl sm:text-2xl font-black font-['Space_Grotesk'] text-[#1C130B]">{society.priceEstimate}</div></div>
+                <div><span className="text-[11px] font-bold uppercase tracking-wider text-[#8A5836] block">Fixed Estimate</span><div className="text-xl sm:text-2xl font-black font-['Syne'] text-[#1C130B]">{society.priceEstimate}</div></div>
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-[#15803D] bg-[#15803D]/10 px-2.5 py-1 rounded-full"><Clock className="w-3 h-3" /><span>48h Ready</span></div>
               </div>
               <button onClick={() => handleSelectSociety(society.name)} className="w-full py-3.5 px-6 rounded-2xl bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-md hover:shadow-lg cursor-pointer group/btn"><span>Check My Flat</span><ArrowRight className="w-4 h-4 text-[#C5A880] transition-transform duration-200 group-hover/btn:translate-x-1" /></button>

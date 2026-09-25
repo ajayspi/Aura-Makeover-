@@ -1,104 +1,63 @@
 # AuroMakeover — Next.js 16 + Tailwind CSS v4 Project
 
+> **Read this first (2026-09-25):** the working tree is in the middle of an **uncommitted font rollback** and has **untracked new modules**. `git status` shows ~50 modified files reverting headings from Space Grotesk → `font-['Syne']` (globals.css `--font-heading: 'Syne'`; `layout.tsx` loads `Syne + Plus_Jakarta_Sans + Yeseva_One`). The E2E tests **still pin Space Grotesk**: R1.1 asserts HeroSection contains `Space_Grotesk`, R6.3 asserts layout imports `Space_Grotesk`, R12.8 asserts layout+hero use `Space_Grotesk` and hero does NOT contain `font-['Syne']`. **The suite currently FAILS on the working tree** until fonts and tests are reconciled one way or the other. `src/app/[city]/page.tsx` is a rollback artifact: `Syne({ variable: '--font-space-grotesk' })` (variable renamed, font is Syne). Untracked: `src/components/NavBar.tsx` (already imported by `layout.tsx`), `ScrollReveal.tsx`, `src/components/estimator/` (StepRoomSize/StepFinishTier/StepReviewBook split from EstimatorGateway), `src/app/collections/` route, and the R13 pair images (`public/images/*-r13.jpg`, `*-balcony*`, `*-kids*`). Committed HEAD (c217b99) = Space Grotesk + green CI. Commit the rollback + matching test updates together, or the deploy will be red.
+
 ## Development Commands
-- `npm run dev` — start Next.js 16 dev server (default: http://localhost:3000)
-- `npm run build` — Next.js build
+- `npm run dev` — Next.js 16 dev server (default: http://localhost:3000)
+- `npm run build` — Next.js build (runs tsc type-strip; a TS error like TS2353 fails it hard)
 - `npm run start` — Next.js start production server
-- `npm run lint` — ESLint (runs before typecheck/build)
-- `node scripts/test-e2e.mjs` — opaque-box E2E suite (108 tests, **not** an npm script; exit 0 = all pass)
-- `npx tsc --noEmit` — typecheck; together with `build` + the E2E suite these are the three acceptance gates
-- CI: `.github/workflows/ci.yml` (repo root `Aura/`) runs all 4 gates on push/PR to `main`; `DEPLOY.md` has the deploy runbook (migration PENDING REVIEW, `SALES_AGENTS_JSON` seeding, demo purge, `919700675637` fallback)
+- `npm run lint` — ESLint 9 flat config (`eslint.config.mjs`; ignores `tools/**`, `.kilo/**`; 0 errors is the bar, warnings are tolerated)
+- `node scripts/test-e2e.mjs` — self-contained opaque-box E2E suite (**117 tests**, exit 0 = all pass; NOT an npm script). It source-inspects files and imports pure `src/lib/*.ts` directly — no dev server, no DB needed.
+- `npx tsc --noEmit` — typecheck (with `build` + the E2E suite + lint these are the four acceptance gates; CI runs them in that order in `.github/workflows/ci.yml`, Node 20, `npm ci`)
+- There is **no `npm test` script**. Vitest infra exists (`tests/`, `vitest.config.ts`, jsdom) but the canonical suite is the `.mjs` runner above.
 
 ## Verification — trust the runner, not the reports
-- **E2E suite is green**: `node scripts/test-e2e.mjs` → **108/108** (verified 2026-09-23: 70/70 → 74/74 → 77/77 → 81/81 → 84/84 → 88/88 → 93/93 w/ R10 GSAP layer → 99/99 w/ R11 WhatsApp-handoff lead capture → 108/108 w/ R12 homepage-expansion R1–R11 all green). `TEST_READY.md`/`PROJECT.md` milestone statuses are planning-time snapshots — ignore their claims, run the suite.
-- Fonts load via `next/font/google` in `layout.tsx` (`Space_Grotesk` + `Plus_Jakarta_Sans` + `Yeseva_One`, variables `--font-space-grotesk`/`--font-plus-jakarta`/`--font-yeseva`). Space Grotesk replaced Syne as the heading font site-wide (decision D1, spec-homepage-expansion); test R6.3 asserts on the `next/font` imports, and R1.1/R12.8 assert Hero/global headings use Space Grotesk. The redundant Google-Fonts `@import` was REMOVED from `globals.css` — do NOT re-add it (its families are loaded via `next/font`); do NOT remove the `next/font` imports.
-- `next build` warns about duplicate lockfiles (workspace root inferred as `C:/Users/vigilare/Aura`); set `turbopack.root` or remove the root lockfile to silence it.
-- Notion docs hub (status, research, roadmap live here): https://app.notion.com/p/AuroMakeover-Project-Documentation-3e38162475868186b45cf59f63907290
+- **E2E suite = 117/117 green at HEAD** (verified 2026-09-24 on f787caf: 108→117 w/ the R13 tier R13.1–R13.9). `TEST_READY.md`/`PROJECT.md` are planning-time snapshots — ignore their claims and run the suite. The uncommitted font rollback breaks R1.1/R6.3/R12.8 (see warning above).
+- Fonts are a **test contract**: `next/font/google` imports in `layout.tsx` are asserted by R6.3, and R1.1/R12.8 pin `Space_Grotesk` in hero/global headings. Renaming the font or the `--font-*` variable without updating these tests fails Gate 1.
+- `globals.css` has NO Google-Fonts `@import` (only `@import "tailwindcss"` + `@theme`) — do not re-add one; families come from `next/font`.
+
+## Deploy (Vercel)
+- **Production branch = `init-auromakeover-16081128185176046364`** (the repo's only/default branch — there is no `main`; `DEPLOY.md`'s "merge to main" wording is stale). CI yml triggers on push/PR to `main` AND that branch. **Pushing to origin auto-deploys production** (project `designjoom/aura-makeover`, live at https://aura-makeover.vercel.app).
+- No local Vercel CLI login/token exists on this machine — auth goes through the GitHub integration. Deployment status shows as the "Vercel" check on commits (`gh api repos/ajayspi/Aura-Makeover-/commits/<sha>/status`).
+- Guardrail: `DEPLOY.md` — Prisma migration `prisma/migrations/pending_lead_routing` is **PENDING REVIEW, never blind-apply**; `SalesAgent` seeding via `SALES_AGENTS_JSON` env; demo rows must be purged; WhatsApp fallback number `919700675637`.
 
 ## Project Structure
-- `src/app/` — Next.js 16 App Router: `layout.tsx`, `page.tsx`, `globals.css`, plus Phase 2 routes `quiz/page.tsx`, `api/leads/quiz/route.ts`, `api/leads/estimator/route.ts`, `api/ai/restyle/route.ts`, `api/ai/restyle/[jobId]/route.ts`, `[city]/page.tsx` + `[city]/CityLanding.tsx`
-- `src/components/` — Feature sections (R1–R9):
-  - `HeroSection.tsx` (R1), `BeforeAfterShowcase.tsx` (R2), `DesignGallery.tsx` (R3)
-  - `SocietyPreMeasured.tsx` (R4), `StatsTicker.tsx` (R5), `EstimatorGateway.tsx` (R5)
-  - `Footer.tsx` (R6) plus admin/technician subfolders
-  - Phase 2: `StyleQuiz.tsx` (quiz stepper), `VisualizeRoom.tsx` (AI restyle modal)
-  - Phase 3+: `HowItWorks.tsx` (R7, 48-Hour Method, metallic timeline), `OfferBanner.tsx` (R7, sticky+dismiss), `Reviews.tsx` (R8, trust section; exports `REVIEWS` catalog used by TestimonialMarquee), `PackageRecommender.tsx` (R9, questionnaire→package)
-  - R12 homepage expansion (award-winning metallic redesign, 2026-09-23): `ProductShowcase.tsx` (6-category showroom on deep-royal `#3E2C1E` using royalty-free `public/images/showcase-*.jpg`), `SocietyRegionBand.tsx` (West-Hyderabad corridor belt w/ ARIA progressbars, `id="corridors"`), `FAQSection.tsx` (accordion, `id="faq"`), `UrgencyBanner48.tsx` (midnight countdown + `.shimmer-bar` + `#estimator` CTA), `TestimonialMarquee.tsx` (auto-scroll strip reusing `REVIEWS` — no data duplication)
-  - GSAP layer (R10, additive over framer-motion): `AnimatedCounter.tsx` (count-up figures, Warm Gold digits), `GoldDivider.tsx` (self-drawing gold seam line), `src/lib/gsap.ts` (singleton: registers ScrollTrigger once, SSR-guarded, re-exports `gsap`/`ScrollTrigger`/`useGSAP`)
-- `src/lib/engines.ts` — Pure calculation engines (see below); **do not alter function signatures** without updating callers
-- `src/lib/` Phase 2: `quiz-to-tags.ts` (quiz answers → WhatsApp/estimator payload), `cities.ts` (city configs: societies, WhatsApp numbers, service areas), `lead-router.ts` (pure routeLead: city→weight→24h round-robin), `lead-assign.ts` (server assignment w/ fail-closed fallback), `package-recommender.ts` (pure scoring + recommendToPrefill)
-- R11 WhatsApp-handoff lead capture (2026-09-23): **every WhatsApp open is gated on captured name + phone**. Shared validators in `src/lib/lead-details.ts` (`normalizeLeadPhone` → 10-digit Indian mobile, `isValidLeadPhone` 6–9 start, `isValidLeadName` ≥2 chars). Quiz gained a 6th step "Your Details" (`STEPS.length` = 6 — SSR shows "Step 1 of 6"); estimator Step 3 got a "Your Contact Details" card; both CTAs `disabled` until valid; `/api/leads/{quiz,estimator}` persist real `customerName`/`phone` (fallbacks `'Walk-in (…)'`/`'UNKNOWN'`). WhatsApp messages carry the name (`tagsToWhatsAppMessage(tags, society?, customerName?)` + `• Customer Name`/`• Contact Number` lines). Tests R11.1–R11.6.
+- `src/app/` — App Router: `layout.tsx` (NavBar + OfferBanner + SpeedInsights), `page.tsx`, `globals.css`, `quiz/page.tsx`, `api/leads/{quiz,estimator}/route.ts`, `api/ai/restyle/route.ts` + `[jobId]`, `[city]/page.tsx` + `CityLanding.tsx`, and the new (untracked) `collections/` route.
+- `src/components/` — R1–R13 features. R13 2026-09-24: `BeforeAfterGrid.tsx` (16-cell grid = 15 pairs + CTA, `id="before-after-grid"`, gap token must stay `--grid-gap` + a lowercase `grid gap` comment — see gotchas) + `src/data/before-after-pairs.ts` (15 same-space pairs, 7 categories) + `scripts/generate-before-after.mjs` (keyed Pollinations edits; keys read from gitignored `.secrets/image-keys.json`, never inlined).
+- Estimator was split (working tree, untracked) into `src/components/estimator/` steps; `NavBar.tsx`, `ScrollReveal.tsx` are new untracked modules.
+- Specs/decision records live in `.opencode/*.md` (`spec-homepage-expansion.md`, `spec-beforeafter-grid-expansion.md`, …) — consult before re-deciding a documented decision (e.g. font choice D1).
+- `src/lib/engines.ts` — pure calculation engines (see interfaces below); `lead-router.ts`/`lead-assign.ts`/`lead-details.ts`/`quiz-to-tags.ts`/`package-recommender.ts`/`cities.ts` are the pure lead & estimator plumbing.
+- `README.md` is boilerplate create-next-app — ignore it. `CLAUDE.md` is `@AGENTS.md`. `.agents/.claude/.cursor/.devin/.kilo` dirs hold `prisma skills sync` output.
 
 ## Key Interfaces — `src/lib/engines.ts`
-Three pure functions with fixed interfaces; any changes require updating all callers:
+Three pure functions with fixed interfaces; any change requires updating all callers:
+- `calculateRollNesting(input)` → `{ totalVerticalDrops, matchingWasteInches, requiredContinuousMeters, totalSqFtRequired, totalSqFtWithBuffer }` (min 11% safety buffer over exact wall size)
+- `analyzeSolarLux(input)` → `{ highSolarHeatRadiation, recommendedBlindType }` (discriminant union of 3 blind types)
+- `calculateDynamicPricing(input)` → `{ materialCost, primerCost, installationLaborCost, subtotal, gstAmount, totalRetailPrice, escrowTranches }` (GST 18%; escrow 10/60/30; `isSmartMotorized` adds ₹15000)
 
-- `calculateRollNesting(input)` → `{ totalVerticalDrops, matchingWasteInches, requiredContinuousMeters, totalSqFtRequired, totalSqFtWithBuffer }`
-  - Note: Applies min 11% safety buffer over exact wall size (`Math.max(totalSqFtRequired, exactWallSqFt * 1.11)`)
-- `analyzeSolarLux(input)` → `{ highSolarHeatRadiation, recommendedBlindType }`
-  - `recommendedBlindType` is a discriminant union: `'Standard Translucent Sheer' | '100% Blackout Motorized Blinds' | 'Double-cell Honeycomb Blinds'`
-- `calculateDynamicPricing(input)` → `{ materialCost, primerCost, installationLaborCost, subtotal, gstAmount, totalRetailPrice, escrowTranches }`
-  - GST is 18%; escrow tranches are 10/60/30 of totalRetailPrice
-  - `isSmartMotorized` adds a flat ₹15000 surcharge
-
-## Design System Tokens (from `src/app/globals.css` and `PROJECT.md`)
-- **Palette**: Dark Espresso `#1C130B`, Warm Gold `#C5A880`, Terracotta Brown `#8A5836`, Linen Off-White `#FAF8F5`, WhatsApp Green `#15803D`
-- **Typography (V2)**: Headings MUST use `DM Sans` (`font-heading`) for a mature, editorial feel. Body MUST use `Inter` (`font-body`). Never use playful, bouncy, or overly geometric display fonts (e.g., Syne) for luxury brands.
-- **Imagery Rule**: NEVER use CSS gradients, blobs, or solid color blocks as placeholders for interior design projects. Always use high-quality, photorealistic images (or generate them via tools). Luxury sells on visual proof.
-- **Layout Philosophy**: Employ "Luxury Restraint". Use massive white space (120px+ section padding), minimal text overlays, and avoid crowding sections with too many stat pills, badges, or CTAs. Let the photography speak.
-- **Corners**: Only `rounded-2xl`, `rounded-3xl`, or `rounded-full`. Zero `rounded-sm` or basic `rounded`.
-- **Colors CSS vars**: `--color-espresso`, `--color-gold`, `--color-terracotta`, `--color-linen`, `--color-whatsapp`, plus R12 additions `--color-silver` (`#C9CDD4`) + `--color-royal` (`#3E2C1E`, deep bronze). Metallic utilities in `globals.css`: `.text-foil` (gold-foil gradient text w/ drifting `foil-sheen` keyframe), `.bg-foil-card` (bronze→gold card surfacing), `.shimmer-bar` (animated gold/silver rule) — all animation disabled under `prefers-reduced-motion`.
-
-## Framer Motion 13 Animations
-- Stagger entries, spring animations, marquee tickers, 3D tilt transformations
-- `motion` components from `framer-motion` are used throughout; preserve animation props when refactoring
+## Design System Tokens (`globals.css` + `PROJECT.md`)
+- **Palette**: Dark Espresso `#1C130B`, Warm Gold `#C5A880`, Terracotta `#8A5836`, Linen `#FAF8F5`, WhatsApp Green `#15803D`, R12 adds Silver `#C9CDD4` + Royal `#3E2C1E`. Utilities: `.text-foil`, `.bg-foil-card`, `.shimmer-bar` (reduced-motion disabled).
+- **Typography**: heading font is currently **Syne in the working tree, Space Grotesk at HEAD** (decision D1, mid-rollback — see top warning). Body is Plus Jakarta Sans. Curvy Yeseva One is loaded for the "Your Society, Pre-Measured" headline (`--font-yeseva`).
+- **Imagery Rule**: never CSS gradients/blobs/color blocks as interior-photo placeholders — use photorealistic images (`public/images/`).
+- **Corners**: only `rounded-2xl` / `rounded-3xl` / `rounded-full` (R6-B5 audits zero `rounded-sm`).
+- **Layout**: "Luxury Restraint" — 120px+ section padding, minimal stat pills/badges/CTAs.
 
 ## GSAP 3 Interaction Layer (R10)
-- Deps: `gsap@^3.15` + `@gsap/react@^2` (free since GSAP 3.13 — no license concerns).
-- **Always import through `src/lib/gsap.ts`** (`gsap`, `ScrollTrigger`, `useGSAP`, `registerGsap`) — it registers ScrollTrigger exactly once and guards SSR via `typeof window`. Call `registerGsap()` at the top of every `useGSAP` callback.
-- All GSAP work lives inside `useGSAP` in `"use client"` components; scope with `{ scope: ref }` and return a cleanup (kill tweens/triggers).
-- R10 tests (opaque, `scripts/test-e2e.mjs`): R10.1 gsap dep + setup module · R10.2 AnimatedCounter (`useGSAP`, `gsap.to`, `#C5A880`, ScrollTrigger) · R10.3 GoldDivider (`strokeDash`, gold palette, scroll-trigger) · R10.4 page seams + Reviews counter · R10.5 hero parallax (`yPercent`/`scrub`).
-- Don't touch hero stat-pill literals (R1.4 pins `247 Flats Done` etc.) — GSAP additions around them are additive only.
+- Deps `gsap@^3.15` + `@gsap/react@^2` (free). **Always import via `src/lib/gsap.ts`** (registers ScrollTrigger once, SSR-guarded); call `registerGsap()` at the top of every `useGSAP` callback; scope with `{ scope: ref }` and return cleanup. Additive over framer-motion only.
 
-## Tailwind CSS v4
-- Configured via `tailwind.config.ts`; PostCSS plugin `@tailwindcss/postcss` v4
-- `clsx` is used for conditional class joining
-- `tailwind-merge` v3 for class conflict resolution
-- **Do not upgrade Tailwind without reviewing `tailwind.config.ts`** — v4 has breaking changes from v3
-
-## Prisma ORM
-- `@prisma/client` v7.10.0; `prisma` v8.0.0-rc.15
-- `postinstall` script runs `prisma skills sync || exit 0`
-- Schema lives in `prisma/` — generate client with `npx prisma generate`
-
-## Critical Integration Points (from `PROJECT.md`)
-- `src/lib/engines.ts` ↔ `EstimatorGateway.tsx`: pass engine outputs as estimator inputs
-- Anchor target `#estimator` in `src/app/page.tsx`
-- Event: `window.dispatchEvent(new CustomEvent('auro:select-society', { detail: { society: string } }))` for pre-selecting society in wizard
+## Tailwind CSS v4 / Prisma
+- Tailwind v4 via `@tailwindcss/postcss` + `tailwind.config.ts` (v4 format). Class-merge behavior differs from v3 — check `tailwind-merge` interactions when refactoring class strings.
+- `@prisma/client` v7.10.0, `prisma` v8 rc; `postinstall` = `prisma skills sync || exit 0`. No local `prisma generate` → **lead APIs 503/500 locally by design** (`/api/leads/*`); quiz fallback opens WhatsApp with `919700675637`, estimator falls through to default number. Real persistence only on Vercel after the DEPLOY.md runbook.
 
 ## Milestones (from `PROJECT.md`)
-- M1: Global Foundation & Layout typing, Google fonts, Tailwind v4 theme
-- M2: Hero with word stagger & blobs, Before/After draggable slider
-- M3: Masonry grid with 3D tilt, 4 society cards with smooth scroll
-- M4: Auto-scrolling ticker, 3-step estimator wizard, luxury footer
-- M5: 100% E2E test suite pass + adversarial coverage hardening
+M1 Foundation & fonts · M2 Hero + draggable before/after · M3 Masonry + society cards · M4 Ticker + 3-step estimator + footer · M5 100% E2E + adversarial hardening (→ superseded by R7–R13 expansions; take milestone claims as history, not spec).
 
 ## Things Agents Often Get Wrong
-- **Tailwind class order**: With Tailwind v4, class ordering and `tailwind-merge` usage matters more than v3; incorrect merges cause unexpected overrides
-- **Test grade the contract, not duplication**: tests like R8.1 assert a reusable `StarRow` aria-label template + `REVIEWS.map` (single definition), NOT N copies of the markup — don't "fix" them by inlining components N times
-- **Every `/images/*` path must exist on disk** (R9.4 guard test scans `src/` and walks `public/images`); don't add dead image config — `cities.ts` society entries carry no `image` field
-- **Framer Motion props**: `whileHover`, `whileTap`, `transition` props are version-specific; check the `framer-motion` v13 docs before adding new animations
-- **`next/font` Google fonts**: `layout.tsx` loads `Syne` + `Plus_Jakarta_Sans` (weights 400–800) as `--font-syne`/`--font-plus-jakarta` — test R6.3 asserts on these imports, don't remove them. The extra CSS `@import` of the same families in `globals.css` is redundant (and causes a build warning); the `next/font` setup is the source of truth.
-- **Engines function purity**: `src/lib/engines.ts` functions are pure — no side effects, no DB calls. Treat as utility library; do not convert to async unless needed
-- **Runtime-verifying client flows without a browser**: SSR HTML contains React `<!-- -->` comment markers at every expression boundary (so `Contains('Step 1 of 6')` fails on `Step <!-- -->1<!-- --> of <!-- -->6`) and em-dashes in JSX text render as `-`. Match with tolerant regexes/stripped whitespace, not literals. Node 24 runs erasable-TS modules directly (type stripping) — `node -e`/`.mjs` can `import` `src/lib/*.ts` for pure-logic behavior tests (used for R11 validators, 16/16).
-- **Local lead APIs fail by design**: no local `prisma generate`, so `/api/leads/{quiz,estimator}` 503/500 locally — the quiz page's `.catch()` opens WhatsApp with default `919700675637` and the estimator falls through to the default number. Expected locally; real name/phone persistence happens on Vercel after the deploy runbook (migration PENDING REVIEW).
-- **CSS custom props in React `style` (2026-09-24)**: `style={{ '--grid-gap': '1.5rem' }}` fails `next build`/tsc with TS2353 (`'--grid-gap' does not exist in type Properties`) — cast it `as React.CSSProperties`. R13.1 opaque test asserts `code.includes('grid gap')` **case-sensitive** on `BeforeAfterGrid.tsx` — keep a lowercase `grid gap` class/comment or the gate fails (Vercel prod deploy + CI Gate 2 both broke on this at f787caf).
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- **Opaque tests grade source, not runtime**: R8.1 asserts a reusable `StarRow` aria-label template + `REVIEWS.map` (single definition) — don't "fix" by inlining copies. R9.4 walks `src/` and guards every `/images/*` path on disk — don't add dead image config; commit new images together with their code or CI Gate 1 fails on checkout.
+- **R13.1 case trap**: `BeforeAfterGrid.tsx` must contain the lowercase substring `grid gap` (the `--grid-gap` token + a lowercase `grid gap` comment satisfy it); the custom prop needs `as React.CSSProperties` or `next build` dies with TS2353. (Both broke the Vercel deploy + CI at 20a7002/f787caf — see git log.)
+- **SSR markers**: rendered text contains `<!-- -->` at expression boundaries and em-dashes render as `-` — match with tolerant regexes, not literals.
+- **Framer Motion props** (`whileHover`, `transition`, …) are v13-specific; check docs before adding.
+- **Hero stat-pill literals are pinned** (R1.4: "247 Flats Done" etc.) — GSAP additions around them are additive only.
+- **`engines.ts` functions are pure** (no side effects, no DB) — don't make them async.
+- **`next build` warns about duplicate lockfiles** (root `package-lock.json` vs workspace inference) — cosmetic; ignored for the gates.
+- **Don't touch the `<!-- BEGIN:nextjs-agent-rules -->` block below** — `next dev` regenerates it; committing it with your work keeps the tree clean.

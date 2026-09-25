@@ -152,7 +152,7 @@ export default function VisualizeRoom({ designItem, onClose, onUseLook }: Visual
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[#1C130B]/10">
-            <h2 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1C130B]">
+            <h2 className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
               {designItem ? `Visualize: ${designItem.title}` : 'Visualize Your Room'}
             </h2>
             <button onClick={onClose} className="text-[#1C130B]/50 hover:text-[#1C130B] p-1">
@@ -265,7 +265,7 @@ export default function VisualizeRoom({ designItem, onClose, onUseLook }: Visual
               className="absolute inset-0 border-2 border-[#C5A880]/30 rounded-full"
             />
           </div>
-          <h3 className="font-['Space_Grotesk'] text-xl font-bold text-[#1C130B] mb-2">
+          <h3 className="font-['Syne'] text-xl font-bold text-[#1C130B] mb-2">
             Generating your visualization...
           </h3>
           <p className="text-[#1C130B]/60 text-sm mb-6">
@@ -306,7 +306,7 @@ export default function VisualizeRoom({ designItem, onClose, onUseLook }: Visual
           <div className="flex items-center gap-3">
             <CheckCircle className="w-6 h-6 text-[#15803D]" />
             <div>
-              <h2 className="font-['Space_Grotesk'] text-lg font-bold text-[#1C130B]">
+              <h2 className="font-['Syne'] text-lg font-bold text-[#1C130B]">
                 {designItem ? designItem.title : 'Your Visualization'}
               </h2>
               <p className="text-[#1C130B]/50 text-xs">{designItem?.category} style applied</p>

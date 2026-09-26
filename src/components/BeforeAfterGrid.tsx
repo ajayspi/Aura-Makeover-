@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -8,37 +8,8 @@ import { BEFORE_AFTER_PAIRS, PAIR_COUNT, CELL_COUNT } from '@/data/before-after-
 
 function CardSlider({ item }: { item: any }) {
   const [sliderPosition, setSliderPosition] = useState(50);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleMove = (clientX: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    const percent = (x / rect.width) * 100;
-    setSliderPosition(percent);
-  };
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (isDragging) handleMove(e.clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (isDragging) handleMove(e.touches[0].clientX);
-  };
-
   return (
-    <div 
-      ref={containerRef}
-      className="relative w-full aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden cursor-ew-resize group"
-      onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
-      onMouseUp={() => setIsDragging(false)}
-      onMouseLeave={() => setIsDragging(false)}
-      onMouseMove={onMouseMove}
-      onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
-      onTouchEnd={() => setIsDragging(false)}
-      onTouchMove={onTouchMove}
-    >
+    <div className="relative w-full aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden group">
       {/* Before Image (Background) */}
       <div className="absolute inset-0">
         <Image src={item.before} alt={`${item.label} Before`} fill className="object-cover grayscale-[0.35]" />
@@ -60,13 +31,24 @@ function CardSlider({ item }: { item: any }) {
 
       {/* Slider Handle */}
       <div 
-        className="absolute top-0 bottom-0 w-1 bg-[#FAF8F5] cursor-ew-resize pointer-events-none shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+        className="absolute top-0 bottom-0 w-1 bg-[#FAF8F5] pointer-events-none shadow-[0_0_10px_rgba(0,0,0,0.5)]"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-[#FAF8F5] rounded-full flex items-center justify-center shadow-lg border border-[#C5A880]">
           <div className="w-1 h-4 border-l border-r border-[#C5A880] opacity-50" />
         </div>
       </div>
+      
+      {/* Hidden input range for foolproof smooth dragging */}
+      <input 
+        type="range" 
+        min="0" 
+        max="100" 
+        value={sliderPosition}
+        onChange={(e) => setSliderPosition(Number(e.target.value))}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-10 m-0 p-0"
+        aria-label="Before and after slider"
+      />
       
       {/* Footer Info */}
       <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#1C130B]/80 to-transparent pointer-events-none">

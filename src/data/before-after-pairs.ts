@@ -159,7 +159,7 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     variant: 2,
     label: 'Balcony — Vertical Green Garden',
     before: '/images/balcony 1 -garden BEFORE.jpg',
-    after: '/images/balcony 1 -garden (1).jpg',
+    after: '/images/after-balcony-garden.jpg',
   },
 ];
 

@@ -29,7 +29,7 @@ export const GRID_CATEGORIES = [
 
 export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
   // Living Room (3 variants)
-    {
+  {
     id: 'living-1',
     category: 'living',
     variant: 1,
@@ -37,7 +37,7 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     before: '/images/before-living-2.jpg',
     after: '/images/after-living-fluted.jpg',
   },
-    {
+  {
     id: 'living-2',
     category: 'living',
     variant: 2,
@@ -45,7 +45,7 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     before: '/images/before-living-1.jpg',
     after: '/images/after-living-botanical.jpg',
   },
-    {
+  {
     id: 'living-3',
     category: 'living',
     variant: 3,
@@ -54,26 +54,34 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     after: '/images/after-living-arch.jpg',
   },
 
-  // Bedroom (2 variants)
+  // Bedroom (3 variants)
   {
     id: 'bedroom-1',
     category: 'bedroom',
     variant: 1,
-    label: 'Bedroom — Neo-classical Moulding',
-    before: '/images/before.jpg',
-    after: '/images/neoclassical.jpg',
+    label: 'Bedroom — Warm Gold Textile Layer',
+    before: '/images/before-master.jpg',
+    after: '/images/after-master-pichwai.jpg',
   },
   {
     id: 'bedroom-2',
     category: 'bedroom',
     variant: 2,
-    label: 'Bedroom — Warm Gold Textile Layer',
-    before: '/images/before.jpg',
-    after: '/images/pichwai.jpg',
+    label: 'Bedroom — Smart Blackout Minimal',
+    before: '/images/before-master.jpg',
+    after: '/images/after-master-smart.jpg',
+  },
+  {
+    id: 'bedroom-3',
+    category: 'bedroom',
+    variant: 3,
+    label: 'Bedroom — Organic Linen Tones',
+    before: '/images/before-master.jpg',
+    after: '/images/after-master-linen.jpg',
   },
 
-  // Dining (2 variants)
-    {
+  // Dining (1 variant)
+  {
     id: 'dining-1',
     category: 'dining',
     variant: 1,
@@ -81,17 +89,9 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     before: '/images/before-dining.jpg',
     after: '/images/after-dining-mirror.jpg',
   },
-    {
-    id: 'dining-2',
-    category: 'dining',
-    variant: 2,
-    label: 'Dining Room — Fluted Slat Feature',
-    before: '/images/before-dining.jpg',
-    after: '/images/showcase-slats.jpg',
-  },
 
   // Office (2 variants)
-    {
+  {
     id: 'office-1',
     category: 'office',
     variant: 1,
@@ -99,7 +99,7 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     before: '/images/before-office.jpg',
     after: '/images/after-office-wood.jpg',
   },
-    {
+  {
     id: 'office-2',
     category: 'office',
     variant: 2,
@@ -113,17 +113,17 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     id: 'pooja-1',
     category: 'pooja',
     variant: 1,
-    label: 'Pooja Room — Carved Teak Jali Panels',
-    before: '/images/before.jpg',
-    after: '/images/showcase-pooja.jpg',
+    label: 'Pooja Room — Traditional Carved Wood',
+    before: '/images/before-pooja.jpg',
+    after: '/images/after-pooja-traditional.jpg',
   },
   {
     id: 'pooja-2',
     category: 'pooja',
     variant: 2,
-    label: 'Pooja Room — Concealed Diya Lighting',
-    before: '/images/before.jpg',
-    after: '/images/fluted-louver.jpg',
+    label: 'Pooja Room — Modern Statuario Marble',
+    before: '/images/before-pooja.jpg',
+    after: '/images/after-pooja-marble.jpg',
   },
 
   // Kids Room (2 variants)
@@ -131,17 +131,17 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     id: 'kids-1',
     category: 'kids',
     variant: 1,
-    label: 'Kids Room — Playful Wallpaper Zone',
-    before: '/images/before.jpg',
-    after: '/images/showcase-wallpaper.jpg',
+    label: 'Kids Room — Luxury Jungle Safari',
+    before: '/images/before-kids.jpg',
+    after: '/images/after-kids-jungle.jpg',
   },
   {
     id: 'kids-2',
     category: 'kids',
     variant: 2,
-    label: 'Kids Room — Modular Storage System',
-    before: '/images/before.jpg',
-    after: '/images/showcase-living.jpg',
+    label: 'Kids Room — Galaxy Space Theme',
+    before: '/images/before-kids.jpg',
+    after: '/images/after-kids-space.jpg',
   },
 
   // Balcony (2 variants)
@@ -149,17 +149,17 @@ export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
     id: 'balcony-1',
     category: 'balcony',
     variant: 1,
-    label: 'Balcony — Weather-proof Louver Screen',
-    before: '/images/before.jpg',
-    after: '/images/fluted-louver.jpg',
+    label: 'Balcony — Teak Wood Decking',
+    before: '/images/balcony 1 -garden BEFORE.jpg',
+    after: '/images/after-balcony-decking.jpg',
   },
   {
     id: 'balcony-2',
     category: 'balcony',
     variant: 2,
-    label: 'Balcony — Green Wall + Seating Nook',
-    before: '/images/before.jpg',
-    after: '/images/botanical.jpg',
+    label: 'Balcony — Vertical Green Garden',
+    before: '/images/balcony 1 -garden BEFORE.jpg',
+    after: '/images/balcony 1 -garden (1).jpg',
   },
 ];
 

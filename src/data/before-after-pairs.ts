@@ -29,29 +29,29 @@ export const GRID_CATEGORIES = [
 
 export const BEFORE_AFTER_PAIRS: BeforeAfterPair[] = [
   // Living Room (3 variants)
-  {
+    {
     id: 'living-1',
     category: 'living',
     variant: 1,
     label: 'Living Room — Fluted Walnut Louvers',
-    before: '/images/before.jpg',
-    after: '/images/after.jpg',
+    before: '/images/before-living-2.jpg',
+    after: '/images/after-living-fluted.jpg',
   },
-  {
+    {
     id: 'living-2',
     category: 'living',
     variant: 2,
     label: 'Living Room — Botanical Wallpaper Accent',
-    before: '/images/before.jpg',
-    after: '/images/showcase-wallpaper.jpg',
+    before: '/images/before-living-1.jpg',
+    after: '/images/after-living-botanical.jpg',
   },
-  {
+    {
     id: 'living-3',
     category: 'living',
     variant: 3,
     label: 'Living Room — Concealed Cove Lighting',
-    before: '/images/before.jpg',
-    after: '/images/showcase-slats.jpg',
+    before: '/images/before-living-3.jpg',
+    after: '/images/after-living-arch.jpg',
   },
 
   // Bedroom (2 variants)

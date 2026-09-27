@@ -38,7 +38,7 @@ export default function NavBar() {
           
           {/* Logo */}
           <Link href="/" className="relative z-50">
-            <AuroBrand />
+            <AuroBrand variant={isScrolled || mobileMenuOpen ? 'dark' : 'light'} />
           </Link>
 
           {/* Desktop Nav */}

@@ -55,11 +55,11 @@ export function AuroBrand({ className = "", variant = 'dark' }: { className?: st
   const highlightColor = variant === 'dark' ? 'text-[#8A5836]' : 'text-[#C5A880]';
 
   return (
-    <div className={`flex items-center gap-2 group ${className}`}>
-      <div className="relative flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-        <AuroLogo className="w-8 h-8 sm:w-10 sm:h-10" variant={variant} />
+    <div className={`flex items-center gap-1.5 sm:gap-2 group ${className}`}>
+      <div className="relative flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+        <AuroLogo className="w-6 h-6 sm:w-8 sm:h-8" variant={variant} />
       </div>
-      <span className={`font-['Syne'] font-black text-xl sm:text-2xl tracking-tight ${textColor}`}>
+      <span className={`font-['Syne'] font-black text-lg sm:text-xl tracking-tight ${textColor}`}>
         Auro<span className={highlightColor}>Makeover</span>
       </span>
     </div>

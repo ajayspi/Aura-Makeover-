@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { assignAgent } from '@/lib/lead-assign';
+import { EventBus } from '@/lib/infrastructure/EventBus';
 
 // Dynamic Prisma client for Prisma 8 compatibility
 let prismaClient: {
@@ -66,9 +67,18 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    const typedLead = lead as { id: string; customerName: string; phone: string };
+
+    // [Enterprise Architecture] Fire-and-forget Domain Event
+    EventBus.emitEvent('lead.created', {
+      leadId: typedLead.id,
+      customerName: typedLead.customerName,
+      phone: typedLead.phone,
+    });
+
     return NextResponse.json({
       success: true,
-      leadId: (lead as { id: string }).id,
+      leadId: typedLead.id,
       assignedAgent: agent ? { id: agent.id, name: agent.name } : null,
       assignedWhatsapp: agent ? agent.phone : null,
     });

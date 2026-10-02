@@ -52,8 +52,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  leads     Lead[]
-  orders    Order[]
+  leads         Lead[]
+  orders        Order[]
+  installations Installation[] @relation("TechInstallations")
 }
 
 model SocietyLayout {
@@ -146,6 +147,8 @@ model Order {
   updatedAt           DateTime   @updatedAt
   items               OrderItem[]
   warranty            WarrantyVault?
+  escrowTransactions  EscrowTransaction[]
+  installation        Installation?
 }
 
 model OrderItem {
@@ -171,4 +174,67 @@ model WarrantyVault {
   expiresAt           DateTime
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+}
+
+enum EscrowStage {
+  DEPOSIT_10
+  MATERIAL_60
+  QA_30
+}
+
+enum TransactionStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+model EscrowTransaction {
+  id        String            @id @default(uuid())
+  order     Order             @relation(fields: [orderId], references: [id])
+  orderId   String
+  stage     EscrowStage
+  status    TransactionStatus @default(PENDING)
+  amount    Float
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+enum InstallStatus {
+  SCHEDULED
+  IN_PROGRESS
+  QA_PENDING
+  COMPLETED
+}
+
+model Van {
+  id            String         @id @default(uuid())
+  vehicleNumber String         @unique
+  city          String
+  status        String         @default("AVAILABLE")
+  installations Installation[]
+}
+
+model Installation {
+  id           String        @id @default(uuid())
+  order        Order         @relation(fields: [orderId], references: [id])
+  orderId      String        @unique
+  technician   User?         @relation(name: "TechInstallations", fields: [technicianId], references: [id])
+  technicianId String?
+  van          Van?          @relation(fields: [vanId], references: [id])
+  vanId        String?
+  scheduledAt  DateTime
+  status       InstallStatus @default(SCHEDULED)
+  startedAt    DateTime?
+  completedAt  DateTime?
+  qaReport     QAReport?
+}
+
+model QAReport {
+  id              String       @id @default(uuid())
+  installation    Installation @relation(fields: [installationId], references: [id])
+  installationId  String       @unique
+  moistureReading Float
+  customerSigned  Boolean      @default(false)
+  warrantyStatus  String       @default("PENDING")
+  createdAt       DateTime     @default(now())
 }

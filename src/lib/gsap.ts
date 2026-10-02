@@ -13,14 +13,22 @@ import { useGSAP } from '@gsap/react';
 
 let registered = false;
 
-/** Register GSAP plugins exactly once. Safe to call from every client mount. */
 export function registerGsap(): boolean {
   if (typeof window === 'undefined') return false;
   if (!registered) {
     gsap.registerPlugin(ScrollTrigger);
+    // Setup default easing for the whole app
+    gsap.defaults({ ease: 'power3.out', duration: 0.8 });
     registered = true;
   }
   return registered;
 }
+
+// Create responsive contexts for heavy animations
+export const mediaQs = {
+  desktop: "(min-width: 1024px)",
+  mobile: "(max-width: 1023px)",
+  reducedMotion: "(prefers-reduced-motion: reduce)"
+};
 
 export { gsap, ScrollTrigger, useGSAP };

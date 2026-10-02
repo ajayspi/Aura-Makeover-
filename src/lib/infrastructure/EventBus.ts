@@ -24,3 +24,7 @@ class DomainEventBus extends EventEmitter {
 
 // Singleton instance
 export const EventBus = new DomainEventBus();
+
+// Auto-register subscribers to wire up business logic (Scoring, Orchestration)
+import { registerEventSubscribers } from './EventSubscribers';
+registerEventSubscribers();

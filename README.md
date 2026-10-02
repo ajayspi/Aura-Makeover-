@@ -14,6 +14,25 @@ Detailed architectural documentation can be found in the `docs/` directory:
 - [Database Architecture (ERD)](docs/DATABASE_ARCHITECTURE.md) — Prisma schema ERD showing Escrow, Inventory, and Order flows.
 - [Notion Master Document](docs/NOTION_MASTER_DOC.md) — Comprehensive business, design, and animation spec designed for Notion import.
 
+### Core Services (Enterprise Architecture)
+
+| Service | Path | Purpose |
+|---|---|---|
+| **Lifecycle State Machine** | `src/lib/services/LifecycleStateMachine.ts` | 20-state deterministic customer lifecycle with guard conditions |
+| **Lead Scoring Engine** | `src/lib/services/LeadScoringEngine.ts` | 3-dimensional scoring (Engagement/Intent/Value) with S/A/B/C tier routing |
+| **Communication Orchestrator** | `src/lib/services/CommunicationOrchestrator.ts` | Multi-channel message routing (WhatsApp/SMS/Email/Push) with template engine |
+| **Webhook Dispatcher** | `src/lib/services/WebhookDispatcher.ts` | HMAC-signed outbound webhooks for CRM integration |
+| **Domain Event Bus** | `src/lib/infrastructure/EventBus.ts` | Typed pub/sub event emitter decoupling business logic from integrations |
+
+### REST API v1
+
+| Endpoint | Purpose |
+|---|---|
+| `GET/POST /api/v1/customers` | Customer CRUD with 360° profile |
+| `GET/POST /api/v1/leads` | Lead listing + lifecycle state transitions |
+| `GET /api/v1/analytics?type=` | Pipeline, Revenue, Conversion funnel, Agent leaderboard |
+| `POST /api/v1/webhooks/crm` | Secure inbound CRM sync (HMAC validated) |
+
 ## 🚀 Tech Stack
 
 - **Frontend:** Next.js 16 (App Router), React 19

@@ -238,3 +238,194 @@ model QAReport {
   warrantyStatus  String       @default("PENDING")
   createdAt       DateTime     @default(now())
 }
+
+// ═══════════════════════════════════════════════════════════════
+// CUSTOMER MANAGEMENT PLATFORM — Phase P0 Extension
+// ═══════════════════════════════════════════════════════════════
+
+enum LifecycleStage {
+  ANONYMOUS
+  LEAD_CAPTURED
+  CONTACTED
+  VAN_DISPATCHED
+  MEASURED
+  QUOTE_SENT
+  NEGOTIATING
+  DEAL_WON
+  DEAL_LOST
+  MATERIAL_ORDERED
+  INSTALL_SCHEDULED
+  INSTALLING
+  QA_PENDING
+  COMPLETED
+  WARRANTY_ACTIVE
+  CLAIM_OPEN
+  CLAIM_RESOLVED
+  WARRANTY_EXPIRED
+  REACTIVATION_TARGET
+  NURTURE_SEQUENCE
+}
+
+enum TimelineEventType {
+  CALL
+  WHATSAPP
+  EMAIL
+  VISIT
+  PAYMENT
+  NOTE
+  SYSTEM
+  STAGE_CHANGE
+}
+
+enum ScoreTier {
+  S
+  A
+  B
+  C
+}
+
+model Customer {
+  id              String          @id @default(uuid())
+  phone           String          @unique
+  email           String?
+  name            String
+  avatarUrl       String?
+  lifecycleStage  LifecycleStage  @default(ANONYMOUS)
+  lifetimeValue   Float           @default(0)
+  projectCount    Int             @default(0)
+  npsScore        Float?
+  firstTouchAt    DateTime        @default(now())
+  lastActivityAt  DateTime        @default(now())
+  preferences     Json?           // Style quiz results, preferred categories
+  referralCode    String?         @unique
+  referredBy      String?         // referralCode of the referring customer
+  externalCrmId   String?         @unique
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  addresses       CustomerAddress[]
+  timeline        CustomerTimeline[]
+  tags            CustomerTag[]
+  score           CustomerScore?
+}
+
+model CustomerAddress {
+  id          String   @id @default(uuid())
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  String
+  type        String   @default("HOME") // HOME, OFFICE, SITE
+  society     String?
+  tower       String?
+  unit        String?
+  city        String
+  pincode     String?
+  latitude    Float?
+  longitude   Float?
+  isPrimary   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([customerId])
+}
+
+model CustomerTimeline {
+  id          String             @id @default(uuid())
+  customer    Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  String
+  eventType   TimelineEventType
+  channel     String             @default("WEB") // WEB, APP, PHONE, FIELD, SYSTEM
+  summary     String
+  actorId     String?            // Agent or System user ID
+  actorName   String?
+  metadata    Json?              // Flexible payload (call duration, message content, etc.)
+  occurredAt  DateTime           @default(now())
+
+  @@index([customerId, occurredAt])
+  @@index([eventType])
+}
+
+model CustomerTag {
+  id          String   @id @default(uuid())
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  String
+  tag         String   // HIGH_VALUE, REFERRAL_SOURCE, VIP, CHURNED, REPEAT
+  createdAt   DateTime @default(now())
+
+  @@unique([customerId, tag])
+  @@index([tag])
+}
+
+model CustomerScore {
+  id               String    @id @default(uuid())
+  customer         Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId       String    @unique
+  engagementScore  Int       @default(0) // 0-100
+  intentScore      Int       @default(0) // 0-100
+  valueScore       Int       @default(0) // 0-100
+  compositeScore   Int       @default(0) // Weighted average
+  tier             ScoreTier @default(C)
+  calculatedAt     DateTime  @default(now())
+}
+
+model CustomerSegment {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g. "Kokapet Premium 3BHK"
+  description String?
+  query       Json     // Dynamic filter expression
+  memberCount Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MessageTemplate {
+  id        String   @id @default(uuid())
+  slug      String   @unique // e.g. "lead_welcome", "quote_sent"
+  channel   String   // WHATSAPP, SMS, EMAIL, PUSH
+  subject   String?  // For email only
+  body      String   // Supports {{customer.name}}, {{order.totalAmount}}
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model WebhookEndpoint {
+  id        String   @id @default(uuid())
+  url       String
+  secret    String   // HMAC signing secret
+  events    String[] // e.g. ["lead.created", "order.completed"]
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorId     String
+  actorRole   String
+  action      String   // CREATE, UPDATE, DELETE, TRANSITION
+  entityType  String   // Customer, Lead, Order
+  entityId    String
+  oldValue    Json?
+  newValue    Json?
+  ipAddress   String?
+  userAgent   String?
+  occurredAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([occurredAt])
+}
+
+model ApiKey {
+  id          String   @id @default(uuid())
+  name        String   // e.g. "Salesforce Integration"
+  keyHash     String   @unique // SHA-256 hash of the actual key
+  prefix      String   // First 8 chars for identification (e.g. "auro_pk_")
+  permissions String[] // ["customers:read", "leads:write", "orders:read"]
+  rateLimit   Int      @default(100) // Requests per minute
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}

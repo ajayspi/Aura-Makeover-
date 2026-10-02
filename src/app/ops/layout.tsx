@@ -22,6 +22,10 @@ export default function OpsLayout({ children }: { children: React.ReactNode }) {
             <Users className="w-5 h-5 text-[#8A5836]" />
             Leads CRM
           </Link>
+          <Link href="/ops/customers" className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
+            <Users className="w-5 h-5 text-gray-400" />
+            Customers 360°
+          </Link>
           <Link href="/ops/inventory" className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
             <Package className="w-5 h-5 text-gray-400" />
             Inventory

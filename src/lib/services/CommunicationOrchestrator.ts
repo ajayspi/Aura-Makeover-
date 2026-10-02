@@ -142,20 +142,35 @@ export function routeMessage(payload: MessagePayload): RoutedMessage[] {
   }];
 }
 
+import { AiSensyService } from './AiSensyService';
+
 /**
  * Dispatch a message (Phase 1: console log, Phase 2: real API calls).
  */
-export async function dispatchMessage(message: RoutedMessage): Promise<boolean> {
+export async function dispatchMessage(message: RoutedMessage, rawVariables: Record<string, string> = {}): Promise<boolean> {
   console.log(`[Orchestrator] Dispatching via ${message.channel} to ${message.to}`);
   console.log(`  Template: ${message.templateSlug}`);
-  console.log(`  Body: ${message.body.substring(0, 100)}...`);
+  
+  if (message.channel === 'WHATSAPP') {
+    // AiSensy expects ordered parameters (e.g., ["Arjun", "₹85,000"]) rather than named keys.
+    // We extract the values from our named variables payload to pass to AiSensy.
+    const orderedParams = Object.values(rawVariables);
+    
+    // Fallback username if name isn't provided in variables
+    const userName = rawVariables.name || 'Customer';
 
-  // Phase 2: Replace with actual API calls
+    return await AiSensyService.sendTemplateMessage(
+      message.to,
+      message.templateSlug, // This must match the Campaign Name in AiSensy dashboard exactly
+      userName,
+      orderedParams
+    );
+  }
+
+  // Phase 2: Add other channel dispatchers (SMS/Email)
   // switch (message.channel) {
-  //   case 'WHATSAPP': return await gupshupSend(message);
   //   case 'SMS': return await twillioSend(message);
   //   case 'EMAIL': return await sesSend(message);
-  //   case 'PUSH': return await firebaseSend(message);
   // }
 
   return true;

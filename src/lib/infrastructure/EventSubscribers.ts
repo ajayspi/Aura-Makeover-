@@ -53,7 +53,9 @@ export function registerEventSubscribers() {
     });
 
     for (const msg of messages) {
-      await dispatchMessage(msg);
+      await dispatchMessage(msg, {
+        name: payload.customerName.split(' ')[0], // First name
+      });
     }
   });
 
@@ -72,7 +74,11 @@ export function registerEventSubscribers() {
         },
       });
       for (const msg of messages) {
-        await dispatchMessage(msg);
+        await dispatchMessage(msg, {
+          name: 'Customer',
+          society: 'Your Society',
+          amount: '₹85,000',
+        });
       }
     }
   });

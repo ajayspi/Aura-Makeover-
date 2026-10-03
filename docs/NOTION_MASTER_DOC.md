@@ -119,3 +119,51 @@ erDiagram
 - **Database:** Prisma ORM (PostgreSQL)
 - **Payments (Proposed):** Razorpay Escrow API
 - **Auth (Proposed):** NextAuth.js / Clerk
+
+---
+
+# 6. Customer Management Platform (CMP) & Event-Driven Architecture
+
+The core CRM and back-office platform is defined by Phase P0 to P2 extensions, powering AuroMakeover's operations.
+
+## Customer 360 & Core Models
+- **Customer Model**: Real-time snapshot of the customer, tracking lifetime value (LTV), NPS, project count, tags, and lifecycle stage.
+- **CustomerTimeline**: Immutable event sourcing logging all interactions (calls, WhatsApp messages, payments, site visits) for perfect traceability.
+- **CustomerScore**: Live computation of engagement, intent, and value to rank leads.
+
+## 20-State Lifecycle State Machine
+A deterministic state machine (`src/lib/services/LifecycleStateMachine.ts`) enforces valid transitions with hard guard conditions.
+
+<details>
+<summary>Key Transitions & Guards</summary>
+
+- `ANONYMOUS` → `LEAD_CAPTURED`: Triggered by `quiz_submit` (requires sessionId).
+- `QUOTE_SENT` → `DEAL_WON`: Triggered by 10% Escrow Deposit confirmation.
+- `MATERIAL_ORDERED` → `INSTALL_SCHEDULED`: Requires both a technician and valid date.
+- `INSTALLING` → `QA_PENDING`: Requires technician to upload at least one QA photo.
+- `QA_PENDING` → `COMPLETED`: Requires digital customer signature.
+</details>
+
+## Lead Scoring Engine & SLA Tiers
+A three-dimensional scoring system (`src/lib/services/LeadScoringEngine.ts`) runs on each customer update.
+
+| Tier | Score Range | Description & Urgency SLA |
+|---|---|---|
+| **Tier S** | 80 - 100 | Immediate assignment to senior agent + instant WhatsApp alert. High intent, high value. |
+| **Tier A** | 60 - 79 | Assign to available agent within 15 min + auto-send Swatch PDF via WhatsApp. |
+| **Tier B** | 40 - 59 | Enrolled in 7-day automated drip WhatsApp campaign to nurture intent. |
+| **Tier C** | 0 - 39 | Weekly batch email newsletter (low engagement/intent). |
+
+## Communication Orchestrator & WhatsApp (AiSensy)
+All outbound messaging (WhatsApp, SMS, Email) flows through the `CommunicationOrchestrator` (`src/lib/services/CommunicationOrchestrator.ts`).
+
+- **AiSensy Integration**: The system directly connects to WhatsApp Business API via AiSensy.
+- **Event-Driven**: The system relies on a central `EventBus`. When the `LifecycleStateMachine` successfully transitions a lead to `QUOTE_SENT`, an event is emitted and the orchestrator dispatches a templated WhatsApp message automatically.
+- **Templates**: Dynamic handlebars-style string replacement stored natively in Prisma.
+
+## Live Inventory Tracking & Supply Chain
+Materials and field dispatches are tracked precisely.
+
+- **Dye-Lot Tracking**: Wallpaper batches are logged by `DyeLot` (CMYK code and substrate batch) to eliminate slight color discrepancies across walls.
+- **Serial Depletion**: Rolls are serialized. When assigned, their `stockMeters` drops based on the `calculateRollNesting()` pure function (including an 11% safety buffer).
+- **Technician & Van Tracking**: Fleet operations dispatch specific Vans and Technicians, recording check-in and checkout times for each installation.

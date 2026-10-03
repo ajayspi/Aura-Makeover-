@@ -13,6 +13,7 @@ Detailed architectural documentation can be found in the `docs/` directory:
 - [UML Use Case Diagrams](docs/UML_USE_CASES.md) — Visual mapping of Customer, Admin, Technician, and Vendor workflows.
 - [Database Architecture (ERD)](docs/DATABASE_ARCHITECTURE.md) — Prisma schema ERD showing Escrow, Inventory, and Order flows.
 - [Notion Master Document](docs/NOTION_MASTER_DOC.md) — Comprehensive business, design, and animation spec designed for Notion import.
+- [Enterprise Architecture](docs/ARCHITECTURE.md) — Comprehensive documentation of the Customer Management Platform (CMP), 20-state lifecycle state machine, lead scoring, WhatsApp integrations, and inventory tracking.
 
 ### Core Services (Enterprise Architecture)
 

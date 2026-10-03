@@ -1,18 +1,22 @@
-"use client";
-
 import React from 'react';
 import { Search, Plus, Filter } from 'lucide-react';
+import { PrismaClient } from '@prisma/client';
 
-const mockLeads = [
-  { id: 'LD-1021', name: 'Arjun Reddy', society: 'My Home Bhooja', stage: 'NEW', value: '₹55,000' },
-  { id: 'LD-1022', name: 'Priya K.', society: 'Aparna Sarovar', stage: 'CONTACTED', value: 'Pending' },
-  { id: 'LD-1019', name: 'Rahul V.', society: 'Prestige High Fields', stage: 'QUOTED', value: '₹89,000' },
-  { id: 'LD-1015', name: 'Sneha M.', society: 'Rajapushpa', stage: 'WON', value: '₹1,20,000' },
-];
+const prisma = new PrismaClient();
 
-const STAGES = ['NEW', 'CONTACTED', 'QUOTED', 'WON'];
+const STAGES = ['NEW', 'WHATSAPP_SENT', 'VAN_DISPATCHED', 'MEASURED', 'QUOTE_LOCKED', 'WON', 'LOST'] as const;
 
-export default function LeadsCRM() {
+export default async function LeadsCRM() {
+  const leads = await prisma.lead.findMany({
+    include: {
+      society: true,
+      orders: {
+        select: { totalAmount: true }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
   return (
     <div className="p-8">
       {/* Header */}
@@ -41,29 +45,44 @@ export default function LeadsCRM() {
 
       {/* Kanban Board */}
       <div className="flex gap-6 overflow-x-auto pb-4">
-        {STAGES.map(stage => (
-          <div key={stage} className="min-w-[300px] flex-1">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-sm text-gray-700">{stage}</h3>
-              <span className="bg-gray-200 text-gray-600 text-xs font-bold px-2 py-0.5 rounded-full">
-                {mockLeads.filter(l => l.stage === stage).length}
-              </span>
-            </div>
-            
-            <div className="space-y-3">
-              {mockLeads.filter(l => l.stage === stage).map(lead => (
-                <div key={lead.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:border-[#C5A880]/50 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-bold text-gray-400">{lead.id}</span>
-                    <span className="text-xs font-bold text-[#8A5836]">{lead.value}</span>
+        {STAGES.map(stage => {
+          const stageLeads = leads.filter(l => l.status === stage);
+          return (
+            <div key={stage} className="min-w-[300px] flex-1">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-sm text-gray-700">{stage.replace(/_/g, ' ')}</h3>
+                <span className="bg-gray-200 text-gray-600 text-xs font-bold px-2 py-0.5 rounded-full">
+                  {stageLeads.length}
+                </span>
+              </div>
+              
+              <div className="space-y-3">
+                {stageLeads.map(lead => {
+                  const val = lead.orders.length > 0 
+                    ? `₹${lead.orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}` 
+                    : 'Pending';
+                    
+                  return (
+                    <div key={lead.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:border-[#C5A880]/50 transition-colors cursor-pointer">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] font-mono text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">{lead.id.split('-')[0].substring(0, 8)}</span>
+                        <span className="text-xs font-bold text-[#8A5836]">{val}</span>
+                      </div>
+                      <h4 className="font-bold text-[#1C130B] mb-1">{lead.customerName}</h4>
+                      <p className="text-xs text-gray-500">{lead.society?.societyName || 'Unknown Society'}</p>
+                    </div>
+                  );
+                })}
+                
+                {stageLeads.length === 0 && (
+                  <div className="p-4 rounded-xl border border-dashed border-gray-200 text-center text-xs text-gray-400 font-medium">
+                    No leads in this stage
                   </div>
-                  <h4 className="font-bold text-[#1C130B] mb-1">{lead.name}</h4>
-                  <p className="text-sm text-gray-500">{lead.society}</p>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

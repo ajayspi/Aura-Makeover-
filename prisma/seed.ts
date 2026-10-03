@@ -114,6 +114,40 @@ async function main() {
     }
   });
 
+  // 5. Create Leads for the Kanban Board
+  await prisma.lead.createMany({
+    data: [
+      {
+        customerName: 'Rahul Venkat',
+        phone: '+918876512345',
+        societyId: society1.id,
+        status: 'NEW',
+        assignedAgentId: agent.id,
+      },
+      {
+        customerName: 'Kiran D.',
+        phone: '+919988776655',
+        societyId: society1.id,
+        status: 'WHATSAPP_SENT',
+        assignedAgentId: agent.id,
+      },
+      {
+        customerName: 'Priya K.',
+        phone: '+919123456780',
+        societyId: society1.id,
+        status: 'QUOTE_LOCKED',
+        assignedAgentId: agent.id,
+      },
+      {
+        customerName: 'Sneha M.',
+        phone: '+917765498765',
+        societyId: society1.id,
+        status: 'WON',
+        assignedAgentId: agent.id,
+      }
+    ]
+  });
+
   console.log(`✅ Seeded Customer: ${customer1.name} (S-Tier)`);
   console.log(`✅ Seeded Customer: ${customer2.name} (A-Tier)`);
   console.log('🌱 Seeding complete.');

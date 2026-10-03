@@ -1,114 +1,146 @@
-"use client";
-
 import React from 'react';
-import { TrendingUp, Users, IndianRupee, Truck, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, Users, IndianRupee, Truck, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
+import { PrismaClient } from '@prisma/client';
 
-const revenueData = [
-  { month: 'May', value: 320000 },
-  { month: 'Jun', value: 480000 },
-  { month: 'Jul', value: 510000 },
-  { month: 'Aug', value: 720000 },
-  { month: 'Sep', value: 890000 },
-];
+const prisma = new PrismaClient();
 
-const recentActivity = [
-  { action: 'Lead converted to Order', detail: 'Arjun Reddy · My Home Bhooja', time: '2 min ago', type: 'success' },
-  { action: 'Escrow 60% received', detail: 'Order ORD-882 · ₹34,200', time: '15 min ago', type: 'payment' },
-  { action: 'Low stock alert', detail: 'Art Deco Gold (WP-GEO-04) — 45m remaining', time: '1h ago', type: 'warning' },
-  { action: 'QA Report submitted', detail: 'Ravi K. · Prestige High Fields T5-1501', time: '3h ago', type: 'info' },
-  { action: 'New lead captured', detail: 'Quiz · Sneha from Rajapushpa', time: '4h ago', type: 'info' },
-];
+export default async function OpsOverview() {
+  // Fetch Live Data
+  const [
+    totalOrders,
+    leads,
+    criticalInventory,
+    recentLogs
+  ] = await Promise.all([
+    prisma.order.findMany({ select: { totalAmount: true, escrowStage: true } }),
+    prisma.lead.findMany({ select: { status: true, id: true } }),
+    prisma.dyeLot.count({ where: { stockMeters: { lt: 30 } } }),
+    prisma.auditLog.findMany({ take: 5, orderBy: { timestamp: 'desc' } })
+  ]);
 
-export default function OpsOverview() {
-  const maxRevenue = Math.max(...revenueData.map(d => d.value));
+  const activeLeadsCount = leads.filter(l => !['WON', 'LOST'].includes(l.status)).length;
+  
+  // Pipeline Value (Sum of orders not fully paid/completed)
+  const pipelineValue = totalOrders
+    .filter(o => o.escrowStage !== 'COMPLETED')
+    .reduce((sum, o) => sum + o.totalAmount, 0);
+
+  const revenueCurrentMonth = totalOrders.reduce((sum, o) => sum + o.totalAmount, 0); // Simplified for demo
+
+  // Escrow Tranches calculation
+  const getTranche = (stage: string) => totalOrders.filter(o => o.escrowStage === stage);
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-[#FAF8F5] min-h-screen relative overflow-hidden">
+      {/* Decorative ambient background */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C5A880]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#8A5836]/5 rounded-full blur-[150px] pointer-events-none" />
+
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold font-['Syne'] text-[#1C130B]">Ops Overview</h1>
-        <p className="text-gray-500 text-sm mt-1">Real-time business pulse across all verticals.</p>
+      <div className="mb-10 relative z-10">
+        <h1 className="text-3xl font-black font-['Syne'] text-[#1C130B] tracking-tight">Command Center</h1>
+        <p className="text-[#8A5836] text-sm mt-1 font-bold">Real-time business pulse & CRM Intelligence</p>
       </div>
 
       {/* KPI Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 relative z-10">
         {[
-          { label: 'Monthly Revenue', value: '₹8,90,000', change: '+17%', up: true, icon: IndianRupee, accent: 'bg-green-50 text-green-600' },
-          { label: 'Active Leads', value: '34', change: '+5 this week', up: true, icon: Users, accent: 'bg-blue-50 text-blue-600' },
-          { label: 'Pipeline Value', value: '₹12.4L', change: '8 deals in Quote', up: true, icon: TrendingUp, accent: 'bg-amber-50 text-amber-600' },
-          { label: 'Vans Deployed', value: '3 / 5', change: '2 returning', up: false, icon: Truck, accent: 'bg-purple-50 text-purple-600' },
+          { label: 'Total Revenue', value: `₹${(revenueCurrentMonth / 100000).toFixed(1)}L`, change: '+12%', up: true, icon: IndianRupee, accent: 'bg-[#1C130B] text-[#C5A880]' },
+          { label: 'Active Leads', value: activeLeadsCount.toString(), change: 'Live Pipeline', up: true, icon: Users, accent: 'bg-white text-[#8A5836] border border-[#C5A880]/30' },
+          { label: 'Pipeline Value', value: `₹${(pipelineValue / 100000).toFixed(1)}L`, change: 'In Escrow', up: true, icon: TrendingUp, accent: 'bg-white text-[#1C130B] border border-gray-200' },
+          { label: 'Inventory Alerts', value: criticalInventory.toString(), change: 'Dye-lots < 30m', up: criticalInventory === 0, icon: Activity, accent: criticalInventory > 0 ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100' },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.accent}`}>
-                <kpi.icon className="w-5 h-5" />
+          <div key={i} className={`p-6 rounded-3xl shadow-sm ${kpi.accent.includes('bg-[#1C130B]') ? 'bg-[#1C130B] shadow-xl' : 'bg-white'} hover:-translate-y-1 transition-transform duration-300`}>
+            <div className="flex items-center justify-between mb-6">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.accent}`}>
+                <kpi.icon className="w-6 h-6" />
               </div>
-              <span className={`text-xs font-bold flex items-center gap-1 ${kpi.up ? 'text-green-600' : 'text-gray-500'}`}>
-                {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+              <span className={`text-xs font-bold flex items-center gap-1 ${kpi.up ? (kpi.accent.includes('bg-[#1C130B]') ? 'text-[#C5A880]' : 'text-green-600') : 'text-red-500'}`}>
+                {kpi.up ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                 {kpi.change}
               </span>
             </div>
-            <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">{kpi.label}</p>
-            <p className="text-2xl font-bold font-['Syne'] text-[#1C130B]">{kpi.value}</p>
+            <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${kpi.accent.includes('bg-[#1C130B]') ? 'text-white/60' : 'text-gray-500'}`}>{kpi.label}</p>
+            <p className={`text-3xl font-black font-['Syne'] ${kpi.accent.includes('bg-[#1C130B]') ? 'text-white' : 'text-[#1C130B]'}`}>{kpi.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Revenue Chart (CSS-only bar chart) */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h3 className="font-bold text-[#1C130B] mb-6">Revenue Trend (Last 5 Months)</h3>
-          <div className="flex items-end gap-4 h-48">
-            {revenueData.map((d, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                <span className="text-xs font-bold text-gray-500">₹{(d.value / 1000).toFixed(0)}K</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
+        {/* Analytics Main Pane */}
+        <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+          <h3 className="font-bold text-[#1C130B] mb-8 font-['Syne'] text-xl">Revenue Trajectory</h3>
+          <div className="flex items-end gap-6 h-64">
+            {[
+              { month: 'May', value: 320 },
+              { month: 'Jun', value: 480 },
+              { month: 'Jul', value: 510 },
+              { month: 'Aug', value: 720 },
+              { month: 'Sep', value: revenueCurrentMonth / 1000 },
+            ].map((d, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-3 group cursor-pointer">
+                <span className="text-sm font-bold text-gray-400 group-hover:text-[#8A5836] transition-colors">₹{d.value.toFixed(0)}K</span>
                 <div
-                  className="w-full bg-gradient-to-t from-[#C5A880] to-[#8A5836] rounded-t-lg transition-all duration-700"
-                  style={{ height: `${(d.value / maxRevenue) * 100}%` }}
+                  className="w-full bg-gradient-to-t from-[#C5A880] to-[#1C130B] rounded-xl transition-all duration-700 opacity-80 group-hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(197,168,128,0.4)]"
+                  style={{ height: `${(d.value / 1000) * 100}%`, minHeight: '10%' }}
                 />
-                <span className="text-xs font-bold text-gray-400">{d.month}</span>
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{d.month}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Activity Feed */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h3 className="font-bold text-[#1C130B] mb-4">Recent Activity</h3>
-          <div className="space-y-4">
-            {recentActivity.map((item, i) => (
-              <div key={i} className="flex gap-3">
-                <div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${
-                  item.type === 'success' ? 'bg-green-500' :
-                  item.type === 'payment' ? 'bg-[#C5A880]' :
-                  item.type === 'warning' ? 'bg-red-500' : 'bg-blue-400'
-                }`} />
+        {/* Real-time Event Stream */}
+        <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col">
+          <h3 className="font-bold text-[#1C130B] mb-6 font-['Syne'] text-xl flex items-center justify-between">
+            Live Stream
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+          </h3>
+          <div className="space-y-6 flex-1">
+            {recentLogs.length > 0 ? recentLogs.map((log) => (
+              <div key={log.id} className="flex gap-4">
+                <div className="w-2 h-2 rounded-full mt-2 shrink-0 bg-[#C5A880]" />
                 <div>
-                  <p className="text-sm font-bold text-[#1C130B]">{item.action}</p>
-                  <p className="text-xs text-gray-500">{item.detail}</p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{item.time}</p>
+                  <p className="text-sm font-bold text-[#1C130B] capitalize">{log.action.replace(/_/g, ' ')}</p>
+                  <p className="text-xs text-gray-500 line-clamp-1">{log.details?.toString() || 'System event triggered'}</p>
+                  <p className="text-[10px] font-bold text-[#8A5836] mt-1 tracking-wider uppercase">
+                    {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center text-gray-400 text-sm py-10 font-medium">No recent system events</div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Escrow Pipeline */}
-      <div className="mt-6 bg-[#1C130B] p-6 rounded-2xl text-[#FAF8F5] shadow-xl">
-        <h3 className="font-bold mb-4">Escrow Pipeline</h3>
-        <div className="grid grid-cols-3 gap-6">
+      <div className="mt-8 bg-[#1C130B] p-8 rounded-3xl text-[#FAF8F5] shadow-2xl relative z-10 overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+        
+        <h3 className="font-bold mb-6 font-['Syne'] text-xl">Active Escrow Tranches</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { stage: '10% Deposits Pending', amount: '₹1,42,000', count: '8 orders' },
-            { stage: '60% Material Release', amount: '₹4,80,000', count: '5 orders' },
-            { stage: '30% QA Unlock', amount: '₹2,10,000', count: '3 orders' },
-          ].map((tranche, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4">
-              <p className="text-xs text-[#C5A880] font-bold uppercase tracking-wider mb-2">{tranche.stage}</p>
-              <p className="text-2xl font-bold font-['Syne']">{tranche.amount}</p>
-              <p className="text-xs text-white/50 mt-1">{tranche.count}</p>
-            </div>
-          ))}
+            { stage: '10% Deposits Pending', orders: getTranche('DEPOSIT_PENDING') },
+            { stage: '60% Material Release', orders: getTranche('MATERIAL_RELEASED') },
+            { stage: '30% QA Unlock', orders: getTranche('POST_QA_UNLOCK_PENDING') },
+          ].map((tranche, i) => {
+            const amount = tranche.orders.reduce((sum, o) => sum + o.totalAmount, 0);
+            return (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/10 transition-colors">
+                <p className="text-xs text-[#C5A880] font-bold uppercase tracking-widest mb-2">{tranche.stage}</p>
+                <p className="text-3xl font-black font-['Syne']">₹{(amount / 1000).toFixed(1)}K</p>
+                <p className="text-xs text-white/50 mt-2 font-medium flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-white/20 inline-block"></span>
+                  {tranche.orders.length} active orders
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

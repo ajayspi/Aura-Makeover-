@@ -1,17 +1,44 @@
-"use client";
-
-import React, { useState } from 'react';
+import React from 'react';
 import { Search, Plus, Filter, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { PrismaClient } from '@prisma/client';
 
-const mockInventory = [
-  { sku: 'WP-FLORAL-01', title: 'Midnight Botanical', category: 'WALLPAPER', batch: 'DL-A409', stockMeters: 450, status: 'HEALTHY' },
-  { sku: 'WP-GEO-04', title: 'Art Deco Gold', category: 'WALLPAPER', batch: 'DL-B882', stockMeters: 45, status: 'CRITICAL' },
-  { sku: 'LV-ACOUSTIC-OAK', title: 'Fluted Oak Panel (8ft)', category: 'LOUVER', batch: 'N/A', stockMeters: 120, status: 'HEALTHY' },
-  { sku: 'BL-SMART-01', title: 'Somfy Motorized Roller', category: 'SMART_BLIND', batch: 'N/A', stockMeters: 12, status: 'LOW' },
-];
+const prisma = new PrismaClient();
 
-export default function InventoryDashboard() {
-  const [filter, setFilter] = useState('ALL');
+export default async function InventoryDashboard() {
+  // Fetch active design items with their current dye lots
+  const items = await prisma.designItem.findMany({
+    where: { isActive: true },
+    include: {
+      dyeLots: {
+        where: { stockMeters: { gt: 0 } },
+        orderBy: { stockMeters: 'asc' }
+      }
+    }
+  });
+
+  // Flatten for table view (one row per active dye lot)
+  const inventoryRows = items.flatMap(item => 
+    item.dyeLots.map(lot => {
+      // Status determination
+      let status: 'HEALTHY' | 'LOW' | 'CRITICAL' = 'HEALTHY';
+      if (lot.stockMeters < 30) status = 'CRITICAL';
+      else if (lot.stockMeters < 100) status = 'LOW';
+      
+      return {
+        id: lot.id,
+        sku: item.sku,
+        title: item.title,
+        category: item.category,
+        batch: lot.rollSerial,
+        stockMeters: lot.stockMeters,
+        status,
+      };
+    })
+  );
+
+  const totalSKUs = items.length;
+  const criticalCount = inventoryRows.filter(r => r.status === 'CRITICAL').length;
+  const activeLots = inventoryRows.length;
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -41,7 +68,7 @@ export default function InventoryDashboard() {
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total SKUs</p>
-            <p className="text-3xl font-bold font-['Syne']">124</p>
+            <p className="text-3xl font-bold font-['Syne']">{totalSKUs}</p>
           </div>
           <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
             <CheckCircle2 className="w-6 h-6 text-gray-600" />
@@ -52,7 +79,7 @@ export default function InventoryDashboard() {
           <div className="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
           <div>
             <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Critical Stock</p>
-            <p className="text-3xl font-bold font-['Syne'] text-red-600">3</p>
+            <p className="text-3xl font-bold font-['Syne'] text-red-600">{criticalCount}</p>
           </div>
           <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
             <AlertTriangle className="w-6 h-6 text-red-500" />
@@ -62,7 +89,7 @@ export default function InventoryDashboard() {
         <div className="bg-white p-6 rounded-2xl border border-[#C5A880]/30 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Active Dye-Lots</p>
-            <p className="text-3xl font-bold font-['Syne'] text-[#8A5836]">42</p>
+            <p className="text-3xl font-bold font-['Syne'] text-[#8A5836]">{activeLots}</p>
           </div>
           <div className="w-12 h-12 bg-[#FAF8F5] rounded-full flex items-center justify-center">
             <Filter className="w-6 h-6 text-[#C5A880]" />
@@ -84,15 +111,15 @@ export default function InventoryDashboard() {
             </tr>
           </thead>
           <tbody>
-            {mockInventory.map((item, i) => (
-              <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+            {inventoryRows.map((item) => (
+              <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                 <td className="p-4 pl-6">
                   <p className="font-bold text-[#1C130B]">{item.title}</p>
                   <p className="text-xs text-gray-400 font-mono mt-0.5">{item.sku}</p>
                 </td>
                 <td className="p-4">
                   <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
-                    {item.category}
+                    {item.category.replace(/_/g, ' ')}
                   </span>
                 </td>
                 <td className="p-4">
@@ -117,6 +144,13 @@ export default function InventoryDashboard() {
                 </td>
               </tr>
             ))}
+            {inventoryRows.length === 0 && (
+              <tr>
+                <td colSpan={6} className="p-8 text-center text-gray-500">
+                  No active dye-lots in stock. Seed the database or receive a PO.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

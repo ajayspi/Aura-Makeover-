@@ -148,6 +148,52 @@ async function main() {
     ]
   });
 
+  // 6. Create Inventory (Design Items & Dye Lots)
+  const item1 = await prisma.designItem.create({
+    data: {
+      sku: 'WP-FLORAL-01',
+      title: 'Midnight Botanical',
+      category: 'BOTANICAL',
+      baseRateSqFt: 150,
+      patternRepeatHeightCm: 60,
+      rollWidthInches: 42,
+      dyeLots: {
+        create: [
+          { cmykLotCode: 'A409', substrateBatch: 'SUB-22', rollSerial: 'DL-A409-01', stockMeters: 450 },
+          { cmykLotCode: 'A410', substrateBatch: 'SUB-23', rollSerial: 'DL-A410-01', stockMeters: 10 } // Critical low
+        ]
+      }
+    }
+  });
+
+  const item2 = await prisma.designItem.create({
+    data: {
+      sku: 'WP-GEO-04',
+      title: 'Art Deco Gold',
+      category: 'GEOMETRIC',
+      baseRateSqFt: 180,
+      patternRepeatHeightCm: 50,
+      rollWidthInches: 42,
+      dyeLots: {
+        create: { cmykLotCode: 'B882', substrateBatch: 'SUB-24', rollSerial: 'DL-B882-01', stockMeters: 45 } // Critical
+      }
+    }
+  });
+
+  const item3 = await prisma.designItem.create({
+    data: {
+      sku: 'LV-ACOUSTIC-OAK',
+      title: 'Fluted Oak Panel (8ft)',
+      category: 'FLUTED_LOUVER',
+      baseRateSqFt: 350,
+      patternRepeatHeightCm: 0,
+      rollWidthInches: 8,
+      dyeLots: {
+        create: { cmykLotCode: 'OAK-1', substrateBatch: 'WOOD-01', rollSerial: 'DL-OAK-01', stockMeters: 120 }
+      }
+    }
+  });
+
   console.log(`✅ Seeded Customer: ${customer1.name} (S-Tier)`);
   console.log(`✅ Seeded Customer: ${customer2.name} (A-Tier)`);
   console.log('🌱 Seeding complete.');

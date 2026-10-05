@@ -54,10 +54,8 @@ export default async function CityPage({ params }: CityPageProps) {
   }
 
   return (
-    <html lang="en" className={`${syne.variable} ${plusJakarta.variable} h-full antialiased scroll-smooth`}>
-      <body className="min-h-full flex flex-col">
-        <CityLanding city={cityConfig} />
-      </body>
-    </html>
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1C130B] font-['Plus_Jakarta_Sans'] overflow-x-hidden">
+      <CityLanding city={cityConfig} />
+    </main>
   );
 }

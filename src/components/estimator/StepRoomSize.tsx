@@ -1,7 +1,8 @@
 "use client";
 
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Ruler, ArrowRight } from 'lucide-react';
+import { Ruler, ArrowRight, Building2, Sparkles } from 'lucide-react';
 import { RollNestingOutput } from '@/lib/engines';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -10,6 +11,13 @@ const ROOM_PRESETS = [
   { label: 'Master Bedroom', width: 14, height: 10 },
   { label: 'Living Lounge', width: 18, height: 10 },
   { label: 'Grand Foyer', width: 12, height: 12 },
+];
+
+const SOCIETY_FLOORPLANS = [
+  { society: 'My Home Bhooja', plan: '3BHK Living Accent', width: 14, height: 10, unit: '3BHK 2680 sft' },
+  { society: 'Rajapushpa Provincia', plan: '3BHK Master Bed', width: 13, height: 10, unit: '3BHK 2350 sft' },
+  { society: 'Prestige High Fields', plan: '2.5BHK Lounge Wall', width: 12, height: 10, unit: '2.5BHK 1748 sft' },
+  { society: 'Jayabheri The Peak', plan: '4BHK Grand Foyer', width: 16, height: 11, unit: '4BHK 4100 sft' },
 ];
 
 export default function StepRoomSize({
@@ -31,6 +39,8 @@ export default function StepRoomSize({
   pricingSqft: number;
   onNext: () => void;
 }) {
+  const [presetTab, setPresetTab] = useState<'standard' | 'society'>('standard');
+
   return (
     <motion.div
       key="step-1"
@@ -52,33 +62,90 @@ export default function StepRoomSize({
         </p>
       </div>
 
-      {/* Quick Presets */}
+      {/* Preset Mode Tabs */}
       <div>
-        <label className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#8A5836] block mb-3 font-['Plus_Jakarta_Sans']">
-          Luxury Presets
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-          {ROOM_PRESETS.map((preset) => (
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#8A5836] font-['Plus_Jakarta_Sans']">
+            Quick Sizing Presets
+          </label>
+          <div className="flex items-center bg-[#FAF8F5] p-1 rounded-xl border border-[#C5A880]/30 text-xs font-['Plus_Jakarta_Sans']">
             <button
-              key={preset.label}
               type="button"
-              onClick={() => {
-                setWidthFt(preset.width);
-                setHeightFt(preset.height);
-              }}
-              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl text-left border transition-all duration-300 font-['Plus_Jakarta_Sans'] ${
-                widthFt === preset.width && heightFt === preset.height
-                  ? 'bg-[#1C130B] text-[#C5A880] border-[#1C130B] shadow-lg'
-                  : 'bg-white border-[#C5A880]/30 text-[#1C130B] hover:border-[#C5A880]'
+              onClick={() => setPresetTab('standard')}
+              className={`px-3 py-1 rounded-lg font-bold text-xs transition-colors ${
+                presetTab === 'standard'
+                  ? 'bg-[#1C130B] text-[#C5A880] shadow-sm'
+                  : 'text-[#1C130B]/60 hover:text-[#1C130B]'
               }`}
             >
-              <div className="font-bold text-xs sm:text-sm mb-1 line-clamp-1">{preset.label}</div>
-              <div className="opacity-80 text-[10px] sm:text-xs">
-                {preset.width}ft × {preset.height}ft
-              </div>
+              Standard Rooms
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => setPresetTab('society')}
+              className={`px-3 py-1 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-colors ${
+                presetTab === 'society'
+                  ? 'bg-[#1C130B] text-[#C5A880] shadow-sm'
+                  : 'text-[#1C130B]/60 hover:text-[#1C130B]'
+              }`}
+            >
+              <Building2 className="w-3 h-3 text-[#C5A880]" />
+              Gated Society Floorplans
+            </button>
+          </div>
         </div>
+
+        {presetTab === 'standard' ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            {ROOM_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => {
+                  setWidthFt(preset.width);
+                  setHeightFt(preset.height);
+                }}
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl text-left border transition-all duration-300 font-['Plus_Jakarta_Sans'] cursor-pointer ${
+                  widthFt === preset.width && heightFt === preset.height
+                    ? 'bg-[#1C130B] text-[#C5A880] border-[#1C130B] shadow-lg'
+                    : 'bg-white border-[#C5A880]/30 text-[#1C130B] hover:border-[#C5A880]'
+                }`}
+              >
+                <div className="font-bold text-xs sm:text-sm mb-1 line-clamp-1">{preset.label}</div>
+                <div className="opacity-80 text-[10px] sm:text-xs">
+                  {preset.width}ft × {preset.height}ft
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            {SOCIETY_FLOORPLANS.map((item) => (
+              <button
+                key={item.society + item.plan}
+                type="button"
+                onClick={() => {
+                  setWidthFt(item.width);
+                  setHeightFt(item.height);
+                }}
+                className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl text-left border transition-all duration-300 font-['Plus_Jakarta_Sans'] cursor-pointer relative overflow-hidden ${
+                  widthFt === item.width && heightFt === item.height
+                    ? 'bg-[#1C130B] text-[#C5A880] border-[#1C130B] shadow-lg'
+                    : 'bg-white border-[#C5A880]/30 text-[#1C130B] hover:border-[#C5A880]'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 text-[9px] text-[#8A5836] font-bold uppercase tracking-wider mb-0.5">
+                  <Sparkles className="w-2.5 h-2.5" />
+                  {item.society}
+                </div>
+                <div className="font-bold text-xs sm:text-sm mb-0.5 line-clamp-1">{item.plan}</div>
+                <div className="opacity-75 text-[10px]">
+                  {item.width}ft × {item.height}ft ({item.unit})
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Sliders Container */}
@@ -180,7 +247,7 @@ export default function StepRoomSize({
         <button
           type="button"
           onClick={onNext}
-          className="w-full sm:w-auto bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-6 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold font-['Plus_Jakarta_Sans'] text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-3 transition-colors duration-300 shadow-xl"
+          className="w-full sm:w-auto bg-[#1C130B] hover:bg-[#8A5836] text-[#FAF8F5] px-6 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold font-['Plus_Jakarta_Sans'] text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-3 transition-colors duration-300 shadow-xl cursor-pointer"
         >
           Next: Choose Finish Tier
           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />

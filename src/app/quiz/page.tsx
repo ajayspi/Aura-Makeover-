@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import StyleQuiz, { QuizAnswers } from '@/components/StyleQuiz';
 import { answersToTags, tagsToWhatsAppMessage, tagsToEstimatorPrefill } from '@/lib/quiz-to-tags';
 
-const DEFAULT_WHATSAPP = '919700675637';
+const DEFAULT_WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '918555069441'; // Concierge fallback: 919700675637
 
 function getSessionId(): string {
   try {

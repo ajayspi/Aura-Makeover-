@@ -54,7 +54,7 @@ export const CITIES: Record<string, CityConfig> = {
 
     ],
     serviceAreas: ['Kokapet', 'Tellapur', 'Financial District', 'Nallagandla', 'Gachibowli'],
-    whatsappNumber: '919700675637',
+    whatsappNumber: '918555069441',
     meta: {
       title: 'AuroMakeover Hyderabad — Premium Home Makeovers in 48 Hours',
       description: 'Luxury wallpapers, fluted louvers & smart blinds installed in 48 hours. Serving Kokapet, Tellapur, Financial District & West Corridor. Zero civil work. Book free swatch van visit.',
@@ -78,7 +78,7 @@ export const CITIES: Record<string, CityConfig> = {
       { id: 'shriram', name: 'Shriram Properties', flatsDone: 35, unitTypes: ['3BHK'], priceRange: 'Est. ₹40,000–₹58,000' },
     ],
     serviceAreas: ['Whitefield', 'Sarjapur Road', 'Marathahalli', 'Bellandur', 'Electronic City'],
-    whatsappNumber: '919700675637',
+    whatsappNumber: '918555069441',
     meta: {
       title: 'AuroMakeover Bangalore — Premium Home Makeovers in 48 Hours',
       description: 'Luxury home makeovers in Bangalore Whitefield & Sarjapur. 48-hour installation, zero civil work. Designer wallpapers, acoustic louvers, smart blinds. Book free swatch van.',
@@ -102,7 +102,7 @@ export const CITIES: Record<string, CityConfig> = {
       { id: 'godrej', name: 'Godrej Azure', flatsDone: 30, unitTypes: ['2BHK', '3BHK'], priceRange: 'Est. ₹34,000–₹48,000' },
     ],
     serviceAreas: ['OMR', 'GST Road', 'Perungudi', 'Thoraipakkam', 'Sholinganallur'],
-    whatsappNumber: '919700675637',
+    whatsappNumber: '918555069441',
     meta: {
       title: 'AuroMakeover Chennai — Premium Home Makeovers in 48 Hours',
       description: 'Chennai\'s fastest home makeover service. OMR & GST Road coverage. Luxury wallpapers, fluted louvers, smart blinds in 48 hours. Zero civil work. Book now.',

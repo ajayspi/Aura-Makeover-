@@ -41,7 +41,8 @@ export default function RentalYieldCalculator() {
     `Hello AuroMakeover, I am an investor with a ${unitType} at ${roi.societyName}. I calculated a projected rental lift of ₹${roi.monthlyRentalLift.toLocaleString('en-IN')}/mo with the ${roi.tierName} package. I would like to book a Turnkey Investor Consultation.`
   );
 
-  const whatsappUrl = `https://wa.me/919700675637?text=${whatsappMessage}`;
+  // Official Investor WhatsApp: 918555069441 (Fallback: 919700675637)
+  const whatsappUrl = `https://wa.me/918555069441?text=${whatsappMessage}`;
 
   return (
     <section id="roi-calculator" className="py-24 sm:py-32 px-6 bg-[#1C130B] text-[#FAF8F5] relative overflow-hidden">

@@ -137,6 +137,7 @@ export class AiSensyService {
     ].filter(Boolean);
 
     const encoded = encodeURIComponent(messageLines.join('\n'));
-    return `https://wa.me/919700675637?text=${encoded}`;
+    // WhatsApp concierge: 918555069441 (Fallback: 919700675637)
+    return `https://wa.me/918555069441?text=${encoded}`;
   }
 }

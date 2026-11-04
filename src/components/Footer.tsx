@@ -72,7 +72,7 @@ function LinkedinIcon({ className = 'w-4 h-4' }: { className?: string }) {
 
 export default function Footer({ city }: FooterProps) {
   const serviceAreas = city?.serviceAreas || ['Kokapet', 'Tellapur', 'Financial District', 'Nallagandla', 'Gachibowli'];
-  const whatsappNumber = city?.whatsappNumber || '919700675637';
+  const whatsappNumber = city?.whatsappNumber || '918555069441';
   const cityName = city?.name || 'Hyderabad';
   const cityRegion = city?.region || 'West';
 
@@ -129,7 +129,7 @@ export default function Footer({ city }: FooterProps) {
                 className="inline-flex items-center gap-3 bg-[#15803D] hover:bg-[#166534] text-[#FAF8F5] px-6 py-3.5 rounded-2xl font-bold font-['Syne'] text-sm transition-all active:scale-95 shadow-lg shadow-[#15803D]/25"
               >
                 <MessageCircle className="w-5 h-5 text-white" />
-                <span>WhatsApp Hotline: +91 {whatsappNumber.slice(2, 4)} {whatsappNumber.slice(4, 9)} {whatsappNumber.slice(9)}</span>
+                <span>WhatsApp Hotline: +91 {whatsappNumber.slice(2, 7)} {whatsappNumber.slice(7)}</span>
               </a>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function Footer({ city }: FooterProps) {
             </a>
 
             <a
-              href={`https://wa.me/${city?.whatsappNumber || '919700675637'}?text=${encodeURIComponent(
+              href={`https://wa.me/${city?.whatsappNumber || '918555069441'}?text=${encodeURIComponent(
                 `Hi AuroMakeover! 👋 I would like to inquire about a 48-hour premium makeover for my home in ${city?.name || 'Hyderabad'}.`
               )}`}
               target="_blank"

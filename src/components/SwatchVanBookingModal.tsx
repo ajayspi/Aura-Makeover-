@@ -247,7 +247,7 @@ export default function SwatchVanBookingModal({
                   <strong>{society} ({flatNumber || 'Flat Confirmed'})</strong> on <strong>{preferredDate}</strong> ({preferredSlot})
                 </p>
                 <p className="text-xs text-gray-500">
-                  Lead Specialist: Ramesh Kumar • Direct Phone: +91 97006 75637
+                  Lead Specialist: Ramesh Kumar • Direct Phone: +91 85550 69441
                 </p>
               </div>
 

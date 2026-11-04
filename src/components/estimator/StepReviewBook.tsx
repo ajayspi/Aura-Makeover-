@@ -69,7 +69,9 @@ Address/Flat No: ${address}
 *Selected Tier:* ${getTierName(finishTier)}
 *Estimated Total:* ₹${pricingDetails.totalRetailPrice.toLocaleString('en-IN')}`;
 
-    window.open(`https://wa.me/919700675637?text=${encodeURIComponent(text)}`, '_blank');
+    // Official WhatsApp concierge: 918555069441 (Reference fallback: 919700675637)
+    const hotline = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '918555069441';
+    window.open(`https://wa.me/${hotline}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   return (

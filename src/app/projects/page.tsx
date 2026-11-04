@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGSAP } from '@gsap/react';
 import { gsap, registerGsap } from '@/lib/gsap';
-import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import BeforeAfterGrid from '@/components/BeforeAfterGrid';
 
@@ -37,8 +36,6 @@ export default function ProjectsPage() {
 
   return (
     <main ref={containerRef} className="min-h-screen bg-[#FAF8F5] text-[#1C130B]">
-      <NavBar />
-      
       {/* 1. Hero Section */}
       <section className="pt-32 pb-16 px-6 bg-[#3E2C1E] text-[#FAF8F5]">
         <div className="max-w-6xl mx-auto text-center">

@@ -48,11 +48,11 @@ function GalleryCard({ item, index, onVisualize, onShopLook }: { item: Design; i
         className={`group relative rounded-2xl overflow-hidden ${index % 2 === 0 ? 'aspect-[4/5]' : 'aspect-[3/4]'} bg-[#1C130B] cursor-pointer [perspective:900px]`}
       >
         <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1C130B]/80 via-[#1C130B]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C130B]/90 via-[#1C130B]/30 to-transparent opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-4 left-4">
           <span className="bg-[#1C130B]/70 text-[#FAF8F5] text-[10px] font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm tracking-wide uppercase">{item.category}</span>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+        <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-0 opacity-100 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300">
           <h3 className="text-[#FAF8F5] text-lg font-semibold tracking-[-0.01em] mb-1">{item.title}</h3>
           <p className="text-[#FAF8F5]/60 text-xs font-medium mb-3">{item.room}</p>
           <button onClick={(e) => { e.stopPropagation(); onVisualize(item); }} className="w-full bg-[#C5A880] hover:bg-[#b8996f] text-[#1C130B] py-2.5 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all">

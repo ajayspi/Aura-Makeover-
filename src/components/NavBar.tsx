@@ -4,11 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AuroBrand } from './AuroLogo';
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isLightRoute = ['/comparator', '/smart-shading', '/visualizer', '/collections', '/quiz'].some(p => pathname?.startsWith(p));
+  const isNavDark = isScrolled || mobileMenuOpen || isLightRoute;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +34,7 @@ export default function NavBar() {
     <>
       <header
         className={`sticky top-0 z-40 transition-all duration-300 border-b -mb-[88px] ${
-          isScrolled
+          isNavDark
             ? 'bg-[#FAF8F5]/85 backdrop-blur-md border-[#C5A880]/20 shadow-sm py-3 sm:py-4'
             : 'bg-transparent border-transparent py-5 sm:py-6'
         }`}
@@ -38,7 +43,7 @@ export default function NavBar() {
           
           {/* Logo */}
           <Link href="/" className="relative z-50">
-            <AuroBrand variant={isScrolled || mobileMenuOpen ? 'dark' : 'light'} />
+            <AuroBrand variant={isNavDark ? 'dark' : 'light'} />
           </Link>
 
           {/* Desktop Nav */}
@@ -82,7 +87,7 @@ export default function NavBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[#FAF8F5] pt-28 px-6 pb-6 flex flex-col md:hidden"
+            className="fixed inset-0 z-[60] bg-[#FAF8F5] pt-28 px-6 pb-6 flex flex-col md:hidden overflow-y-auto"
           >
             <div className="flex flex-col gap-6 text-center">
               {navLinks.map((link) => (

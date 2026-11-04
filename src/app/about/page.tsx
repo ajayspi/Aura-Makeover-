@@ -4,7 +4,6 @@ import React, { useRef } from 'react';
 import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger, registerGsap } from '@/lib/gsap';
-import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
 export default function AboutPage() {
@@ -79,8 +78,6 @@ export default function AboutPage() {
 
   return (
     <main ref={containerRef} className="min-h-screen bg-[#FAF8F5] text-[#1C130B]">
-      <NavBar />
-      
       {/* 1. Hero Section */}
       <section className="pt-40 pb-20 px-6 sm:px-10 lg:px-16 bg-[#1C130B] text-[#FAF8F5] min-h-[60vh] flex flex-col justify-center">
         <div className="max-w-4xl mx-auto text-center">

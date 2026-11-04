@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import RentalYieldCalculator from '@/components/RentalYieldCalculator';
 import BeforeAfterGrid from '@/components/BeforeAfterGrid';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'West Hyderabad Rental Yield & Landlord Payback Model | AuroMakeover',
@@ -14,6 +15,7 @@ export default function RentalROIPage() {
       <div className="bg-[#FAF8F5] text-[#1C130B]">
         <BeforeAfterGrid />
       </div>
+      <Footer />
     </main>
   );
 }

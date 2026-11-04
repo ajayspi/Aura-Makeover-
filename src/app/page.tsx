@@ -27,6 +27,10 @@ export default function Home() {
       <HeroSection />
       
       <ScrollReveal>
+        <BeforeAfterShowcase />
+      </ScrollReveal>
+      
+      <ScrollReveal>
         <BeforeAfterGrid />
       </ScrollReveal>
 

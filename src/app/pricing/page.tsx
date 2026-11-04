@@ -3,7 +3,6 @@
 import React, { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, registerGsap } from '@/lib/gsap';
-import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import AnimatedIcon from '@/components/animations/AnimatedIcon';
 import EstimatorGateway from '@/components/EstimatorGateway';
@@ -48,8 +47,6 @@ export default function PricingPage() {
 
   return (
     <main ref={containerRef} className="min-h-screen bg-[#FAF8F5] text-[#1C130B]">
-      <NavBar />
-      
       {/* 1. Hero Section */}
       <section className="pt-32 pb-16 px-6 text-center">
         <p className="text-[#8A5836] text-sm tracking-[0.2em] font-semibold uppercase mb-4">

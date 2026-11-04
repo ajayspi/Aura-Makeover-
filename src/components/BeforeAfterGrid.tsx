@@ -46,6 +46,7 @@ function CardSlider({ item }: { item: any }) {
         max="100" 
         value={sliderPosition}
         onChange={(e) => setSliderPosition(Number(e.target.value))}
+        style={{ touchAction: 'pan-y' }}
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-10 m-0 p-0"
         aria-label="Before and after slider"
       />

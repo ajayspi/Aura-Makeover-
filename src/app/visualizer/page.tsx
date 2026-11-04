@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import HomographyCanvasVisualizer from '@/components/HomographyCanvasVisualizer';
 import EstimatorGateway from '@/components/EstimatorGateway';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: '2.5D Real-Time Wall Perspective Visualizer | AuroMakeover',
@@ -25,6 +26,7 @@ export default function VisualizerPage() {
         <HomographyCanvasVisualizer />
       </div>
       <EstimatorGateway />
+      <Footer />
     </main>
   );
 }

@@ -4,7 +4,6 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
 import { gsap, registerGsap } from '@/lib/gsap';
-import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import AnimatedIcon from '@/components/animations/AnimatedIcon';
 import Image from 'next/image';
@@ -39,8 +38,6 @@ export default function ServicesPage() {
 
   return (
     <main ref={containerRef} className="min-h-screen bg-[#FAF8F5] text-[#1C130B]">
-      <NavBar />
-      
       {/* 1. Hero Section */}
       <section className="pt-32 pb-16 px-6 bg-[#1C130B] text-[#FAF8F5] relative overflow-hidden">
         {/* Ambient background mosaic placeholder */}

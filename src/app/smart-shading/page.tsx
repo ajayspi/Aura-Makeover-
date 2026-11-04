@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import SmartLightingConfigurator from '@/components/SmartLightingConfigurator';
 import EstimatorGateway from '@/components/EstimatorGateway';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Smart Shading & Architectural Lighting Configurator | AuroMakeover',
@@ -12,6 +13,7 @@ export default function SmartShadingPage() {
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C130B] font-['Plus_Jakarta_Sans'] overflow-x-hidden pt-20">
       <SmartLightingConfigurator />
       <EstimatorGateway />
+      <Footer />
     </main>
   );
 }

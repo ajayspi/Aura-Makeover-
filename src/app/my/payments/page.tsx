@@ -1,7 +1,8 @@
 "use client";
 
-import React from 'react';
-import { Download, CheckCircle2, Clock, IndianRupee } from 'lucide-react';
+import React, { useState } from 'react';
+import { Download, CheckCircle2, Clock, IndianRupee, Lock } from 'lucide-react';
+import EscrowPaymentModal from '@/components/payment/EscrowPaymentModal';
 
 const transactions = [
   { id: 'TXN-9901', date: 'Sep 28, 2026', type: 'Booking Deposit (10%)', amount: '₹5,500', status: 'PAID', method: 'UPI' },
@@ -10,6 +11,9 @@ const transactions = [
 ];
 
 export default function PaymentsPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTranche, setSelectedTranche] = useState<'tranche_1_deposit' | 'tranche_2_material' | 'tranche_3_qa'>('tranche_3_qa');
+  const [amount, setAmount] = useState(16500);
   return (
     <div>
       <h1 className="text-2xl font-bold font-['Syne'] text-[#1C130B] mb-2">Payments & Invoices</h1>
@@ -42,13 +46,21 @@ export default function PaymentsPage() {
       </div>
 
       {/* Pending Action CTA */}
-      <div className="bg-gradient-to-r from-[#C5A880] to-[#8A5836] rounded-2xl p-6 mb-8 flex items-center justify-between text-white">
+      <div className="bg-gradient-to-r from-[#C5A880] to-[#8A5836] rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-white">
         <div>
-          <p className="font-bold text-lg">30% QA Final Payment Due</p>
-          <p className="text-sm text-white/70">This payment will be unlocked after the technician submits the QA report and you sign off.</p>
+          <p className="font-bold text-lg">Next Escrow Tranche: ₹16,500</p>
+          <p className="text-sm text-white/80">30% Post-QA Handover unlock. Held securely in Escrow until digital QA verification.</p>
         </div>
-        <button disabled className="bg-white/20 text-white px-6 py-3 rounded-xl font-bold text-sm cursor-not-allowed opacity-70">
-          Awaiting QA Sign-off
+        <button
+          onClick={() => {
+            setSelectedTranche('tranche_3_qa');
+            setAmount(16500);
+            setIsModalOpen(true);
+          }}
+          className="bg-[#1C130B] hover:bg-[#2A1E12] text-[#C5A880] px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer"
+        >
+          <Lock className="w-4 h-4 text-[#C5A880]" />
+          <span>Pay via Escrow</span>
         </button>
       </div>
 
@@ -94,6 +106,18 @@ export default function PaymentsPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Interactive Escrow Payment Modal */}
+      <EscrowPaymentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        tranche={selectedTranche}
+        amount={amount}
+        projectRef="AURA-HYD-7720"
+        onPaymentSuccess={() => {
+          setIsModalOpen(false);
+        }}
+      />
     </div>
   );
 }

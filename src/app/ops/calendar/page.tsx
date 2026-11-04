@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight, MapPin, Clock, User, Truck } from 'lucide-react';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -43,6 +44,13 @@ export default function InstallationCalendar() {
           <p className="text-gray-500 text-sm mt-1">Schedule and dispatch technicians & swatch vans.</p>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            href="/ops/tech"
+            className="px-4 py-2 bg-[#1C130B] hover:bg-[#3E2C1E] text-[#C5A880] rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm"
+          >
+            <Truck className="w-4 h-4" />
+            <span>Field Tech Mobile</span>
+          </Link>
           <button onClick={() => setWeekOffset(w => w - 1)} className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
             <ChevronLeft className="w-4 h-4" />
           </button>

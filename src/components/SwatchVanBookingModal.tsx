@@ -79,7 +79,25 @@ export default function SwatchVanBookingModal({
     }
   };
 
-  const handleConfirmAndOpenWhatsApp = () => {
+  const handleConfirmAndOpenWhatsApp = async () => {
+    try {
+      await fetch('/api/leads/estimator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: customerName.trim() || 'Resident',
+          phone: phone.trim() || 'Pending',
+          society,
+          quality: finishTier || 'Executive Fluted Louver',
+          widthFt: 12,
+          heightFt: 10,
+          total: 45000,
+        }),
+      });
+    } catch (e) {
+      console.error('Lead booking persist error:', e);
+    }
+
     const url = AiSensyService.buildWhatsAppBookingUrl({
       customerName: customerName.trim() || 'Resident',
       phone: phone.trim() || 'Pending',

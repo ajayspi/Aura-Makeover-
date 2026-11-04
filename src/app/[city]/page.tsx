@@ -1,22 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Syne, Plus_Jakarta_Sans } from 'next/font/google';
 import CityLanding from './CityLanding';
 import { getCity, getAllCitySlugs } from '@/lib/cities';
-
-const syne = Syne({
-  variable: '--font-space-grotesk',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: '--font-plus-jakarta',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-});
 
 interface CityPageProps {
   params: Promise<{ city: string }>;

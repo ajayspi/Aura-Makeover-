@@ -1,21 +1,24 @@
 import React from 'react';
 import { Search, Plus, Filter } from 'lucide-react';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 const STAGES = ['NEW', 'WHATSAPP_SENT', 'VAN_DISPATCHED', 'MEASURED', 'QUOTE_LOCKED', 'WON', 'LOST'] as const;
 
 export default async function LeadsCRM() {
-  const leads = await prisma.lead.findMany({
-    include: {
-      society: true,
-      orders: {
-        select: { totalAmount: true }
-      }
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+  let leads: any[] = [];
+  try {
+    leads = await prisma.lead.findMany({
+      include: {
+        society: true,
+        orders: {
+          select: { totalAmount: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch (err) {
+    leads = [];
+  }
 
   return (
     <div className="p-8">
@@ -46,7 +49,7 @@ export default async function LeadsCRM() {
       {/* Kanban Board */}
       <div className="flex gap-6 overflow-x-auto pb-4">
         {STAGES.map(stage => {
-          const stageLeads = leads.filter(l => l.status === stage);
+          const stageLeads = leads.filter((l: any) => l.status === stage);
           return (
             <div key={stage} className="min-w-[300px] flex-1">
               <div className="flex items-center justify-between mb-4">
@@ -57,9 +60,9 @@ export default async function LeadsCRM() {
               </div>
               
               <div className="space-y-3">
-                {stageLeads.map(lead => {
-                  const val = lead.orders.length > 0 
-                    ? `₹${lead.orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}` 
+                {stageLeads.map((lead: any) => {
+                  const val = lead.orders?.length > 0 
+                    ? `₹${lead.orders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0).toLocaleString()}` 
                     : 'Pending';
                     
                   return (

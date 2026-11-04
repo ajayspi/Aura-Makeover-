@@ -10,10 +10,10 @@ import AnimatedIcon from '@/components/animations/AnimatedIcon';
 import Image from 'next/image';
 
 const SERVICES = [
-  { slug: 'luxury-wallpapers', title: 'Luxury Wallpapers', price: '₹45', img: '/images/test_before_master_1790383345060.jpg' },
-  { slug: 'fluted-louvers', title: 'Fluted Acoustic Louvers', price: '₹85', img: '/images/after_office_bright_matched_1790426268258.jpg' },
-  { slug: 'smart-blinds', title: 'Smart Motorized Blinds', price: '₹120', img: '/images/after_balcony_garden_matched_1790426447789.jpg' },
-  { slug: 'pooja-rooms', title: 'Pooja Room Designs', price: '₹35,000/room', img: '/images/after_pooja_traditional_matched_1790426298818.jpg' },
+  { slug: 'luxury-wallpapers', title: 'Luxury Wallpapers', price: '₹45', img: '/images/after-master-pichwai.jpg' },
+  { slug: 'fluted-louvers', title: 'Fluted Acoustic Louvers', price: '₹85', img: '/images/after-office-bright.jpg' },
+  { slug: 'smart-blinds', title: 'Smart Motorized Blinds', price: '₹120', img: '/images/after-living-fluted.jpg' },
+  { slug: 'pooja-rooms', title: 'Pooja Room Designs', price: '₹35,000/room', img: '/images/after-pooja-traditional.jpg' },
 ];
 
 export default function ServicesPage() {

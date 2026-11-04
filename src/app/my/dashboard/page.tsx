@@ -1,8 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Circle, Clock, Phone, MapPin, User } from 'lucide-react';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 const PROJECT_STAGES = [
   { id: 'DEPOSIT_PAID', label: 'Booking Confirmed' },
@@ -58,7 +56,7 @@ export default async function CustomerDashboard() {
   };
 
   const getTrancheStatus = (stage: string) => {
-    const tx = order?.escrowTransactions.find(t => t.stage === stage);
+    const tx = order?.escrowTransactions?.find((t: any) => t.stage === stage);
     return tx?.status || 'PENDING';
   };
 

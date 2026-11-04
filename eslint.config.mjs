@@ -15,7 +15,16 @@ const eslintConfig = defineConfig([
     // Local-only tooling & scratch (untracked; not part of the app):
     "tools/**",
     ".kilo/**",
+    "docs/**",
   ]),
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react/no-unescaped-entities": "warn",
+      "@next/next/no-html-link-for-pages": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

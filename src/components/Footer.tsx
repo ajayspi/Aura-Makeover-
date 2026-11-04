@@ -17,6 +17,8 @@ interface FooterProps {
 
 const QUICK_LINKS = [
   { label: 'Instant Price Estimator', href: '#estimator' },
+  { label: 'Zero-Civil Comparator', href: '/comparator' },
+  { label: 'Rental ROI Model', href: '/roi' },
   { label: 'Design Lookbook', href: '#gallery' },
   { label: 'Pre-Measured Societies', href: '#societies' },
   { label: 'Client Reviews', href: '#reviews' },

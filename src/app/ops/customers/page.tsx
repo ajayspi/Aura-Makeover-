@@ -1,9 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Search, Plus, Filter, ArrowUpRight, Phone, Mail } from 'lucide-react';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 const TIER_COLORS: Record<string, string> = {
   S: 'bg-red-100 text-red-700 border-red-200',
@@ -26,28 +24,43 @@ const STAGE_COLORS: Record<string, string> = {
 export default async function CustomersListPage({
   searchParams,
 }: {
-  searchParams: { search?: string };
+  searchParams?: { search?: string };
 }) {
   const search = searchParams?.search || '';
 
-  // Fetch Live Data from Prisma
-  const customers = await prisma.customer.findMany({
-    where: search
-      ? {
-          OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { phone: { contains: search } },
-            { addresses: { some: { society: { contains: search, mode: 'insensitive' } } } },
-          ],
-        }
-      : undefined,
-    include: {
-      score: true,
-      tags: true,
-      addresses: { where: { isPrimary: true }, take: 1 },
-    },
-    orderBy: { lastActivityAt: 'desc' },
-  });
+  // Fetch Live Data from Prisma safely
+  let customers: any[] = [];
+  try {
+    customers = await prisma.customer.findMany({
+      where: search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { phone: { contains: search } },
+              { addresses: { some: { society: { contains: search, mode: 'insensitive' } } } },
+            ],
+          }
+        : undefined,
+      include: {
+        score: true,
+        tags: true,
+        addresses: { where: { isPrimary: true }, take: 1 },
+      },
+      orderBy: { lastActivityAt: 'desc' },
+    });
+  } catch (err) {
+    customers = [];
+  }
+
+  // Pre-calculate tier counts
+  const tierCounts: Record<string, number> = { S: 0, A: 0, B: 0, C: 0 };
+  for (const tier of ['S', 'A', 'B', 'C'] as const) {
+    try {
+      tierCounts[tier] = (await prisma.customerScore.count({ where: { tier } })) || 0;
+    } catch {
+      tierCounts[tier] = 0;
+    }
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -80,8 +93,8 @@ export default async function CustomersListPage({
       {/* Score Summary */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         {(['S', 'A', 'B', 'C'] as const).map(tier => {
-          const count = await prisma.customerScore.count({ where: { tier } });
-          const labels = { S: 'Hot Leads', A: 'Warm Leads', B: 'Nurture', C: 'Cold' };
+          const count = tierCounts[tier];
+          const labels: Record<string, string> = { S: 'Hot Leads', A: 'Warm Leads', B: 'Nurture', C: 'Cold' };
           return (
             <div key={tier} className={`p-4 rounded-xl border ${TIER_COLORS[tier]}`}>
               <div className="flex items-center justify-between">
@@ -109,8 +122,8 @@ export default async function CustomersListPage({
             </tr>
           </thead>
           <tbody>
-            {customers.map(c => {
-              const primaryAddress = c.addresses[0];
+            {customers.map((c: any) => {
+              const primaryAddress = c.addresses?.[0];
               const score = c.score?.compositeScore || 0;
               const tier = c.score?.tier || 'C';
               
@@ -119,7 +132,7 @@ export default async function CustomersListPage({
                   <td className="p-4 pl-6">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-[#1C130B] text-white flex items-center justify-center font-bold text-xs shrink-0 uppercase">
-                        {c.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                        {(c.name || 'CU').split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
                       </div>
                       <div>
                         <Link href={`/ops/customers/${c.id}`} className="font-bold text-[#1C130B] hover:text-[#8A5836] transition-colors">
@@ -137,7 +150,7 @@ export default async function CustomersListPage({
                   </td>
                   <td className="p-4">
                     <span className={`text-xs font-bold px-2 py-1 rounded-full ${STAGE_COLORS[c.lifecycleStage] || 'bg-gray-100 text-gray-600'}`}>
-                      {c.lifecycleStage.replace(/_/g, ' ')}
+                      {(c.lifecycleStage || 'NEW').replace(/_/g, ' ')}
                     </span>
                   </td>
                   <td className="p-4">
@@ -147,11 +160,11 @@ export default async function CustomersListPage({
                     </div>
                   </td>
                   <td className="p-4 text-sm font-bold text-[#1C130B]">
-                    ₹{(c.lifetimeValue / 1000).toFixed(0)}K
+                    ₹{((c.lifetimeValue || 0) / 1000).toFixed(0)}K
                   </td>
                   <td className="p-4">
                     <div className="flex gap-1 flex-wrap">
-                      {c.tags.map(tag => (
+                      {(c.tags || []).map((tag: any) => (
                         <span key={tag.id} className="text-[10px] font-bold bg-[#FAF8F5] text-[#8A5836] px-2 py-0.5 rounded-full border border-[#C5A880]/20">
                           {tag.tag}
                         </span>

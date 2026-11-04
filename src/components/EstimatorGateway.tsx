@@ -8,6 +8,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import StepRoomSize from './estimator/StepRoomSize';
 import StepFinishTier from './estimator/StepFinishTier';
 import StepReviewBook from './estimator/StepReviewBook';
+import StickyBOMDrawer from './estimator/StickyBOMDrawer';
+import SwatchVanBookingModal from './SwatchVanBookingModal';
+import { Truck } from 'lucide-react';
 
 interface EstimatorGatewayProps {
   city?: CityConfig;
@@ -16,6 +19,7 @@ interface EstimatorGatewayProps {
 export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
   // Step State
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [isVanModalOpen, setIsVanModalOpen] = useState(false);
 
   // Engine Inputs
   const [widthFt, setWidthFt] = useState(12);
@@ -32,7 +36,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
       document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const handleSocietySelect = (e: CustomEvent) => {
+    const handleSocietySelect = () => {
       setStep(1);
       document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -149,10 +153,55 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
                 />
               )}
             </AnimatePresence>
+
+            {/* Live Bill of Materials (BOM) Sticky Drawer */}
+            <StickyBOMDrawer 
+              widthFt={widthFt}
+              heightFt={heightFt}
+              finishTier={finishTier}
+              isSmartMotorized={isSmart}
+              pricingDetails={pricingDetails}
+              nesting={nesting}
+              currentStep={step}
+              onProceedToReview={() => setStep(3)}
+            />
+
+            {/* Mobile Swatch Van Gate Dispatch Prompt */}
+            <div className="mt-8 pt-6 border-t border-[#C5A880]/20 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FAF8F5] p-5 rounded-2xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#C5A880]/20 flex items-center justify-center shrink-0">
+                  <Truck className="w-5 h-5 text-[#8A5836]" />
+                </div>
+                <div>
+                  <h5 className="font-['Syne'] font-bold text-sm text-[#1C130B]">
+                    Want Tactile Samples at Your Gated Society?
+                  </h5>
+                  <p className="font-['Plus_Jakarta_Sans'] text-xs text-[#1C130B]/70">
+                    Our mobile Mercedes-Benz Sprinter carries physical European textile & louver swatches to your gate.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsVanModalOpen(true)}
+                className="w-full sm:w-auto bg-[#1C130B] hover:bg-[#3E2C1E] text-[#C5A880] px-5 py-2.5 rounded-xl font-bold font-['Plus_Jakarta_Sans'] text-xs shrink-0 transition-colors shadow-md cursor-pointer"
+              >
+                Book Swatch Van at Gate
+              </button>
+            </div>
           </div>
 
         </div>
       </div>
+
+      {/* Swatch Van Booking Modal */}
+      <SwatchVanBookingModal
+        isOpen={isVanModalOpen}
+        onClose={() => setIsVanModalOpen(false)}
+        initialSociety="My Home Bhooja"
+        finishTier={finishTier}
+        wallDimensions={`${widthFt}ft x ${heightFt}ft`}
+      />
     </section>
   );
 }

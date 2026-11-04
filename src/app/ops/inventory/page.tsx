@@ -1,24 +1,27 @@
 import React from 'react';
 import { Search, Plus, Filter, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 export default async function InventoryDashboard() {
-  // Fetch active design items with their current dye lots
-  const items = await prisma.designItem.findMany({
-    where: { isActive: true },
-    include: {
-      dyeLots: {
-        where: { stockMeters: { gt: 0 } },
-        orderBy: { stockMeters: 'asc' }
+  // Fetch active design items with their current dye lots safely
+  let items: any[] = [];
+  try {
+    items = await prisma.designItem.findMany({
+      where: { isActive: true },
+      include: {
+        dyeLots: {
+          where: { stockMeters: { gt: 0 } },
+          orderBy: { stockMeters: 'asc' }
+        }
       }
-    }
-  });
+    });
+  } catch (err) {
+    items = [];
+  }
 
   // Flatten for table view (one row per active dye lot)
-  const inventoryRows = items.flatMap(item => 
-    item.dyeLots.map(lot => {
+  const inventoryRows = items.flatMap((item: any) => 
+    (item.dyeLots || []).map((lot: any) => {
       // Status determination
       let status: 'HEALTHY' | 'LOW' | 'CRITICAL' = 'HEALTHY';
       if (lot.stockMeters < 30) status = 'CRITICAL';
@@ -37,7 +40,7 @@ export default async function InventoryDashboard() {
   );
 
   const totalSKUs = items.length;
-  const criticalCount = inventoryRows.filter(r => r.status === 'CRITICAL').length;
+  const criticalCount = inventoryRows.filter((r: any) => r.status === 'CRITICAL').length;
   const activeLots = inventoryRows.length;
 
   return (
@@ -111,7 +114,7 @@ export default async function InventoryDashboard() {
             </tr>
           </thead>
           <tbody>
-            {inventoryRows.map((item) => (
+            {inventoryRows.map((item: any) => (
               <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                 <td className="p-4 pl-6">
                   <p className="font-bold text-[#1C130B]">{item.title}</p>

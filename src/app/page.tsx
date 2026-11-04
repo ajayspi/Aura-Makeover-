@@ -13,6 +13,7 @@ import GoldDivider from '@/components/GoldDivider';
 import PackageRecommender from '@/components/PackageRecommender';
 import FAQSection from '@/components/FAQSection';
 import UrgencyBanner48 from '@/components/UrgencyBanner48';
+import RenovationComparator from '@/components/RenovationComparator';
 import EstimatorGateway from '@/components/EstimatorGateway';
 import Footer from '@/components/Footer';
 import FeaturesGrid from '@/components/FeaturesGrid';
@@ -81,6 +82,10 @@ export default function Home() {
       
       <ScrollReveal>
         <UrgencyBanner48 />
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <RenovationComparator />
       </ScrollReveal>
       
       <ScrollReveal>

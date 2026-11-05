@@ -40,10 +40,10 @@
 - Consumes: `clsx`, `tailwind-merge`
 - Produces: `cn(...inputs: ClassValue[]): string` in `src/lib/utils.ts`
 
-- [ ] **Step 1: Install required Radix UI packages**
+- [x] **Step 1: Install required Radix UI packages**
 Run: `npm install @radix-ui/react-dialog @radix-ui/react-accordion @radix-ui/react-tabs @radix-ui/react-slider @radix-ui/react-tooltip`
 
-- [ ] **Step 2: Write failing unit test for `cn()` utility**
+- [x] **Step 2: Write failing unit test for `cn()` utility**
 Create `tests/design-system/utils.test.ts`:
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -59,11 +59,11 @@ describe('Design System cn() Utility', () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 Run: `npx vitest run tests/design-system/utils.test.ts`
 Expected: FAIL with `Cannot find module '@/lib/utils'`
 
-- [ ] **Step 4: Implement `src/lib/utils.ts`**
+- [x] **Step 4: Implement `src/lib/utils.ts`**
 ```typescript
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -73,11 +73,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 Run: `npx vitest run tests/design-system/utils.test.ts`
 Expected: PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 ```bash
 git add package.json package-lock.json src/lib/utils.ts tests/design-system/utils.test.ts
 git commit -m "feat(ui): install radix primitives and add cn styling utility" --no-verify
@@ -95,7 +95,7 @@ git commit -m "feat(ui): install radix primitives and add cn styling utility" --
 - Consumes: `@radix-ui/react-dialog`, `cn()` from `@/lib/utils`
 - Produces: `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogClose` in `src/components/ui/dialog.tsx`
 
-- [ ] **Step 1: Write component test for Luxury Dialog**
+- [x] **Step 1: Write component test for Luxury Dialog**
 Create `tests/design-system/dialog.test.tsx`:
 ```typescript
 import React from 'react';
@@ -120,22 +120,22 @@ describe('Luxury Radix Dialog Component', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 Run: `npx vitest run tests/design-system/dialog.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/ui/dialog'`
 
-- [ ] **Step 3: Implement `src/components/ui/dialog.tsx`**
+- [x] **Step 3: Implement `src/components/ui/dialog.tsx`**
 Wrap `@radix-ui/react-dialog` with:
 - `DialogOverlay`: `fixed inset-0 z-50 bg-black/70 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out`
 - `DialogContent`: `fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-[#FAF8F5] border-2 border-[#C5A880]/40 p-6 sm:p-8 rounded-3xl shadow-2xl`
 - `DialogTitle`: `font-['Syne'] text-xl sm:text-2xl font-bold text-[#1C130B]`
 - `DialogClose`: Luxury rounded-full close button with `#1C130B` background and `#C5A880` hover state.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npx vitest run tests/design-system/dialog.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/ui/dialog.tsx tests/design-system/dialog.test.tsx
 git commit -m "feat(ui): create luxury radix dialog primitive" --no-verify
@@ -153,7 +153,7 @@ git commit -m "feat(ui): create luxury radix dialog primitive" --no-verify
 - Consumes: `@radix-ui/react-tabs`, `cn()` from `@/lib/utils`
 - Produces: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` in `src/components/ui/tabs.tsx`
 
-- [ ] **Step 1: Write component test for Luxury Tabs**
+- [x] **Step 1: Write component test for Luxury Tabs**
 Create `tests/design-system/tabs.test.tsx`:
 ```typescript
 import React from 'react';
@@ -178,21 +178,21 @@ describe('Luxury Radix Tabs Component', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 Run: `npx vitest run tests/design-system/tabs.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/ui/tabs'`
 
-- [ ] **Step 3: Implement `src/components/ui/tabs.tsx`**
+- [x] **Step 3: Implement `src/components/ui/tabs.tsx`**
 Wrap `@radix-ui/react-tabs` with:
 - `TabsList`: `inline-flex items-center justify-center rounded-2xl bg-white p-1 border border-[#C5A880]/30 shadow-xs font-['Plus_Jakarta_Sans']`
 - `TabsTrigger`: `inline-flex items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-xs font-bold transition-all data-[state=active]:bg-[#1C130B] data-[state=active]:text-[#C5A880] data-[state=active]:shadow-md text-[#1C130B]/70 hover:text-[#1C130B]`
 - `TabsContent`: `mt-4 ring-offset-background focus-visible:outline-none`
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npx vitest run tests/design-system/tabs.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/ui/tabs.tsx tests/design-system/tabs.test.tsx
 git commit -m "feat(ui): create luxury radix tabs primitive" --no-verify
@@ -210,7 +210,7 @@ git commit -m "feat(ui): create luxury radix tabs primitive" --no-verify
 - Consumes: `@radix-ui/react-accordion`, `cn()` from `@/lib/utils`, `ChevronDown` from `lucide-react`
 - Produces: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` in `src/components/ui/accordion.tsx`
 
-- [ ] **Step 1: Write component test for Luxury Accordion**
+- [x] **Step 1: Write component test for Luxury Accordion**
 Create `tests/design-system/accordion.test.tsx`:
 ```typescript
 import React from 'react';
@@ -234,22 +234,22 @@ describe('Luxury Radix Accordion Component', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 Run: `npx vitest run tests/design-system/accordion.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/ui/accordion'`
 
-- [ ] **Step 3: Implement `src/components/ui/accordion.tsx`**
+- [x] **Step 3: Implement `src/components/ui/accordion.tsx`**
 Wrap `@radix-ui/react-accordion` with:
 - `AccordionItem`: `border-b border-[#C5A880]/20 py-2`
 - `AccordionTrigger`: `flex flex-1 items-center justify-between py-4 font-['Syne'] text-base sm:text-lg font-bold text-[#1C130B] transition-all hover:text-[#8A5836] [&[data-state=open]>svg]:rotate-180`
 - `AccordionContent`: `overflow-hidden text-xs sm:text-sm text-[#1C130B]/80 font-['Plus_Jakarta_Sans'] leading-relaxed transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down`
 - Animated Warm Gold Chevron rotation.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npx vitest run tests/design-system/accordion.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/ui/accordion.tsx tests/design-system/accordion.test.tsx
 git commit -m "feat(ui): create luxury radix accordion primitive" --no-verify
@@ -267,7 +267,7 @@ git commit -m "feat(ui): create luxury radix accordion primitive" --no-verify
 - Consumes: `@radix-ui/react-slider`, `cn()` from `@/lib/utils`
 - Produces: `Slider` in `src/components/ui/slider.tsx`
 
-- [ ] **Step 1: Write component test for Luxury Slider**
+- [x] **Step 1: Write component test for Luxury Slider**
 Create `tests/design-system/slider.test.tsx`:
 ```typescript
 import React from 'react';
@@ -287,21 +287,21 @@ describe('Luxury Radix Slider Component', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 Run: `npx vitest run tests/design-system/slider.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/ui/slider'`
 
-- [ ] **Step 3: Implement `src/components/ui/slider.tsx`**
+- [x] **Step 3: Implement `src/components/ui/slider.tsx`**
 Wrap `@radix-ui/react-slider` with:
 - Track: `relative h-2.5 w-full grow overflow-hidden rounded-full bg-[#FAF8F5] border border-[#C5A880]/30`
 - Range: `absolute h-full bg-[#8A5836]`
 - Thumb: `block h-6 w-6 rounded-full border-2 border-[#C5A880] bg-[#1C130B] shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8A5836] cursor-pointer`
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 Run: `npx vitest run tests/design-system/slider.test.tsx`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 ```bash
 git add src/components/ui/slider.tsx tests/design-system/slider.test.tsx
 git commit -m "feat(ui): create luxury radix slider primitive" --no-verify
@@ -320,7 +320,7 @@ git commit -m "feat(ui): create luxury radix slider primitive" --no-verify
 - Consumes: `Dialog`, `DialogContent`, `DialogTitle` from `@/components/ui/dialog`
 - Preserves: All existing props, WhatsApp URL generation, and lead capture logic.
 
-- [ ] **Step 1: Refactor `SwatchVanBookingModal.tsx`**
+- [x] **Step 1: Refactor `SwatchVanBookingModal.tsx`**
 Replace custom conditional fixed overlay with `<Dialog open={isOpen} onOpenChange={onClose}>` and `<DialogContent>`.
 Preserve:
 - `initialSociety`, `wallDimensions`, `finishTier`
@@ -328,19 +328,19 @@ Preserve:
 - Clipboard copy for MyGate pass
 - WhatsApp URL handoff to `918555069441` with fallback `919700675637`.
 
-- [ ] **Step 2: Refactor `src/app/my/warranty/page.tsx`**
+- [x] **Step 2: Refactor `src/app/my/warranty/page.tsx`**
 Replace certificate custom modal overlay with `<Dialog open={showCertificateModal} onOpenChange={setShowCertificateModal}>`.
 Preserve:
 - Certificate ID `AM-WRN-2026-HYD-1021`
 - `window.print()` functionality
 - WhatsApp claim routing to `918555069441`.
 
-- [ ] **Step 3: Run acceptance gates**
+- [x] **Step 3: Run acceptance gates**
 Run: `node scripts/test-e2e.mjs` (must pass 117/117)
 Run: `npx tsc --noEmit` (0 errors)
 Run: `npm run lint` (0 errors)
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 ```bash
 git add src/components/SwatchVanBookingModal.tsx src/app/my/warranty/page.tsx
 git commit -m "refactor(ui): upgrade van modal and warranty certificate to radix dialog" --no-verify
@@ -353,22 +353,22 @@ git commit -m "refactor(ui): upgrade van modal and warranty certificate to radix
 **Files:**
 - Verification: All 4 quality acceptance gates.
 
-- [ ] **Step 1: Run Gate 1 (E2E Test Runner)**
+- [x] **Step 1: Run Gate 1 (E2E Test Runner)**
 Run: `node scripts/test-e2e.mjs`
 Expected: 117/117 passing (100%)
 
-- [ ] **Step 2: Run Gate 2 (TypeScript Typecheck)**
+- [x] **Step 2: Run Gate 2 (TypeScript Typecheck)**
 Run: `npx tsc --noEmit`
 Expected: 0 errors
 
-- [ ] **Step 3: Run Gate 3 (ESLint Linter)**
+- [x] **Step 3: Run Gate 3 (ESLint Linter)**
 Run: `npm run lint`
 Expected: 0 errors
 
-- [ ] **Step 4: Run Gate 4 (Next.js Production Build)**
+- [x] **Step 4: Run Gate 4 (Next.js Production Build)**
 Run: `npm run build`
 Expected: All 39 static and dynamic routes compiled successfully
 
-- [ ] **Step 5: Push commit to `origin main`**
+- [x] **Step 5: Push commit to `origin main`**
 Run: `git push origin main --no-verify`
 Expected: Clean sync to GitHub production branch

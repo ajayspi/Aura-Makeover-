@@ -2,6 +2,13 @@
 
 import React, { useState } from 'react';
 import { ShieldCheck, FileText, AlertCircle, Printer, Download, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 
 const coveredItems = [
   'Wallpaper seam separation or peeling',
@@ -193,72 +200,64 @@ export default function WarrantyPage() {
         </div>
       </div>
 
-      {/* Official Certificate Modal */}
-      {showCertificateModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-[#FAF8F5] border-4 border-[#C5A880] rounded-3xl max-w-2xl w-full p-8 md:p-10 relative shadow-2xl text-[#1C130B]">
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setShowCertificateModal(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#1C130B] text-white flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-[#8A5836]"
-            >
-              ✕
-            </button>
-
-            {/* Certificate Content */}
-            <div className="text-center border-2 border-[#C5A880]/40 p-6 md:p-8 rounded-2xl bg-white relative">
-              <div className="text-[#8A5836] font-bold text-xs uppercase tracking-[0.25em] mb-2 font-['Plus_Jakarta_Sans']">
+      {/* Official Certificate Radix Dialog Modal */}
+      <Dialog open={showCertificateModal} onOpenChange={setShowCertificateModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="text-center">
+              <div className="text-[#8A5836] font-bold text-xs uppercase tracking-[0.25em] mb-1 font-['Plus_Jakarta_Sans']">
                 Official Authenticity & Guarantee
               </div>
-              <h2 className="text-2xl md:text-3xl font-black font-['Syne'] text-[#1C130B] mb-1">
+              <DialogTitle className="text-2xl sm:text-3xl text-center">
                 Certificate of 2-Year Warranty
-              </h2>
-              <p className="text-xs text-gray-500 font-mono mb-6">
+              </DialogTitle>
+              <DialogDescription className="text-center font-mono text-xs">
                 Certificate ID: AM-WRN-2026-HYD-1021
-              </p>
+              </DialogDescription>
+            </div>
+          </DialogHeader>
 
-              <div className="text-xs text-[#1C130B]/80 font-['Plus_Jakarta_Sans'] leading-relaxed max-w-lg mx-auto mb-6">
-                This document certifies that the bespoke architectural wall coverings, acoustic louvers, and window furnishings installed at <strong className="text-[#1C130B]">My Home Bhooja, Tower 3, Flat 1204</strong> meet AuroMakeover&apos;s 0.2mm laser-aligned precision standard and are guaranteed against seam peeling, bubbling, and adhesive breakdown until <strong className="text-[#8A5836]">March 15, 2028</strong>.
+          <div className="text-center border-2 border-[#C5A880]/40 p-6 rounded-2xl bg-white relative mt-2">
+            <div className="text-xs text-[#1C130B]/80 font-['Plus_Jakarta_Sans'] leading-relaxed max-w-lg mx-auto mb-6">
+              This document certifies that the bespoke architectural wall coverings, acoustic louvers, and window furnishings installed at <strong className="text-[#1C130B]">My Home Bhooja, Tower 3, Flat 1204</strong> meet AuroMakeover&apos;s 0.2mm laser-aligned precision standard and are guaranteed against seam peeling, bubbling, and adhesive breakdown until <strong className="text-[#8A5836]">March 15, 2028</strong>.
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-left bg-[#FAF8F5] p-4 rounded-xl border border-[#C5A880]/30 text-xs mb-6">
+              <div>
+                <span className="text-gray-500 block text-[10px] uppercase font-bold">Client</span>
+                <span className="font-bold text-[#1C130B]">Arjun Reddy</span>
               </div>
-
-              <div className="grid grid-cols-2 gap-4 text-left bg-[#FAF8F5] p-4 rounded-xl border border-[#C5A880]/30 text-xs mb-6">
-                <div>
-                  <span className="text-gray-500 block text-[10px] uppercase font-bold">Client</span>
-                  <span className="font-bold text-[#1C130B]">Arjun Reddy</span>
-                </div>
-                <div>
-                  <span className="text-gray-500 block text-[10px] uppercase font-bold">Certified Lead Artisan</span>
-                  <span className="font-bold text-[#1C130B]">Ravi Kumar (#RK-908)</span>
-                </div>
-                <div>
-                  <span className="text-gray-500 block text-[10px] uppercase font-bold">Adhesive Lot</span>
-                  <span className="font-bold text-[#1C130B]">Henkel Metylan V-44</span>
-                </div>
-                <div>
-                  <span className="text-gray-500 block text-[10px] uppercase font-bold">Seam Tolerance</span>
-                  <span className="font-bold text-emerald-700">0.18 mm (Laser Verified)</span>
-                </div>
+              <div>
+                <span className="text-gray-500 block text-[10px] uppercase font-bold">Certified Lead Artisan</span>
+                <span className="font-bold text-[#1C130B]">Ravi Kumar (#RK-908)</span>
               </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-[#C5A880]/30">
-                <div className="text-left">
-                  <div className="font-serif italic text-base text-[#8A5836]">AuroMakeover QA Guild</div>
-                  <div className="text-[10px] text-gray-400">Digital Seal & Cryptographic Hash</div>
-                </div>
-                <button
-                  type="button"
-                  onClick={handlePrint}
-                  className="bg-[#1C130B] hover:bg-[#8A5836] text-[#C5A880] px-4 py-2 rounded-xl text-xs font-bold font-['Plus_Jakarta_Sans'] flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  Print / Save PDF
-                </button>
+              <div>
+                <span className="text-gray-500 block text-[10px] uppercase font-bold">Adhesive Lot</span>
+                <span className="font-bold text-[#1C130B]">Henkel Metylan V-44</span>
+              </div>
+              <div>
+                <span className="text-gray-500 block text-[10px] uppercase font-bold">Seam Tolerance</span>
+                <span className="font-bold text-emerald-700">0.18 mm (Laser Verified)</span>
               </div>
             </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-[#C5A880]/30">
+              <div className="text-left">
+                <div className="font-serif italic text-base text-[#8A5836]">AuroMakeover QA Guild</div>
+                <div className="text-[10px] text-gray-400">Digital Seal & Cryptographic Hash</div>
+              </div>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="bg-[#1C130B] hover:bg-[#8A5836] text-[#C5A880] px-4 py-2 rounded-xl text-xs font-bold font-['Plus_Jakarta_Sans'] flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Print / Save PDF
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -186,7 +186,7 @@ export default function EstimatorGateway({ city }: EstimatorGatewayProps) {
           </p>
 
           {/* Mode Switcher: Single Room vs Whole-Home Bundle */}
-          <div className="inline-flex p-1.5 bg-white border border-[#C5A880]/40 rounded-2xl shadow-sm">
+          <div className="inline-flex flex-col sm:flex-row w-full sm:w-auto p-1.5 bg-white border border-[#C5A880]/40 rounded-2xl shadow-sm gap-1 sm:gap-0">
             <button
               type="button"
               onClick={() => setMode('single')}

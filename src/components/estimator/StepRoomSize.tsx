@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Ruler, ArrowRight, Building2, Sparkles } from 'lucide-react';
 import { RollNestingOutput } from '@/lib/engines';
 import { Dispatch, SetStateAction } from 'react';
+import { Slider } from '@/components/ui/slider';
 
 const ROOM_PRESETS = [
   { label: 'Accent Wall', width: 10, height: 10 },
@@ -64,7 +65,7 @@ export default function StepRoomSize({
 
       {/* Preset Mode Tabs */}
       <div>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <label className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#8A5836] font-['Plus_Jakarta_Sans']">
             Quick Sizing Presets
           </label>
@@ -161,14 +162,16 @@ export default function StepRoomSize({
               {widthFt} ft
             </span>
           </div>
-          <input
-            type="range"
-            min={5}
-            max={30}
-            value={widthFt}
-            onChange={(e) => setWidthFt(Number(e.target.value))}
-            className="w-full h-2.5 sm:h-3 bg-[#FAF8F5] rounded-full appearance-none cursor-pointer accent-[#8A5836]"
-          />
+          <div className="py-2">
+            <Slider
+              min={5}
+              max={30}
+              step={1}
+              value={[widthFt]}
+              onValueChange={([val]) => setWidthFt(val)}
+              aria-label="Wall Width (Horizontal)"
+            />
+          </div>
           <div className="flex justify-between text-[9px] sm:text-[11px] text-[#1C130B]/40 font-bold px-1 font-['Plus_Jakarta_Sans'] uppercase tracking-wider">
             <span>5 ft</span>
             <span>15 ft</span>
@@ -187,14 +190,16 @@ export default function StepRoomSize({
               {heightFt} ft
             </span>
           </div>
-          <input
-            type="range"
-            min={8}
-            max={15}
-            value={heightFt}
-            onChange={(e) => setHeightFt(Number(e.target.value))}
-            className="w-full h-2.5 sm:h-3 bg-[#FAF8F5] rounded-full appearance-none cursor-pointer accent-[#8A5836]"
-          />
+          <div className="py-2">
+            <Slider
+              min={8}
+              max={15}
+              step={1}
+              value={[heightFt]}
+              onValueChange={([val]) => setHeightFt(val)}
+              aria-label="Wall Height (Vertical Slab)"
+            />
+          </div>
           <div className="flex justify-between text-[9px] sm:text-[11px] text-[#1C130B]/40 font-bold px-1 font-['Plus_Jakarta_Sans'] uppercase tracking-wider">
             <span>8 ft</span>
             <span>10 ft</span>

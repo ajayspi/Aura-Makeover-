@@ -1,6 +1,7 @@
 import { EventBus } from './EventBus';
 import { routeMessage, dispatchMessage } from '../services/CommunicationOrchestrator';
 import { calculateLeadScore, getAutomationAction } from '../services/LeadScoringEngine';
+import { syncLeadToSupabase } from '../supabase';
 
 // Prevent duplicate registrations during Next.js HMR
 let subscribersRegistered = false;
@@ -57,6 +58,14 @@ export function registerEventSubscribers() {
         name: payload.customerName.split(' ')[0], // First name
       });
     }
+
+    // C. Dual write / mirror to Supabase if configured
+    await syncLeadToSupabase({
+      id: payload.leadId,
+      customerName: payload.customerName,
+      phone: payload.phone,
+      source: 'domain_event',
+    });
   });
 
   // 2. Lead Status Updated -> Lifecycle communications

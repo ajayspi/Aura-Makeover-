@@ -12,6 +12,9 @@
   --color-whatsapp: #15803D;
   --color-silver: #C9CDD4;
   --color-royal: #3E2C1E;
+
+  --animate-accordion-down: accordion-down 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-accordion-up: accordion-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
@@ -74,6 +77,29 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Radix UI Accordion Animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
 /* Hide scrollbar utility for clean carousel/card sliding */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
@@ -87,5 +113,8 @@ h1, h2, h3, h4, h5, h6 {
   .text-foil,
   .shimmer-bar {
     animation: none;
+  }
+  [data-state="open"], [data-state="closed"] {
+    animation-duration: 0.001ms !important;
   }
 }

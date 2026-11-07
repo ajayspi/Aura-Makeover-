@@ -3,6 +3,10 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 // Browser / Public Client
 let supabaseInstance: SupabaseClient | null = null;
 
+export function _resetClientForTesting() {
+  supabaseInstance = null;
+}
+
 export function getSupabase(): SupabaseClient | null {
   if (supabaseInstance) return supabaseInstance;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -34,3 +38,50 @@ export function getSupabaseAdmin(): SupabaseClient | null {
     },
   });
 }
+
+export interface SupabaseLeadPayload {
+  id?: string;
+  customerName?: string;
+  phone?: string;
+  source?: string;
+  quizAnswers?: unknown;
+  sessionId?: string;
+  assignedAgentId?: string | null;
+  status?: string;
+}
+
+/**
+ * Safely mirror/upsert a lead to Supabase when credentials and URL are present.
+ * Fails silently with a warning if Supabase is unconfigured or unreachable.
+ */
+export async function syncLeadToSupabase(lead: SupabaseLeadPayload) {
+  const client = getSupabaseAdmin() || getSupabase();
+  if (!client) return null;
+
+  try {
+    const { data, error } = await client.from('leads').upsert(
+      {
+        id: lead.id,
+        customer_name: lead.customerName,
+        phone: lead.phone,
+        source: lead.source,
+        quiz_answers: lead.quizAnswers,
+        session_id: lead.sessionId,
+        assigned_agent_id: lead.assignedAgentId,
+        status: lead.status || 'NEW',
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: lead.sessionId ? 'session_id' : undefined }
+    );
+
+    if (error) {
+      console.warn('[Supabase] Lead sync error:', error.message);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.warn('[Supabase] Lead sync exception:', err);
+    return null;
+  }
+}
+

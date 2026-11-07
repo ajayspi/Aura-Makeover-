@@ -59,8 +59,8 @@ export default function UrgencyBanner48() {
             Book by midnight, <span className="text-foil">install tomorrow.</span>
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#FAF8F5]/65 text-sm leading-relaxed max-w-xl">
-            Tonight&rsquo;s swatch-van slots close at midnight. Reserve yours and your 48-hour
-            makeover window starts tomorrow morning — measured, cut and installed on schedule.
+            Tonight&rsquo;s swatch-van slots close at midnight. Reserve yours and
+            our executive visits your society tomorrow morning with the mobile swatch van — measured, curated and planned with a 48-hour makeover turnaround.
           </p>
         </div>
 

@@ -111,17 +111,17 @@ export default function PricingPage() {
           {[
             { 
               name: 'Essential', price: '₹35-45', 
-              features: ['Premium vinyl wallpapers', '1-2 rooms coverage', '24-hour install', '1-Year Warranty', 'Primer & GST Included'],
+              features: ['Premium vinyl wallpapers', '1-2 rooms coverage', '24-hour turnaround', '1-Year Warranty', 'Primer & GST Included'],
               highlight: false
             },
             { 
               name: 'Signature', price: '₹55-75', 
-              features: ['Designer non-woven + louvers', 'Full flat coverage', '48-hour install', '2-Year Warranty', 'Solar analysis & reco'],
+              features: ['Designer non-woven + louvers', 'Full flat coverage', '48-hour turnaround', '2-Year Warranty', 'Solar analysis & reco'],
               highlight: true
             },
             { 
               name: 'Bespoke', price: '₹90-150', 
-              features: ['Italian imports & smart blinds', 'Full flat + custom', '72-hour install', '3-Year Warranty', 'Dedicated Project Manager'],
+              features: ['Italian imports & smart blinds', 'Full flat + custom', '72-hour turnaround', '3-Year Warranty', 'Dedicated Project Manager'],
               highlight: false
             }
           ].map((pkg, i) => (

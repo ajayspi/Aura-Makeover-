@@ -93,7 +93,7 @@ export default function ServicesPage() {
       {/* 3. Differentiators */}
       <section className="py-12 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-12">
-          {['Zero Civil Work', '48-Hour Install', '2-Year Warranty', 'Escrow Protected'].map((diff, i) => (
+          {['Zero Civil Work', '48-Hour Turnaround', '2-Year Warranty', 'Escrow Protected'].map((diff, i) => (
             <div key={i} className="flex items-center gap-3 font-bold text-[#1C130B]">
               <AnimatedIcon icon="ShieldCheck" className="w-6 h-6 text-[#C5A880]" triggerOnScroll={true} />
               {diff}

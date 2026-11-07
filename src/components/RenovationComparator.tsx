@@ -208,7 +208,7 @@ export default function RenovationComparator() {
                 <div className="flex items-start gap-3 p-3 bg-[#FAF8F5]/5 rounded-2xl border border-[#C5A880]/30">
                   <Clock className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold text-[#FAF8F5] block">Duration: {delta.auraDays} Days Rapid Transformation</span>
+                    <span className="font-bold text-[#FAF8F5] block">Duration: 48-Hour Turnaround ({delta.auraDays} Days)</span>
                     <span className="text-xs text-[#FAF8F5]/70">Pre-measured panels and precision rolls arrive ready to mount. Installed in hours without vacating.</span>
                   </div>
                 </div>

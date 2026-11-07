@@ -49,7 +49,7 @@ const TEMPLATES: Record<string, { subject?: string; body: string }> = {
   },
   'quote_sent': {
     subject: 'Your AuroMakeover Estimate — {{amount}}',
-    body: 'Hi {{name}}, your personalized estimate for {{society}} is ready:\n\n💰 Total: {{amount}} (incl. GST)\n🛡️ 10/60/30 Escrow Protection\n📅 48-hour installation guarantee\n\nReply "BOOK" to lock your slot with a 10% deposit.',
+    body: 'Hi {{name}}, your personalized estimate for {{society}} is ready:\n\n💰 Total: {{amount}} (incl. GST)\n🛡️ 10/60/30 Escrow Protection\n📅 48-hour makeover turnaround guarantee\n\nReply "BOOK" to lock your slot with a 10% deposit.',
   },
   'payment_reminder_10': {
     body: 'Hi {{name}}, your booking deposit of {{amount}} is pending. Pay now to secure your installation slot: {{paymentLink}}',

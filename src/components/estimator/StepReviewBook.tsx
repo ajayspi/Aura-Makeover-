@@ -241,7 +241,7 @@ Address/Flat No: ${address}
         </div>
         <div className="flex items-center gap-3 justify-center sm:justify-center">
           <Clock className="w-5 h-5 text-[#8A5836]" />
-          <span className="font-['Plus_Jakarta_Sans'] text-xs font-bold text-[#1C130B]/70 uppercase tracking-widest">48-Hr SLA</span>
+          <span className="font-['Plus_Jakarta_Sans'] text-xs font-bold text-[#1C130B]/70 uppercase tracking-widest">48-Hr Turnaround SLA</span>
         </div>
         <div className="flex items-center gap-3 justify-center sm:justify-end">
           <CheckCircle2 className="w-5 h-5 text-[#8A5836]" />

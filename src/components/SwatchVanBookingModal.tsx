@@ -113,7 +113,7 @@ export default function SwatchVanBookingModal({
                 Book Mobile Swatch Van
               </DialogTitle>
               <DialogDescription>
-                Tactile samples delivered to your gated society entrance.
+                Our executive visits your gated society with 200+ tactile swatches and laser measurement.
               </DialogDescription>
             </div>
           </div>

@@ -71,7 +71,7 @@ export default function BeforeAfterGrid() {
             The Master Showcase
           </h2>
           <p className="font-['Plus_Jakarta_Sans'] text-[#1C130B]/70 text-lg max-w-2xl mx-auto">
-            {PAIR_COUNT} true same-space transformations. Drag the slider to reveal how we transform standard builder-finish rooms into architectural sanctuaries in exactly 48 hours. (Showing {CELL_COUNT} items total).
+            {PAIR_COUNT} true same-space transformations. Drag the slider to reveal how we transform standard builder-finish rooms into architectural sanctuaries with a 48-hour makeover turnaround. (Showing {CELL_COUNT} items total).
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export default function BeforeAfterGrid() {
               Your Home,<br/>Next.
             </h3>
             <p className="font-['Plus_Jakarta_Sans'] text-sm text-[#FAF8F5]/70 mb-8">
-              Book the mobile swatch van and secure your 48-hour transformation.
+              Book the mobile swatch van and secure your makeover turnaround.
             </p>
             <a href="#estimator" className="w-16 h-16 rounded-full bg-[#C5A880] flex items-center justify-center text-[#1C130B] group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(197,168,128,0.4)]">
               <ArrowRight className="w-8 h-8" />

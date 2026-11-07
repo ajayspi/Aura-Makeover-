@@ -27,7 +27,7 @@ const SERVICE_DATA: Record<string, ServiceDetail> = {
     galleryImgs: ['/images/after-master-pichwai.jpg', '/images/botanical.jpg', '/images/neoclassical.jpg'],
     description: 'Transform your main accent walls with bespoke European non-woven and fabric-backed wallpapers. Milled with 11% safety pattern matching to eliminate visible seams, and installed using non-VOC, odorless German Henkel adhesives that protect indoor air quality.',
     specs: [
-      { label: 'Installation Duration', value: '24 – 48 Hours' },
+      { label: 'Turnaround Time', value: '24 – 48 Hours Makeover Turnaround' },
       { label: 'Adhesive Type', value: 'Zero-VOC Water-Based Henkel Metylan' },
       { label: 'Seam Tolerance', value: '< 0.2mm Precision Laser Aligned' },
       { label: 'Warranty', value: '2-Year Anti-Peel & Colorfast Guarantee' },
@@ -49,6 +49,7 @@ const SERVICE_DATA: Record<string, ServiceDetail> = {
     galleryImgs: ['/images/after-office-bright.jpg', '/images/fluted-louver.jpg', '/images/after-living-fluted.jpg'],
     description: 'Elevate your living room TV credenzas, bedroom headboards, and executive home offices with acoustic fluted slats. Our high-density composite slats feature real wood veneer and recycled PET acoustic backing that dampens flutter echoes in high-ceiling apartments.',
     specs: [
+      { label: 'Turnaround Time', value: '48 Hours Makeover Turnaround' },
       { label: 'Sound Absorption', value: 'NRC 0.85 Certified Acoustic Dampening' },
       { label: 'Material Core', value: 'High-Density Moisture-Resistant Engineered Wood' },
       { label: 'Finish Veneer', value: 'Natural Smoked Oak / American Walnut' },
@@ -71,6 +72,7 @@ const SERVICE_DATA: Record<string, ServiceDetail> = {
     galleryImgs: ['/images/after-living-fluted.jpg', '/images/showcase-living.jpg', '/images/showcase-drapes.jpg'],
     description: 'Designed specifically for West Hyderabad high-rise apartments exposed to aggressive afternoon solar heat. Our automated smart blinds integrate seamlessly with Apple HomeKit, Google Home, and Amazon Alexa to automate daily thermal shading and privacy.',
     specs: [
+      { label: 'Turnaround Time', value: '48 Hours Makeover Turnaround' },
       { label: 'Motor System', value: 'Somfy / Tuya Ultra-Quiet (< 35dB) Motor' },
       { label: 'Solar Heat Rejection', value: 'Up to 78% Solar Heat Radiation Blocked' },
       { label: 'Smart Integration', value: 'Matter / Zigbee / Alexa / Google / HomeKit' },
@@ -95,7 +97,7 @@ const SERVICE_DATA: Record<string, ServiceDetail> = {
     specs: [
       { label: 'Backdrop Material', value: 'Fire-Resistant Composite + Gold Foil Accent' },
       { label: 'Illumination', value: '3000K Warm Backlit LED Profile' },
-      { label: 'Turnaround Time', value: '48 Hours Rapid Installation' },
+      { label: 'Turnaround Time', value: '48 Hours Makeover Turnaround' },
       { label: 'Customization', value: 'Custom Sized to Exact Society Niche Floorplans' },
       { label: 'Warranty', value: '2-Year Comprehensive Surface Warranty' },
     ],
@@ -251,7 +253,7 @@ export default async function ServiceDetailPage({
               <div className="space-y-2 text-xs text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-[#8A5836]" />
-                  <span>Completed in 48 hours guaranteed</span>
+                  <span>48-Hour complete makeover turnaround guaranteed</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-[#8A5836]" />

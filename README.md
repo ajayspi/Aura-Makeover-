@@ -1,5 +1,7 @@
 # AuroMakeover Blueprint
 
+![Aura Makeover - live site](docs/screenshots/aura-makeover.jpg)
+
 ## System Overview
 **AuroMakeover** is a Vertical SaaS platform and premium home interior transformation service operating in Hyderabad, Bangalore, and Chennai. We deliver luxury architectural surface skins (wallcoverings, acoustic fluted louvers, smart motorized blinds) with zero civil work, zero dust, and a 10/60/30 escrow payment protection model.
 

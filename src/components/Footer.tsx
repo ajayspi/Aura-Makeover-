@@ -1,12 +1,14 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import {
   ShieldCheck,
   MapPin,
   MessageCircle,
   ArrowUpRight,
   Truck,
+  Sparkles,
 } from 'lucide-react';
 import { CityConfig } from '@/lib/cities';
 import { AuroBrand } from './AuroLogo';
@@ -18,18 +20,47 @@ interface FooterProps {
 const QUICK_LINKS = [
   { label: 'Instant Price Estimator', href: '#estimator' },
   { label: 'Zero-Civil Comparator', href: '/comparator' },
-  { label: 'Rental ROI Model', href: '/roi' },
+  { label: 'Rental ROI Model', href: '/calculators/rental-yield' },
+  { label: 'AI Design Studio (3D Styler)', href: '/studio' },
   { label: 'Design Lookbook', href: '#gallery' },
   { label: 'Pre-Measured Societies', href: '#societies' },
   { label: 'Client Reviews', href: '#reviews' },
-  { label: 'The 48-Hour Process', href: '#how-it-works' },
+  { label: 'The 48-Hour Method', href: '#how-it-works' },
 ];
 
-const DESIGN_COLLECTIONS = [
-  { label: 'Botanical Wallpapers', href: '#gallery' },
-  { label: 'Acoustic Fluted Louvers', href: '#gallery' },
-  { label: 'Neo-Classical Mouldings', href: '#gallery' },
-  { label: 'Temple Pichwai Canvas', href: '#gallery' },
+const SERVICE_SILOS = [
+  { label: 'Architectural Louvers & Panels', href: '/services/architectural-louvers-and-panels' },
+  { label: 'Premium European Wallcoverings', href: '/services/premium-wallcoverings' },
+  { label: 'Smart Blinds & Acoustics', href: '/services/smart-blinds-and-acoustics' },
+  { label: 'Concealed Cove Lighting', href: '/services/concealed-lighting-upgrades' },
+  { label: 'Sacred Mandir & Pooja Rooms', href: '/services/pooja-rooms' },
+];
+
+const ROOM_SILOS = [
+  { label: 'Living Room Makeovers', href: '/rooms/living-room-makeovers' },
+  { label: 'Master Bedroom Sanctuaries', href: '/rooms/master-bedroom-sanctuaries' },
+  { label: 'Media & Acoustic Rooms', href: '/rooms/media-and-acoustic-rooms' },
+  { label: 'Balcony & Outdoor Styling', href: '/rooms/balcony-and-outdoor-styling' },
+  { label: 'Plum-Inspired Stone Collection', href: '/collections/stone' },
+];
+
+const LOCATION_CORRIDORS = [
+  { label: 'Kokapet High-Rises', href: '/locations/premium-interiors-kokapet-highrises' },
+  { label: 'Manikonda & Lanco Hills', href: '/locations/interior-design-makeovers-in-manikonda' },
+  { label: 'Financial District Styling', href: '/locations/financial-district-apartment-styling' },
+  { label: 'Hyderabad West SSR Hub', href: '/hyderabad' },
+  { label: 'Bangalore East Corridor', href: '/bangalore' },
+  { label: 'Chennai South Hub', href: '/chennai' },
+];
+
+const PORTALS = [
+  { label: 'Customer Portal Dashboard', href: '/my/dashboard' },
+  { label: 'Escrow 10/60/30 Payments', href: '/my/payments' },
+  { label: '2-Year Digital Warranty Certificate', href: '/my/warranty' },
+  { label: 'Executive Operations Center', href: '/ops' },
+  { label: 'Real-Time Lead Kanban', href: '/ops/leads' },
+  { label: 'Customer 360 & RFM', href: '/ops/customers' },
+  { label: 'Batch Dye-Lot & Inventory', href: '/ops/inventory' },
 ];
 
 function InstagramIcon({ className = 'w-4 h-4' }: { className?: string }) {
@@ -86,11 +117,11 @@ export default function Footer({ city }: FooterProps) {
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#C5A880]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#8A5836]/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto relative z-10 space-y-12">
+      <div className="max-w-7xl mx-auto relative z-10 space-y-14">
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Brand Column & 2-Year Warranty Badge */}
-          <div className="md:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-6">
             <div>
               <h3 className="mb-2">
                 <AuroBrand variant="light" className="text-3xl" />
@@ -108,7 +139,7 @@ export default function Footer({ city }: FooterProps) {
                 </div>
                 <div>
                   <div className="text-sm font-bold font-['Syne'] text-[#FAF8F5] flex items-center gap-2">
-                    2-Year Comprehensive Warranty
+                    2-Year Warranty (Comprehensive)
                     <span className="text-[10px] bg-[#C5A880] text-[#1C130B] font-bold px-2 py-0.5 rounded-full uppercase">
                       Included
                     </span>
@@ -135,7 +166,7 @@ export default function Footer({ city }: FooterProps) {
           </div>
 
           {/* Service Areas Column */}
-          <div className="md:col-span-3 space-y-4">
+          <div className="lg:col-span-3 space-y-4">
             <h4 className="text-sm font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
               Service Areas ({cityName} {cityRegion})
             </h4>
@@ -156,11 +187,11 @@ export default function Footer({ city }: FooterProps) {
             </div>
           </div>
 
-          {/* Quick Links & Collections */}
-          <div className="md:col-span-4 grid grid-cols-2 gap-6">
+          {/* Quick Links & Hubs */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             <div className="space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
-                Navigation
+                Explore Navigation
               </h4>
               <ul className="space-y-2 text-xs font-medium">
                 {QUICK_LINKS.map((link) => (
@@ -179,22 +210,70 @@ export default function Footer({ city }: FooterProps) {
 
             <div className="space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-widest text-[#C5A880] font-['Syne']">
-                Collections
+                Services Silos
               </h4>
               <ul className="space-y-2 text-xs font-medium">
-                {DESIGN_COLLECTIONS.map((item) => (
+                {SERVICE_SILOS.map((item) => (
                   <li key={item.label}>
-                    <a
+                    <Link
                       href={item.href}
                       className="text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors flex items-center gap-1"
                     >
-                      <span>{item.label}</span>
-                      <ArrowUpRight className="w-3 h-3 text-[#C5A880]/50" />
-                    </a>
+                      <span className="truncate">{item.label}</span>
+                      <ArrowUpRight className="w-3 h-3 text-[#C5A880]/50 shrink-0" />
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* Directory Silos Strip: Rooms, Locations, Portals */}
+        <div className="pt-10 border-t border-[#C5A880]/20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-xs font-medium">
+          <div className="space-y-3">
+            <h5 className="font-['Syne'] font-bold uppercase tracking-wider text-[#C5A880] text-xs">
+              Room Transformation Silos
+            </h5>
+            <ul className="space-y-2">
+              {ROOM_SILOS.map((r) => (
+                <li key={r.label}>
+                  <Link href={r.href} className="text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors flex items-center gap-1">
+                    <span>{r.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h5 className="font-['Syne'] font-bold uppercase tracking-wider text-[#C5A880] text-xs">
+              Corridors & Metro Hubs
+            </h5>
+            <ul className="space-y-2">
+              {LOCATION_CORRIDORS.map((l) => (
+                <li key={l.label}>
+                  <Link href={l.href} className="text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors flex items-center gap-1">
+                    <span>{l.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h5 className="font-['Syne'] font-bold uppercase tracking-wider text-[#C5A880] text-xs">
+              Client & Ops Command Portals
+            </h5>
+            <ul className="space-y-2">
+              {PORTALS.map((p) => (
+                <li key={p.label}>
+                  <Link href={p.href} className="text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors flex items-center gap-1">
+                    <span>{p.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 

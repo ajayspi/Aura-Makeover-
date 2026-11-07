@@ -1,20 +1,18 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertTriangle, 
-  CheckCircle2, 
   Clock, 
   Home, 
-  TrendingDown, 
   Sparkles, 
   ShieldCheck, 
-  ArrowRight,
-  Building,
-  UserCheck
+  ArrowRight, 
+  Building, 
+  UserCheck 
 } from 'lucide-react';
 import { calculateRenovationDisruption } from '@/lib/disruption-engine';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function RenovationComparator() {
   const [isLivingInFlat, setIsLivingInFlat] = useState(true);
@@ -53,7 +51,7 @@ export default function RenovationComparator() {
           </p>
         </div>
 
-        {/* Interactive Controls Bar */}
+        {/* Interactive Controls Bar featuring Radix Segmented Tabs */}
         <div className="bg-white rounded-3xl p-6 shadow-xl border border-[#C5A880]/20 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
           
           {/* Persona Toggle */}
@@ -61,30 +59,28 @@ export default function RenovationComparator() {
             <label className="text-xs font-bold text-[#8A5836] uppercase tracking-wider block mb-2 font-['Plus_Jakarta_Sans']">
               1. Your Occupancy Status:
             </label>
-            <div className="inline-flex bg-[#FAF8F5] p-1.5 rounded-2xl border border-[#C5A880]/30 w-full sm:w-auto">
-              <button
-                onClick={() => setIsLivingInFlat(true)}
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300 ${
-                  isLivingInFlat 
-                    ? 'bg-[#1C130B] text-[#C5A880] shadow-md' 
-                    : 'text-[#1C130B]/70 hover:text-[#1C130B]'
-                }`}
-              >
-                <UserCheck className="w-4 h-4" />
-                Living in Flat (Live-in Friendly)
-              </button>
-              <button
-                onClick={() => setIsLivingInFlat(false)}
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300 ${
-                  !isLivingInFlat 
-                    ? 'bg-[#1C130B] text-[#C5A880] shadow-md' 
-                    : 'text-[#1C130B]/70 hover:text-[#1C130B]'
-                }`}
-              >
-                <Building className="w-4 h-4" />
-                Vacant Unit (Landlord / Investor)
-              </button>
-            </div>
+            <Tabs
+              value={isLivingInFlat ? 'living' : 'investment'}
+              onValueChange={(val) => setIsLivingInFlat(val === 'living')}
+              className="w-full sm:w-auto"
+            >
+              <TabsList className="bg-[#FAF8F5] p-1.5 rounded-2xl border border-[#C5A880]/30 w-full sm:w-auto grid grid-cols-2 sm:flex gap-1">
+                <TabsTrigger
+                  value="living"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300"
+                >
+                  <UserCheck className="w-4 h-4" />
+                  Living in Flat (Live-in Friendly)
+                </TabsTrigger>
+                <TabsTrigger
+                  value="investment"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300"
+                >
+                  <Building className="w-4 h-4" />
+                  Vacant Unit (Landlord / Investor)
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
           {/* Scope Selector */}
@@ -92,25 +88,27 @@ export default function RenovationComparator() {
             <label className="text-xs font-bold text-[#8A5836] uppercase tracking-wider block mb-2 font-['Plus_Jakarta_Sans']">
               2. Transformation Scope:
             </label>
-            <div className="inline-flex bg-[#FAF8F5] p-1.5 rounded-2xl border border-[#C5A880]/30 w-full sm:w-auto">
-              {[
-                { count: 1, label: '1 Accent Wall' },
-                { count: 2, label: 'Living + Dining (2 Rooms)' },
-                { count: 3, label: 'Full 3BHK (3 Rooms)' },
-              ].map((scope) => (
-                <button
-                  key={scope.count}
-                  onClick={() => setRoomCount(scope.count)}
-                  className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300 ${
-                    roomCount === scope.count
-                      ? 'bg-[#C5A880] text-[#1C130B] shadow-md'
-                      : 'text-[#1C130B]/70 hover:text-[#1C130B]'
-                  }`}
-                >
-                  {scope.label}
-                </button>
-              ))}
-            </div>
+            <Tabs
+              value={String(roomCount)}
+              onValueChange={(val) => setRoomCount(Number(val))}
+              className="w-full sm:w-auto"
+            >
+              <TabsList className="bg-[#FAF8F5] p-1.5 rounded-2xl border border-[#C5A880]/30 w-full sm:w-auto grid grid-cols-3 sm:flex gap-1">
+                {[
+                  { count: 1, label: '1 Accent Wall' },
+                  { count: 2, label: 'Living + Dining (2 Rooms)' },
+                  { count: 3, label: 'Full 3BHK (3 Rooms)' },
+                ].map((scope) => (
+                  <TabsTrigger
+                    key={scope.count}
+                    value={String(scope.count)}
+                    className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm font-['Plus_Jakarta_Sans'] transition-all duration-300"
+                  >
+                    {scope.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
 
         </div>
@@ -260,7 +258,7 @@ export default function RenovationComparator() {
 
               <button
                 onClick={scrollToEstimator}
-                className="w-full bg-[#C5A880] hover:bg-[#d5ba94] text-[#1C130B] font-bold font-['Plus_Jakarta_Sans'] py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl group text-sm"
+                className="w-full bg-[#C5A880] hover:bg-[#d5ba94] text-[#1C130B] font-bold font-['Plus_Jakarta_Sans'] py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300 shadow-xl group text-sm cursor-pointer"
               >
                 <span>Calculate Your Exact Wall Quote</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -290,7 +288,7 @@ export default function RenovationComparator() {
             <div className="shrink-0 flex items-center gap-3">
               <button
                 onClick={scrollToEstimator}
-                className="bg-[#C5A880] text-[#1C130B] px-6 py-3 rounded-2xl font-bold font-['Plus_Jakarta_Sans'] hover:bg-[#d5ba94] transition-colors text-sm shadow-lg inline-flex items-center gap-2"
+                className="bg-[#C5A880] text-[#1C130B] px-6 py-3 rounded-2xl font-bold font-['Plus_Jakarta_Sans'] hover:bg-[#d5ba94] transition-colors text-sm shadow-lg inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>Book Zero-Civil Makeover</span>
                 <ShieldCheck className="w-4 h-4" />

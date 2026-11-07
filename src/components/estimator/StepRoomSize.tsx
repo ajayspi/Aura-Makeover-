@@ -6,6 +6,7 @@ import { Ruler, ArrowRight, Building2, Sparkles } from 'lucide-react';
 import { RollNestingOutput } from '@/lib/engines';
 import { Dispatch, SetStateAction } from 'react';
 import { Slider } from '@/components/ui/slider';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 const ROOM_PRESETS = [
   { label: 'Accent Wall', width: 10, height: 10 },
@@ -63,40 +64,34 @@ export default function StepRoomSize({
         </p>
       </div>
 
-      {/* Preset Mode Tabs */}
-      <div>
+      {/* Preset Mode Tabs powered by Radix UI */}
+      <Tabs
+        value={presetTab}
+        onValueChange={(val) => setPresetTab(val as 'standard' | 'society')}
+        className="w-full"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <label className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#8A5836] font-['Plus_Jakarta_Sans']">
             Quick Sizing Presets
           </label>
-          <div className="flex items-center bg-[#FAF8F5] p-1 rounded-xl border border-[#C5A880]/30 text-xs font-['Plus_Jakarta_Sans']">
-            <button
-              type="button"
-              onClick={() => setPresetTab('standard')}
-              className={`px-3 py-1 rounded-lg font-bold text-xs transition-colors ${
-                presetTab === 'standard'
-                  ? 'bg-[#1C130B] text-[#C5A880] shadow-sm'
-                  : 'text-[#1C130B]/60 hover:text-[#1C130B]'
-              }`}
+          <TabsList className="bg-[#FAF8F5] p-1 rounded-xl border border-[#C5A880]/30 text-xs font-['Plus_Jakarta_Sans'] inline-flex">
+            <TabsTrigger
+              value="standard"
+              className="px-3 py-1.5 rounded-lg font-bold text-xs transition-all data-[state=active]:bg-[#1C130B] data-[state=active]:text-[#C5A880]"
             >
               Standard Rooms
-            </button>
-            <button
-              type="button"
-              onClick={() => setPresetTab('society')}
-              className={`px-3 py-1 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-colors ${
-                presetTab === 'society'
-                  ? 'bg-[#1C130B] text-[#C5A880] shadow-sm'
-                  : 'text-[#1C130B]/60 hover:text-[#1C130B]'
-              }`}
+            </TabsTrigger>
+            <TabsTrigger
+              value="society"
+              className="px-3 py-1.5 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-all data-[state=active]:bg-[#1C130B] data-[state=active]:text-[#C5A880]"
             >
               <Building2 className="w-3 h-3 text-[#C5A880]" />
               Gated Society Floorplans
-            </button>
-          </div>
+            </TabsTrigger>
+          </TabsList>
         </div>
 
-        {presetTab === 'standard' ? (
+        <TabsContent value="standard" className="mt-0">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             {ROOM_PRESETS.map((preset) => (
               <button
@@ -119,7 +114,9 @@ export default function StepRoomSize({
               </button>
             ))}
           </div>
-        ) : (
+        </TabsContent>
+
+        <TabsContent value="society" className="mt-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
             {SOCIETY_FLOORPLANS.map((item) => (
               <button
@@ -146,10 +143,10 @@ export default function StepRoomSize({
               </button>
             ))}
           </div>
-        )}
-      </div>
+        </TabsContent>
+      </Tabs>
 
-      {/* Sliders Container */}
+      {/* Sliders Container featuring Radix UI Slider */}
       <div className="bg-white border-2 border-[#C5A880]/30 p-5 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6 sm:space-y-8 shadow-sm">
         {/* Width Slider */}
         <div className="space-y-3 sm:space-y-4">

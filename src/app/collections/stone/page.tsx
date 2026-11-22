@@ -17,61 +17,61 @@ const COLORAMA_PALETTE: Swatch[] = [
   {
     id: 'g05-stone',
     name: 'Green 05 - Stone',
-    frenchName: 'Vert Kaki Sourde',
+    frenchName: 'Muted Sage Green',
     colorHex: '#7D8471',
     category: 'wall',
     pricePerSqFt: 85,
-    tagline: "Un gris relevé d'une touche de vert, sourd et intemporel",
+    tagline: 'A muted grey elevated with a whisper of timeless green',
     thumbnailUrl: '/images/fluted-louver.jpg',
   },
   {
     id: 'a01-argile',
-    name: 'Argile',
-    frenchName: 'Argile Naturelle',
+    name: 'Argile Clay',
+    frenchName: 'Natural Earthen Clay',
     colorHex: '#B69E87',
     category: 'wall',
     pricePerSqFt: 80,
-    tagline: 'Teinte minérale douce inspirée des terres cuites et argiles brutes',
+    tagline: 'Soft mineral hue inspired by raw terracotta and clay',
     thumbnailUrl: '/images/after-living-arch.jpg',
   },
   {
     id: 't03-terre-cuite',
-    name: 'Terre Cuite',
-    frenchName: 'Terracotta Toscane',
+    name: 'Tuscan Terracotta',
+    frenchName: 'Warm Terracotta',
     colorHex: '#8A5836',
     category: 'wall',
     pricePerSqFt: 82,
-    tagline: 'Ocre chaleureux et enveloppant créant une atmosphère solaire',
+    tagline: 'Warm enveloping ochre creating an ambient sunlit warmth',
     thumbnailUrl: '/images/botanical.jpg',
   },
   {
     id: 'i02-ivoire',
-    name: 'Ivoire',
-    frenchName: 'Blanc Ivoire Chaud',
+    name: 'Warm Ivory',
+    frenchName: 'Warm Off-White',
     colorHex: '#ECE7DC',
     category: 'wall',
     pricePerSqFt: 75,
-    tagline: 'Blanc légèrement cassé captant délicatement la lumière naturelle',
+    tagline: 'Soft refined off-white delicately capturing natural daylight',
     thumbnailUrl: '/images/after-master-linen.jpg',
   },
   {
     id: 'b04-bleu-paon',
-    name: 'Bleu Paon',
-    frenchName: 'Bleu Paon Profond',
+    name: 'Peacock Teal',
+    frenchName: 'Deep Peacock Blue',
     colorHex: '#2B444B',
     category: 'wall',
     pricePerSqFt: 88,
-    tagline: 'Pigment profond créant un contraste feutré et cinématique',
+    tagline: 'Deep jewel-tone pigment creating rich cinematic contrast',
     thumbnailUrl: '/images/after-office-wood.jpg',
   },
   {
     id: 'o06-smoked-oak',
     name: 'Smoked Oak',
-    frenchName: 'Chêne Fumé Véritable',
+    frenchName: 'Smoked Oak Wood',
     colorHex: '#3E2C1E',
     category: 'wall',
     pricePerSqFt: 95,
-    tagline: 'Bois noble teinté dans la masse avec relief acoustique',
+    tagline: 'Noble through-dyed timber with 3D acoustic fluted relief',
     thumbnailUrl: '/images/after-living-fluted.jpg',
   },
 ];
@@ -79,32 +79,32 @@ const COLORAMA_PALETTE: Swatch[] = [
 const COMPANION_HARMONIES: Swatch[] = [
   {
     id: 'smoked-oak-harmony',
-    name: 'Chêne Fumé',
-    frenchName: 'Chêne Fumé Véritable',
+    name: 'Smoked Oak Louver',
+    frenchName: 'Acoustic Wood Slat',
     colorHex: '#3E2C1E',
     category: 'wall',
     pricePerSqFt: 95,
-    tagline: 'Apporte de la profondeur et un contraste architectural chaud.',
+    tagline: 'Adds rich depth and warm architectural contrast.',
     thumbnailUrl: '/images/after-living-fluted.jpg',
   },
   {
     id: 'brushed-brass-harmony',
-    name: 'Laiton Brossé',
-    frenchName: 'Laiton Brossé Doré',
+    name: 'Brushed Brass Metal',
+    frenchName: 'Warm Gold Accent',
     colorHex: '#C5A880',
     category: 'hardware',
     pricePerSqFt: 120,
-    tagline: 'Illumine le vert sourd par des touches métalliques raffinées.',
+    tagline: 'Illuminates muted green with refined warm metallic accents.',
     thumbnailUrl: '/images/hero.jpg',
   },
   {
     id: 'travertine-romano-harmony',
-    name: 'Travertin Romano',
-    frenchName: 'Travertin Romano Brut',
+    name: 'Travertine Romano Stone',
+    frenchName: 'Natural Honed Limestone',
     colorHex: '#D7C4A5',
     category: 'stone',
     pricePerSqFt: 110,
-    tagline: 'Texture minérale poreuse pour équilibrer la laque mate velours.',
+    tagline: 'Porous mineral texture balancing the velvety matte finish.',
     thumbnailUrl: '/images/after-pooja-marble.jpg',
   },
 ];
@@ -121,8 +121,8 @@ interface ApplicationView {
 const APPLICATION_VIEWS: ApplicationView[] = [
   {
     id: 'fluted',
-    name: 'Panneaux Cannelés',
-    frenchLabel: 'Agencement Cannelé',
+    name: 'Acoustic Fluted Louvers',
+    frenchLabel: 'Fluted Wall Slats',
     baseImage: '/images/after-living-fluted.jpg',
     polygon: [
       { x: 18, y: 10 },
@@ -130,12 +130,12 @@ const APPLICATION_VIEWS: ApplicationView[] = [
       { x: 82, y: 88 },
       { x: 18, y: 88 },
     ],
-    description: 'Profilés verticaux 3D créant un jeu d\'ombres rythmé et absorbant les échos.',
+    description: 'Vertical 3D fluted slats creating rhythmic shadow lines while absorbing acoustic flutter echoes.',
   },
   {
     id: 'smooth',
-    name: 'Revêtement Mural Continu',
-    frenchLabel: 'Peinture & Mur',
+    name: 'Seamless Wallcovering',
+    frenchLabel: 'Smooth Wall Finish',
     baseImage: '/images/after-living-arch.jpg',
     polygon: [
       { x: 22, y: 8 },
@@ -143,7 +143,7 @@ const APPLICATION_VIEWS: ApplicationView[] = [
       { x: 78, y: 92 },
       { x: 22, y: 92 },
     ],
-    description: 'Finition mate poudrée continue, ultra-résistante et lavable.',
+    description: 'Continuous matte powdered finish, ultra-durable and washable with zero-VOC German adhesive.',
   },
 ];
 
@@ -168,9 +168,9 @@ function CollectionStoneContent() {
   const handleAddSample = (swatch: Swatch) => {
     const success = addSwatch(swatch);
     if (success) {
-      showToast(`Échantillon "${swatch.name}" ajouté à votre boîte !`);
+      showToast(`Swatch "${swatch.name}" added to your Van Box!`);
     } else {
-      showToast(`Votre boîte d'échantillons est pleine (3/3).`);
+      showToast(`Your swatch box is full (3/3).`);
     }
   };
 
@@ -212,14 +212,14 @@ function CollectionStoneContent() {
               href="/studio?color=g05-stone"
               className="px-4 py-2 rounded-full text-xs font-bold bg-[#C5A880] text-[#1C130B] hover:bg-[#d5b992] transition-all flex items-center gap-1.5 shadow-md"
             >
-              <span>Configurer dans le Styler 3D</span>
+              <span>Configure in 3D Styler</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
       </header>
 
-      {/* 2. Editorial Hero Section (Exact Plum Living Layout) */}
+      {/* 2. Editorial Hero Section (Plum Living Inspired Layout) */}
       <section className="pt-16 pb-12 px-6 bg-[#1C130B] text-[#FAF8F5] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <Image src="/images/hero.jpg" fill className="object-cover" alt="Collection Stone" priority />
@@ -228,7 +228,7 @@ function CollectionStoneContent() {
         <div className="max-w-5xl mx-auto relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-[#C5A880]/30 text-xs font-bold tracking-widest uppercase text-[#C5A880] mb-4">
             <span className="w-2 h-2 rounded-full bg-[#7D8471] border border-white/60" />
-            <span>NUANCIER PLUM LIVING FRANCE</span>
+            <span>ARCHITECTURAL COLORAMA · HYDERABAD</span>
           </div>
 
           <h1 className="font-['Syne'] text-4xl sm:text-6xl md:text-7xl font-black mb-4 tracking-tight leading-tight">
@@ -236,11 +236,11 @@ function CollectionStoneContent() {
           </h1>
 
           <p className="font-['Plus_Jakarta_Sans'] italic text-lg sm:text-2xl text-[#FAF8F5]/90 max-w-2xl mx-auto font-light leading-relaxed mb-6">
-            « Un gris relevé d&apos;une touche de vert, sourd et intemporel. »
+            &ldquo;A muted grey elevated with a whisper of timeless green.&rdquo;
           </p>
 
           <p className="text-sm sm:text-base text-white/70 max-w-3xl mx-auto leading-relaxed mb-8">
-            Inspirée des minéraux anciens et des argiles patinées, la teinte Stone métamorphose les volumes des appartements de prestige en 48 heures sans démolition.
+            Inspired by ancient minerals and patinated earthen clay, the Stone finish transforms high-rise living rooms and master suites in 48 hours with zero civil demolition.
           </p>
 
           {/* Dual Action CTAs */}
@@ -250,14 +250,14 @@ function CollectionStoneContent() {
               className="px-7 py-3.5 rounded-2xl bg-[#C5A880] text-[#1C130B] font-bold text-sm hover:bg-[#d5b992] transition-all shadow-xl flex items-center gap-2 cursor-pointer"
             >
               <Box className="w-4 h-4" />
-              <span>Commander l&apos;échantillon (Offert)</span>
+              <span>Order Free Swatch Box</span>
             </button>
 
             <Link
               href="/studio?color=g05-stone"
               className="px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all flex items-center gap-2 backdrop-blur-md"
             >
-              <span>Projeter dans mon salon 3D</span>
+              <span>Visualize in 3D Styler</span>
               <ArrowRight className="w-4 h-4 text-[#C5A880]" />
             </Link>
           </div>
@@ -291,7 +291,7 @@ function CollectionStoneContent() {
           {/* Colorama Palette Selector */}
           <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-full">
             <span className="text-xs uppercase font-bold text-[#C5A880] tracking-wider hidden lg:inline mr-1">
-              Colorama :
+              Colorama Palette:
             </span>
             {COLORAMA_PALETTE.map((color) => {
               const isSelected = selectedColor.id === color.id;
@@ -333,7 +333,7 @@ function CollectionStoneContent() {
             ) : (
               <>
                 <Sun className="w-3.5 h-3.5 text-yellow-400" />
-                <span>Lumière du Jour</span>
+                <span>Natural Daylight</span>
               </>
             )}
           </button>
@@ -367,7 +367,7 @@ function CollectionStoneContent() {
             {activeHotspot === 'wall' && (
               <div className="absolute top-10 left-1/2 -translate-x-1/2 w-64 bg-[#1C130B]/95 text-white p-4 rounded-2xl border border-[#C5A880] shadow-2xl backdrop-blur-xl z-30">
                 <span className="text-[10px] font-bold text-[#C5A880] uppercase tracking-wider block mb-1">
-                  Revêtement Mural
+                  Architectural Wall Finish
                 </span>
                 <h4 className="font-['Syne'] text-sm font-bold text-white mb-1">
                   {selectedColor.name} ({activeAppView.name})
@@ -380,7 +380,7 @@ function CollectionStoneContent() {
                   className="w-full py-2 rounded-xl bg-[#C5A880] text-[#1C130B] text-xs font-bold hover:bg-[#d5b992] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Box className="w-3.5 h-3.5" />
-                  <span>+ Ajouter l&apos;échantillon</span>
+                  <span>+ Add Swatch to Box</span>
                 </button>
               </div>
             )}
@@ -402,20 +402,20 @@ function CollectionStoneContent() {
             {activeHotspot === 'stone' && (
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-64 bg-[#1C130B]/95 text-white p-4 rounded-2xl border border-[#C5A880] shadow-2xl backdrop-blur-xl z-30">
                 <span className="text-[10px] font-bold text-[#C5A880] uppercase tracking-wider block mb-1">
-                  Assise & Niche
+                  Stone Bench & Niche
                 </span>
                 <h4 className="font-['Syne'] text-sm font-bold text-white mb-1">
-                  Travertin Romano Brut
+                  Travertine Romano Limestone
                 </h4>
                 <p className="text-[11px] text-white/70 mb-3 leading-snug">
-                  Pierre naturelle adoucie aux pores ouverts. Harmonisation minérale idéale.
+                  Honed natural limestone with open pores for authentic mineral warmth.
                 </p>
                 <button
                   onClick={() => handleAddSample(COMPANION_HARMONIES[2])}
                   className="w-full py-2 rounded-xl bg-[#C5A880] text-[#1C130B] text-xs font-bold hover:bg-[#d5b992] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Box className="w-3.5 h-3.5" />
-                  <span>+ Ajouter l&apos;échantillon</span>
+                  <span>+ Add Swatch to Box</span>
                 </button>
               </div>
             )}
@@ -446,23 +446,23 @@ function CollectionStoneContent() {
               <span className="text-[#C5A880] font-semibold">₹{selectedColor.pricePerSqFt}/sq.ft</span>
             </div>
             <p className="text-[11px] text-white/70">
-              {activeAppView.name} · {selectedColor.frenchName}
+              {activeAppView.name} · {selectedColor.name}
             </p>
           </div>
         </div>
       </section>
 
-      {/* 4. "Avec quoi l'associer ?" (Palette Harmonies Section - Exact Plum Port) */}
+      {/* 4. "What to Pair It With?" (Palette Harmonies Section) */}
       <section className="py-16 px-6 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold text-[#8A5836] uppercase tracking-[0.25em] block mb-2 font-['Plus_Jakarta_Sans']">
-            HARMONIES DE MATIÈRES
+            ARCHITECTURAL MATERIAL HARMONIES
           </span>
           <h2 className="font-['Syne'] text-3xl sm:text-4xl md:text-5xl font-black text-[#1C130B] mb-4">
-            Avec quoi l&apos;associer ?
+            What to Pair It With?
           </h2>
           <p className="text-sm sm:text-base text-[#1C130B]/70 leading-relaxed font-['Plus_Jakarta_Sans']">
-            Pour sublimer la profondeur sourde de Green 05 - Stone, nos architectes d&apos;intérieur ont sélectionné ces trois textures complémentaires.
+            To enhance the muted depth of Green 05 - Stone, our interior architects recommend these three complementary textures for Hyderabad high-rises.
           </p>
         </div>
 
@@ -514,12 +514,12 @@ function CollectionStoneContent() {
                   {isAlreadyInTray ? (
                     <>
                       <Check className="w-4 h-4 text-green-700" />
-                      <span>Ajouté au panier d&apos;échantillons</span>
+                      <span>Added to Swatch Tray</span>
                     </>
                   ) : (
                     <>
                       <Box className="w-4 h-4 text-[#C5A880]" />
-                      <span>+ Ajouter à ma sélection</span>
+                      <span>+ Add to Selection</span>
                     </>
                   )}
                 </button>
@@ -536,10 +536,10 @@ function CollectionStoneContent() {
             <Clock className="w-8 h-8 text-[#C5A880] shrink-0" />
             <div>
               <h4 className="font-['Syne'] text-base font-bold text-white mb-1">
-                Pose en 48 Heures
+                48-Hour Installation
               </h4>
               <p className="text-xs text-white/70 leading-relaxed">
-                Fixation mécanique sèche sur rails invisibles. 0% gravats ni poussière de plâtre.
+                Concealed dry mechanical rails. Zero civil rubble, zero plaster dust, zero noise complaints.
               </p>
             </div>
           </div>
@@ -548,10 +548,10 @@ function CollectionStoneContent() {
             <Award className="w-8 h-8 text-[#C5A880] shrink-0" />
             <div>
               <h4 className="font-['Syne'] text-base font-bold text-white mb-1">
-                Garantie 2 Ans
+                2-Year Warranty
               </h4>
               <p className="text-xs text-white/70 leading-relaxed">
-                Certificat de garantie numérique assurant la tenue des laques et la stabilité dimensionnelle.
+                Digital warranty certificate guaranteeing paint adhesion, motor function, and dimensional stability.
               </p>
             </div>
           </div>
@@ -560,10 +560,10 @@ function CollectionStoneContent() {
             <Layers className="w-8 h-8 text-[#C5A880] shrink-0" />
             <div>
               <h4 className="font-['Syne'] text-base font-bold text-white mb-1">
-                Confort Acoustique NRC 0.85
+                NRC 0.85 Acoustics
               </h4>
               <p className="text-xs text-white/70 leading-relaxed">
-                Feutre PET recyclé 9mm intégré absorbant les réverbérations des baies vitrées.
+                Integrated 9mm recycled PET acoustic felt absorbs hollow reflections from large glass balconies.
               </p>
             </div>
           </div>
@@ -572,10 +572,10 @@ function CollectionStoneContent() {
             <ShieldCheck className="w-8 h-8 text-[#C5A880] shrink-0" />
             <div>
               <h4 className="font-['Syne'] text-base font-bold text-white mb-1">
-                Escrow 10/60/30
+                10/60/30 Escrow
               </h4>
               <p className="text-xs text-white/70 leading-relaxed">
-                Seulement 10% d&apos;acompte à la réservation, 60% à la livraison du van, 30% après réception.
+                Only 10% booking deposit, 60% on factory milling, 30% released after final QA walkthrough.
               </p>
             </div>
           </div>

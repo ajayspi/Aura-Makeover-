@@ -151,30 +151,30 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'g05-stone',
     name: 'Green 05 - Stone',
-    frenchName: 'Vert Kaki Sourde',
+    frenchName: 'Muted Sage Green',
     category: 'wall',
     pricePerSqFt: 85,
     colorHex: '#7D8471',
     tagline: 'Velvet matte lacquer & fluted oak joinery',
     specs: 'Plum Living Signature · NRC 0.85',
-    badge: 'Plum Flagship',
+    badge: 'Flagship Finish',
     overlayImage: '/images/after-living-fluted.jpg',
   },
   {
     id: 'a01-argile',
-    name: 'Argile Naturelle',
-    frenchName: 'Argile Minérale',
+    name: 'Natural Earthen Clay',
+    frenchName: 'Natural Earthen Clay',
     category: 'wall',
     pricePerSqFt: 80,
     colorHex: '#B69E87',
-    tagline: 'Teinte minérale douce inspirée des argiles brutes',
-    specs: 'Finition Mate Poudrée · Lavable',
+    tagline: 'Soft mineral hue inspired by raw terracotta and clay',
+    specs: 'Matte Powder Finish · Washable',
     overlayImage: '/images/after-living-arch.jpg',
   },
   {
     id: 'slat-smoked-oak',
     name: 'Acoustic Smoked Oak Louver',
-    frenchName: 'Chêne Fumé Cannelé',
+    frenchName: 'Smoked Oak Slat',
     category: 'wall',
     pricePerSqFt: 85,
     colorHex: '#3E2C1E',
@@ -186,7 +186,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'slat-natural-walnut',
     name: 'Natural American Walnut Slat',
-    frenchName: 'Noyer Naturel Cannelé',
+    frenchName: 'American Walnut Slat',
     category: 'wall',
     pricePerSqFt: 95,
     colorHex: '#4A3324',
@@ -197,7 +197,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'mural-temple-pichwai',
     name: 'Royal Temple Pichwai Mural',
-    frenchName: 'Toile Pichwai Dorée',
+    frenchName: 'Gold Leaf Temple Art',
     category: 'wall',
     pricePerSqFt: 45,
     colorHex: '#C5A880',
@@ -209,7 +209,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'linen-belgian-texture',
     name: 'Belgian Textured Linen Wallcovering',
-    frenchName: 'Lin Belge Tactile',
+    frenchName: 'Belgian Textured Linen',
     category: 'wall',
     pricePerSqFt: 45,
     colorHex: '#D6C8B4',
@@ -220,32 +220,32 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'moulding-neoclassical',
     name: 'Neo-Classical Architectural Mouldings',
-    frenchName: 'Moulures Haussmanniennes',
+    frenchName: 'Neo-Classical Profiles',
     category: 'wall',
     pricePerSqFt: 65,
     colorHex: '#FAF8F5',
     tagline: 'High-density polymer profiles in warm ivory',
-    specs: 'Parisian Symmetrical Wall Paneling',
+    specs: 'Symmetrical Architectural Wall Paneling',
     overlayImage: '/images/after-living-arch.jpg',
   },
 
-  // 2. Plum Stone Collection
+  // 2. Natural Stone Collection
   {
     id: 'stone-travertine-romano',
     name: 'Travertine Romano Slabs',
-    frenchName: 'Travertin Romano Brut',
+    frenchName: 'Travertine Limestone',
     category: 'stone',
     pricePerSqFt: 110,
     colorHex: '#D7C4A5',
     tagline: 'Honed limestone with warm amber veins',
     specs: '8mm Ultra-Slim · Moisture Sealed',
-    badge: 'Plum Exclusive',
+    badge: 'Mineral Luxury',
     overlayImage: '/images/after-pooja-marble.jpg',
   },
   {
     id: 'stone-volcanic-basalt',
-    name: 'Basalte Volcanique Slate',
-    frenchName: 'Basalte Volcanique Anthracite',
+    name: 'Volcanic Basalt Slate',
+    frenchName: 'Volcanic Basalt Stone',
     category: 'stone',
     pricePerSqFt: 125,
     colorHex: '#3A3837',
@@ -255,8 +255,8 @@ const FINISH_CATALOG: FinishItem[] = [
   },
   {
     id: 'stone-terrazzo-fume',
-    name: 'Terrazzo Fumé Vénitien',
-    frenchName: 'Terrazzo Fumé Vénitien',
+    name: 'Venetian Smoked Terrazzo',
+    frenchName: 'Venetian Terrazzo',
     category: 'stone',
     pricePerSqFt: 115,
     colorHex: '#A29688',
@@ -266,8 +266,8 @@ const FINISH_CATALOG: FinishItem[] = [
   },
   {
     id: 'stone-calacatta-gold',
-    name: 'Marbre Calacatta Gold',
-    frenchName: 'Marbre Calacatta Ambré',
+    name: 'Calacatta Gold Marble',
+    frenchName: 'Calacatta Gold Slabs',
     category: 'stone',
     pricePerSqFt: 145,
     colorHex: '#EAE5DB',
@@ -281,7 +281,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'blind-somfy-blackout',
     name: 'Somfy Motorized Blackout Blinds',
-    frenchName: 'Stores Motorisés Somfy',
+    frenchName: 'Somfy Motorized Blackout',
     category: 'blinds',
     pricePerSqFt: 120,
     colorHex: '#2C2A29',
@@ -293,7 +293,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'blind-solarlux-cellular',
     name: 'Solar Lux Dual-Cell Honeycomb',
-    frenchName: 'Stores Cellulaires Isolants',
+    frenchName: 'Solar Lux Honeycomb',
     category: 'blinds',
     pricePerSqFt: 135,
     colorHex: '#8A5836',
@@ -304,7 +304,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'blind-linen-sheer',
     name: 'Architectural Sheer Day Shading',
-    frenchName: 'Voilage Architectural',
+    frenchName: 'Architectural Sheer Fabric',
     category: 'blinds',
     pricePerSqFt: 85,
     colorHex: '#E8E1D5',
@@ -317,7 +317,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'light-3000k-cove',
     name: '3000K Warm Architectural Cove LED',
-    frenchName: 'Gorge Lumineuse 3000K',
+    frenchName: '3000K Cove Strip',
     category: 'lighting',
     pricePerSqFt: 65,
     colorHex: '#FFDF9E',
@@ -328,7 +328,7 @@ const FINISH_CATALOG: FinishItem[] = [
   {
     id: 'light-2700k-sunset',
     name: '2700K Sunset Amber Indirect Halo',
-    frenchName: 'Halo Ambré Crépuscule',
+    frenchName: '2700K Amber Halo',
     category: 'lighting',
     pricePerSqFt: 75,
     colorHex: '#FFA852',
@@ -454,7 +454,7 @@ function PlumRoomStylerContent() {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
             <span className="text-xs font-bold text-white uppercase tracking-wider font-['Syne']">
-              Plum 3D Room Styler v3.0
+              3D Room Styler v3.0 | Hyderabad High-Rises
             </span>
           </div>
         </div>
@@ -750,11 +750,11 @@ function PlumRoomStylerContent() {
               </div>
             </TabsPrimitive.Content>
 
-            {/* TAB 2: PLUM STONE COLLECTION */}
+            {/* TAB 2: NATURAL STONE COLLECTION */}
             <TabsPrimitive.Content value="stone" className="space-y-3 focus:outline-none">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#C5A880] uppercase tracking-wider">
-                  La Collection Stone (Plum-Inspired)
+                  Natural Stone & Marble Collection
                 </span>
                 <Link href="/collections/stone" className="text-[11px] text-[#C5A880] hover:underline">
                   Full Catalog →
@@ -788,7 +788,7 @@ function PlumRoomStylerContent() {
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-white/60 italic">{item.frenchName}</p>
+                          <p className="text-[11px] text-white/60">{item.tagline}</p>
                           <span className="text-[10px] text-[#C5A880] font-semibold">{item.specs}</span>
                         </div>
                       </div>
@@ -969,7 +969,7 @@ function PlumRoomStylerContent() {
               <DialogContent className="max-w-lg bg-[#FAF8F5] text-[#1C130B]">
                 <DialogHeader>
                   <DialogTitle className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
-                    Dispatch Swatch Van (Boîte d&apos;Échantillons)
+                    Dispatch Swatch Van (3 Free Samples)
                   </DialogTitle>
                   <DialogDescription className="text-sm text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
                     Our laser-equipped Swatch Van visits {activeScene.society} daily. Inspect your 3 selected physical samples in your apartment&apos;s natural lighting.

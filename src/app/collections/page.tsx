@@ -27,7 +27,7 @@ export default function CollectionsPage() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8A5836] hover:bg-[#a66a42] text-white text-xs font-bold uppercase tracking-wider transition-all font-['Plus_Jakarta_Sans'] shadow"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-            New: Explore Plum-Inspired Stone Collection →
+            New: Explore Green 05 - Stone Collection →
           </Link>
         </div>
       </div>

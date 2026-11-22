@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import PlumRoomStyler from '@/components/styler/PlumRoomStyler';
 
 export const metadata: Metadata = {
-  title: 'AI Design Studio & 3D Room Styler (Plum-Inspired) | AuroMakeover',
-  description: 'Interactive 3D Room Styler: Configure acoustic fluted louvers, Plum-inspired mineral stone finishes, motorized Somfy solar blinds, and 3000K warm cove lighting with live BOM costing.',
+  title: 'AI Design Studio & 3D Room Styler | AuroMakeover Hyderabad',
+  description: 'Interactive 3D Room Styler: Configure acoustic fluted louvers, mineral stone finishes, motorized Somfy solar blinds, and 3000K warm cove lighting with live BOM costing for Hyderabad apartments.',
 };
 
 export default function StudioPage() {

@@ -28,8 +28,8 @@ export default function PlumSwatchBar() {
   ];
 
   const bookingText = encodeURIComponent(
-    `Hi AuroMakeover! I've selected my 3 physical swatches (Boîte d'Échantillons) via the Plum Swatch Bar:\n` +
-    swatches.map((s, i) => `${i + 1}. ${s.name} (${s.frenchName})`).join('\n') +
+    `Hi AuroMakeover! I've selected my 3 physical swatches via the Swatch Bar:\n` +
+    swatches.map((s, i) => `${i + 1}. ${s.name} (${s.category})`).join('\n') +
     `\nPlease dispatch the Swatch Van to ${society}. Name: ${fullName}, Phone: ${phone}.`
   );
 
@@ -56,7 +56,7 @@ export default function PlumSwatchBar() {
                   borderStyle: item ? 'solid' : 'dashed',
                   backgroundColor: item ? item.colorHex : 'rgba(255, 255, 255, 0.04)',
                 }}
-                title={item ? `${item.name} (${item.frenchName})` : `Empty Slot ${idx + 1}`}
+                title={item ? item.name : `Empty Slot ${idx + 1}`}
               >
                 {item ? (
                   <>
@@ -84,13 +84,13 @@ export default function PlumSwatchBar() {
             {/* Counter Text */}
             <div className="pl-1 text-left hidden sm:block">
               <div className="text-xs font-bold text-white font-['Syne'] flex items-center gap-1.5">
-                <span>{swatches.length}/3 Échantillons</span>
+                <span>{swatches.length}/3 Free Swatches</span>
                 <span className="text-[10px] bg-[#C5A880] text-[#1C130B] font-extrabold px-1.5 py-0.5 rounded-full uppercase">
-                  Offerts
+                  Free
                 </span>
               </div>
               <p className="text-[11px] text-[#FAF8F5]/70">
-                Livrés en 48h par le Swatch Van
+                Delivered in 48 hours by Swatch Van
               </p>
             </div>
           </div>
@@ -104,16 +104,16 @@ export default function PlumSwatchBar() {
                   className="w-full sm:w-auto px-5 py-2.5 bg-[#C5A880] hover:bg-[#b0936d] text-[#1C130B] font-bold text-xs uppercase tracking-wider rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer font-['Plus_Jakarta_Sans']"
                 >
                   <Box className="w-4 h-4" />
-                  <span>Valider ma Boîte ({swatches.length}/3)</span>
+                  <span>Order Sample Box ({swatches.length}/3)</span>
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-lg bg-[#FAF8F5] text-[#1C130B]">
                 <DialogHeader>
                   <DialogTitle className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
-                    Votre Boîte d&apos;Échantillons (3 Offerts)
+                    Your Swatch Box (3 Free Samples)
                   </DialogTitle>
                   <DialogDescription className="text-sm text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
-                    Vérifiez vos 3 échantillons tactiles au format 13×13 cm. Notre Swatch Van dessert quotidiennement les gated communities de l&apos;Ouest de Hyderabad.
+                    Inspect your 3 tactile material swatches in 13×13 cm format. Our Swatch Van visits West Hyderabad gated societies daily.
                   </DialogDescription>
                 </DialogHeader>
 
@@ -123,10 +123,10 @@ export default function PlumSwatchBar() {
                       <Check className="w-7 h-7" />
                     </div>
                     <h4 className="font-['Syne'] text-xl font-bold text-[#1C130B]">
-                      Swatch Van Confirmé !
+                      Swatch Van Visit Confirmed!
                     </h4>
                     <p className="text-xs text-[#1C130B]/70 font-['Plus_Jakarta_Sans'] max-w-sm mx-auto">
-                      Votre boîte d&apos;échantillons sera livrée sous 48h à {society}. Confirmez directement votre code d&apos;accès MyGate sur WhatsApp.
+                      Your curated swatch box will be delivered within 48 hours to {society}. Confirm your MyGate entry code on WhatsApp.
                     </p>
                     <a
                       href={`https://wa.me/919700675637?text=${bookingText}`}
@@ -134,7 +134,7 @@ export default function PlumSwatchBar() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-[#15803D] text-white rounded-2xl text-xs font-bold uppercase tracking-wider font-['Plus_Jakarta_Sans'] shadow"
                     >
-                      Confirmer sur WhatsApp (919700675637)
+                      Confirm Gate Pass on WhatsApp (919700675637)
                       <ArrowRight className="w-4 h-4" />
                     </a>
                   </div>
@@ -143,7 +143,7 @@ export default function PlumSwatchBar() {
                     {/* Swatches in Box */}
                     <div>
                       <span className="text-xs font-bold uppercase tracking-wider text-[#8A5836] block mb-2 font-['Plus_Jakarta_Sans']">
-                        Échantillons sélectionnés ({swatches.length}/3) :
+                        Selected Swatches ({swatches.length}/3):
                       </span>
                       <div className="grid grid-cols-3 gap-2">
                         {swatches.map((s) => (
@@ -156,7 +156,7 @@ export default function PlumSwatchBar() {
                               style={{ backgroundColor: s.colorHex }}
                             />
                             <span className="text-[10px] font-bold text-[#1C130B] line-clamp-1">{s.name}</span>
-                            <span className="text-[9px] text-[#8A5836]">{s.frenchName}</span>
+                            <span className="text-[9px] text-[#8A5836] uppercase">{s.category}</span>
                           </div>
                         ))}
                       </div>
@@ -165,7 +165,7 @@ export default function PlumSwatchBar() {
                     <form onSubmit={handleSubmit} className="space-y-3 pt-2">
                       <div>
                         <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          Gated Community / High-Rise
+                          Gated Community / High-Rise (Hyderabad)
                         </label>
                         <select
                           value={society}
@@ -183,21 +183,21 @@ export default function PlumSwatchBar() {
 
                       <div>
                         <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          Nom & Prénom
+                          Full Name
                         </label>
                         <input
                           type="text"
                           required
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          placeholder="ex. Ananya Rao"
+                          placeholder="e.g. Ananya Rao"
                           className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
                         />
                       </div>
 
                       <div>
                         <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          Numéro WhatsApp (pour le pass portail)
+                          WhatsApp Mobile Number (for MyGate pass)
                         </label>
                         <input
                           type="tel"
@@ -213,7 +213,7 @@ export default function PlumSwatchBar() {
                         type="submit"
                         className="w-full py-3.5 bg-[#C5A880] hover:bg-[#b0936d] text-[#1C130B] font-bold text-xs uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer font-['Plus_Jakarta_Sans']"
                       >
-                        Expédier ma Boîte Gratuite sous 48h
+                        Dispatch Free Swatch Box in 48 Hours
                       </button>
                     </form>
                   </div>

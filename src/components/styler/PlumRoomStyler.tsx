@@ -22,6 +22,9 @@ import {
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { calculateRollNesting, calculateDynamicPricing } from '@/lib/engines';
+import PlumCanvasCompositor, { Point2D } from '@/components/styler/PlumCanvasCompositor';
+import { SwatchProvider, useSwatch, Swatch } from '@/context/SwatchContext';
+import PlumSwatchBar from '@/components/swatches/PlumSwatchBar';
 
 /* =========================================================================
    SCENE DATA & PRESETS (Plum Living Inspired)
@@ -34,6 +37,7 @@ interface RoomScene {
   roomType: string;
   baseImage: string;
   dimensions: { widthFt: number; heightFt: number };
+  wallPolygon: Point2D[];
   hotspots: {
     id: string;
     label: string;
@@ -51,6 +55,12 @@ const ROOM_SCENES: RoomScene[] = [
     roomType: 'Living Hall & TV Credenza',
     baseImage: '/images/after-living-fluted.jpg',
     dimensions: { widthFt: 18, heightFt: 10.5 },
+    wallPolygon: [
+      { x: 18, y: 10 },
+      { x: 82, y: 10 },
+      { x: 82, y: 88 },
+      { x: 18, y: 88 },
+    ],
     hotspots: [
       { id: 'h-wall', label: 'Acoustic Fluted Wall Slat', x: 42, y: 46, category: 'wall' },
       { id: 'h-stone', label: 'Travertine Romano Niche', x: 26, y: 68, category: 'stone' },
@@ -65,6 +75,12 @@ const ROOM_SCENES: RoomScene[] = [
     roomType: 'Master Suite & Headboard',
     baseImage: '/images/after-master-pichwai.jpg',
     dimensions: { widthFt: 15, heightFt: 10 },
+    wallPolygon: [
+      { x: 15, y: 8 },
+      { x: 85, y: 8 },
+      { x: 85, y: 82 },
+      { x: 15, y: 82 },
+    ],
     hotspots: [
       { id: 'h-wall', label: 'Pichwai Temple Mural', x: 48, y: 40, category: 'wall' },
       { id: 'h-stone', label: 'Calacatta Gold Slabs', x: 22, y: 64, category: 'stone' },
@@ -79,6 +95,12 @@ const ROOM_SCENES: RoomScene[] = [
     roomType: 'Executive Office & Cinema',
     baseImage: '/images/after-office-bright.jpg',
     dimensions: { widthFt: 14, heightFt: 9.5 },
+    wallPolygon: [
+      { x: 20, y: 10 },
+      { x: 80, y: 10 },
+      { x: 80, y: 85 },
+      { x: 20, y: 85 },
+    ],
     hotspots: [
       { id: 'h-wall', label: 'Smoked Oak Acoustic Slat', x: 56, y: 44, category: 'wall' },
       { id: 'h-stone', label: 'Basalte Volcanique Slate', x: 28, y: 58, category: 'stone' },
@@ -93,6 +115,12 @@ const ROOM_SCENES: RoomScene[] = [
     roomType: 'Pooja Sanctum Niche',
     baseImage: '/images/after-pooja-traditional.jpg',
     dimensions: { widthFt: 12, heightFt: 10 },
+    wallPolygon: [
+      { x: 22, y: 8 },
+      { x: 78, y: 8 },
+      { x: 78, y: 88 },
+      { x: 22, y: 88 },
+    ],
     hotspots: [
       { id: 'h-wall', label: 'Pichwai Gold Canvas', x: 50, y: 38, category: 'wall' },
       { id: 'h-stone', label: 'Translucent Backlit Onyx', x: 50, y: 68, category: 'stone' },
@@ -121,6 +149,29 @@ interface FinishItem {
 
 const FINISH_CATALOG: FinishItem[] = [
   // 1. Wall Surfaces
+  {
+    id: 'g05-stone',
+    name: 'Green 05 - Stone',
+    frenchName: 'Vert Kaki Sourde',
+    category: 'wall',
+    pricePerSqFt: 85,
+    colorHex: '#7D8471',
+    tagline: 'Velvet matte lacquer & fluted oak joinery',
+    specs: 'Plum Living Signature · NRC 0.85',
+    badge: 'Plum Flagship',
+    overlayImage: '/images/after-living-fluted.jpg',
+  },
+  {
+    id: 'a01-argile',
+    name: 'Argile Naturelle',
+    frenchName: 'Argile Minérale',
+    category: 'wall',
+    pricePerSqFt: 80,
+    colorHex: '#B69E87',
+    tagline: 'Teinte minérale douce inspirée des argiles brutes',
+    specs: 'Finition Mate Poudrée · Lavable',
+    overlayImage: '/images/after-living-arch.jpg',
+  },
   {
     id: 'slat-smoked-oak',
     name: 'Acoustic Smoked Oak Louver',
@@ -287,15 +338,25 @@ const FINISH_CATALOG: FinishItem[] = [
   },
 ];
 
-export default function PlumRoomStyler() {
+function PlumRoomStylerContent() {
+  const { swatches, addSwatch, removeSwatch } = useSwatch();
+
   // Active Scene
   const [activeScene, setActiveScene] = useState<RoomScene>(ROOM_SCENES[0]);
 
   // Selections
-  const [selectedWall, setSelectedWall] = useState<FinishItem>(FINISH_CATALOG[0]);
-  const [selectedStone, setSelectedStone] = useState<FinishItem>(FINISH_CATALOG[5]);
-  const [selectedBlind, setSelectedBlind] = useState<FinishItem>(FINISH_CATALOG[9]);
-  const [selectedLight, setSelectedLight] = useState<FinishItem>(FINISH_CATALOG[12]);
+  const [selectedWall, setSelectedWall] = useState<FinishItem>(
+    FINISH_CATALOG.find((f) => f.id === 'g05-stone') || FINISH_CATALOG[0]
+  );
+  const [selectedStone, setSelectedStone] = useState<FinishItem>(
+    FINISH_CATALOG.find((f) => f.id === 'stone-travertine-romano') || FINISH_CATALOG[7]
+  );
+  const [selectedBlind, setSelectedBlind] = useState<FinishItem>(
+    FINISH_CATALOG.find((f) => f.id === 'blind-somfy-blackout') || FINISH_CATALOG[11]
+  );
+  const [selectedLight, setSelectedLight] = useState<FinishItem>(
+    FINISH_CATALOG.find((f) => f.id === 'light-3000k-cove') || FINISH_CATALOG[14]
+  );
   
   // Dimensions & Controls
   const [wallWidth, setWallWidth] = useState<number>(activeScene.dimensions.widthFt);
@@ -304,13 +365,31 @@ export default function PlumRoomStyler() {
   const [activeTab, setActiveTab] = useState<string>('wall');
   const [activeHotspotId, setActiveHotspotId] = useState<string | null>(null);
 
-  // Plum Swatch Tray (Holds up to 3 physical swatches)
-  const [swatchTray, setSwatchTray] = useState<FinishItem[]>([FINISH_CATALOG[0], FINISH_CATALOG[5]]);
+  // Modal State
   const [isSampleModalOpen, setIsSampleModalOpen] = useState<boolean>(false);
   const [sampleSuccess, setSampleSuccess] = useState<boolean>(false);
   const [userFlat, setUserFlat] = useState<string>(activeScene.society);
   const [userName, setUserName] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
+
+  const toSwatch = (item: FinishItem): Swatch => ({
+    id: item.id,
+    name: item.name,
+    frenchName: item.frenchName,
+    colorHex: item.colorHex,
+    category: item.category,
+    pricePerSqFt: item.pricePerSqFt,
+    tagline: item.tagline,
+    thumbnailUrl: item.overlayImage,
+  });
+
+  const toggleSwatchInTray = (item: FinishItem) => {
+    if (swatches.some((s) => s.id === item.id)) {
+      removeSwatch(item.id);
+    } else {
+      addSwatch(toSwatch(item));
+    }
+  };
 
   // Sizing Calculation via pure engine
   const nestingResult = useMemo(() => {
@@ -333,19 +412,6 @@ export default function PlumRoomStyler() {
     });
   }, [selectedWall, nestingResult, selectedBlind]);
 
-  // Toggle swatch into physical tray (Max 3 swatches)
-  const toggleSwatchInTray = (item: FinishItem) => {
-    if (swatchTray.some((s) => s.id === item.id)) {
-      setSwatchTray(swatchTray.filter((s) => s.id !== item.id));
-    } else {
-      if (swatchTray.length >= 3) {
-        // Replace oldest
-        setSwatchTray([...swatchTray.slice(1), item]);
-      } else {
-        setSwatchTray([...swatchTray, item]);
-      }
-    }
-  };
 
   // Change scene handler
   const handleSceneChange = (scene: RoomScene) => {
@@ -445,7 +511,7 @@ export default function PlumRoomStyler() {
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FAF8F5]/10 hover:bg-[#FAF8F5]/20 border border-[#C5A880]/30 text-xs font-bold text-[#C5A880] transition-colors cursor-pointer"
           >
             <Box className="w-3.5 h-3.5" />
-            <span>Van Tray ({swatchTray.length}/3)</span>
+            <span>Van Tray ({swatches.length}/3)</span>
           </button>
         </div>
       </header>
@@ -475,28 +541,15 @@ export default function PlumRoomStyler() {
 
           {/* Interactive Room Canvas Viewport */}
           <div className="relative w-full flex-1 rounded-3xl overflow-hidden border-2 border-[#C5A880]/30 shadow-2xl bg-black min-h-[380px] sm:min-h-[460px]">
-            {/* Primary Base Image */}
-            <Image
-              src={selectedWall.overlayImage || activeScene.baseImage}
+            {/* HTML5 Canvas Multi-Pass Compositor (Single Image Recoloring Engine) */}
+            <PlumCanvasCompositor
+              baseImage={activeScene.baseImage}
+              tintColor={selectedWall.colorHex}
+              wallPolygon={activeScene.wallPolygon}
+              isNightMode={isNightMode}
               alt={activeScene.name}
-              fill
-              className={`object-cover transition-all duration-700 ${
-                isNightMode ? 'brightness-75 contrast-110' : 'brightness-100'
-              }`}
-              priority
+              className="w-full h-full"
             />
-
-            {/* Night Mode 3000K Cove Lighting Ambient Overlay Pass */}
-            {isNightMode && (
-              <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-700"
-                style={{
-                  background:
-                    'radial-gradient(ellipse at 50% 10%, rgba(255, 215, 130, 0.45) 0%, rgba(138, 88, 54, 0.25) 50%, rgba(28, 19, 11, 0.65) 100%)',
-                  boxShadow: 'inset 0 100px 140px -40px rgba(255, 200, 110, 0.55)',
-                }}
-              />
-            )}
 
             {/* Interactive Hotspot Pins (Plum Living Inspired) */}
             {activeScene.hotspots.map((pin) => {
@@ -645,7 +698,7 @@ export default function PlumRoomStyler() {
               <div className="space-y-2.5">
                 {FINISH_CATALOG.filter((f) => f.category === 'wall').map((item) => {
                   const isSelected = selectedWall.id === item.id;
-                  const inTray = swatchTray.some((s) => s.id === item.id);
+                  const inTray = swatches.some((s) => s.id === item.id);
                   return (
                     <div
                       key={item.id}
@@ -711,7 +764,7 @@ export default function PlumRoomStyler() {
               <div className="space-y-2.5">
                 {FINISH_CATALOG.filter((f) => f.category === 'stone').map((item) => {
                   const isSelected = selectedStone.id === item.id;
-                  const inTray = swatchTray.some((s) => s.id === item.id);
+                  const inTray = swatches.some((s) => s.id === item.id);
                   return (
                     <div
                       key={item.id}
@@ -774,7 +827,7 @@ export default function PlumRoomStyler() {
               <div className="space-y-2.5">
                 {FINISH_CATALOG.filter((f) => f.category === 'blinds').map((item) => {
                   const isSelected = selectedBlind.id === item.id;
-                  const inTray = swatchTray.some((s) => s.id === item.id);
+                  const inTray = swatches.some((s) => s.id === item.id);
                   return (
                     <div
                       key={item.id}
@@ -911,7 +964,7 @@ export default function PlumRoomStyler() {
               <DialogTrigger asChild>
                 <button className="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-[#C5A880]/40 text-[#FAF8F5] text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer font-['Plus_Jakarta_Sans']">
                   <Box className="w-4 h-4 text-[#C5A880]" />
-                  <span>Order Swatch Box ({swatchTray.length}/3)</span>
+                  <span>Order Swatch Box ({swatches.length}/3)</span>
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-lg bg-[#FAF8F5] text-[#1C130B]">
@@ -952,7 +1005,7 @@ export default function PlumRoomStyler() {
                         Curated Swatches in Van Box:
                       </span>
                       <div className="grid grid-cols-3 gap-2">
-                        {swatchTray.map((swatch) => (
+                        {swatches.map((swatch) => (
                           <div
                             key={swatch.id}
                             className="p-2.5 rounded-xl border border-[#1C130B]/15 bg-white text-center flex flex-col items-center justify-between"
@@ -1046,6 +1099,17 @@ export default function PlumRoomStyler() {
           </div>
         </div>
       </footer>
+
+      {/* Persistent Floating 3-Slot Swatch Bar */}
+      <PlumSwatchBar />
     </div>
+  );
+}
+
+export default function PlumRoomStyler() {
+  return (
+    <SwatchProvider>
+      <PlumRoomStylerContent />
+    </SwatchProvider>
   );
 }

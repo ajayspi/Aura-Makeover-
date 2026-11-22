@@ -481,6 +481,13 @@ function PlumRoomStylerContent() {
 
         {/* Lighting & Swatch Tray Actions */}
         <div className="flex items-center gap-3">
+          <Link
+            href="/kit/styler/kitchen_5"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#C5A880]/15 hover:bg-[#C5A880]/25 border border-[#C5A880]/40 text-xs font-bold text-[#C5A880] transition-colors"
+          >
+            <span>Line Kitchen Styler →</span>
+          </Link>
+
           {/* Day / Night Toggle */}
           <button
             onClick={() => setIsNightMode(!isNightMode)}

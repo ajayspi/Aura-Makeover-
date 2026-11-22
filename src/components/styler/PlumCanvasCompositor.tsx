@@ -11,6 +11,7 @@ export interface PlumCanvasCompositorProps {
   baseImage: string;
   tintColor: string; // Hex color string (e.g. '#7D8471')
   wallPolygon?: Point2D[];
+  polygons?: Point2D[][]; // Support compound/multiple polygons (e.g. upper + lower cabinets)
   isNightMode?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -30,6 +31,7 @@ export default function PlumCanvasCompositor({
     { x: 85, y: 90 },
     { x: 15, y: 90 },
   ],
+  polygons,
   isNightMode = false,
   className = '',
   style,
@@ -88,34 +90,44 @@ export default function PlumCanvasCompositor({
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
 
     // 2. Vector Polygon Mask Clipping & Dynamic Colorama Tinting Pass
-    if (tintColor && wallPolygon && wallPolygon.length >= 3) {
-      ctx.save();
+    const activePolygons: Point2D[][] =
+      polygons && polygons.length > 0
+        ? polygons
+        : wallPolygon && wallPolygon.length >= 3
+        ? [wallPolygon]
+        : [];
 
-      // Begin vector polygon path
-      ctx.beginPath();
-      const firstPt = wallPolygon[0];
-      ctx.moveTo((firstPt.x / 100) * w, (firstPt.y / 100) * h);
+    if (tintColor && activePolygons.length > 0) {
+      for (const poly of activePolygons) {
+        if (!poly || poly.length < 3) continue;
+        ctx.save();
 
-      for (let i = 1; i < wallPolygon.length; i++) {
-        const pt = wallPolygon[i];
-        ctx.lineTo((pt.x / 100) * w, (pt.y / 100) * h);
+        // Begin vector polygon path
+        ctx.beginPath();
+        const firstPt = poly[0];
+        ctx.moveTo((firstPt.x / 100) * w, (firstPt.y / 100) * h);
+
+        for (let i = 1; i < poly.length; i++) {
+          const pt = poly[i];
+          ctx.lineTo((pt.x / 100) * w, (pt.y / 100) * h);
+        }
+        ctx.closePath();
+        ctx.clip();
+
+        // Pass A: Multiply Blend (preserves 3D flute shadows, relief depth & contact shadows)
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.fillStyle = tintColor;
+        ctx.globalAlpha = 0.85;
+        ctx.fillRect(0, 0, w, h);
+
+        // Pass B: Color / Tint Blend (tints highlights and midtones authentically)
+        ctx.globalCompositeOperation = 'color';
+        ctx.fillStyle = tintColor;
+        ctx.globalAlpha = 0.55;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.restore();
       }
-      ctx.closePath();
-      ctx.clip();
-
-      // Pass A: Multiply Blend (preserves 3D flute shadows, relief depth & contact shadows)
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.fillStyle = tintColor;
-      ctx.globalAlpha = 0.85;
-      ctx.fillRect(0, 0, w, h);
-
-      // Pass B: Color / Tint Blend (tints highlights and midtones authentically)
-      ctx.globalCompositeOperation = 'color';
-      ctx.fillStyle = tintColor;
-      ctx.globalAlpha = 0.55;
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.restore();
     }
 
     // 3. Specular Lighting & 3000K Cove Glow Pass (Night Mode simulation)
@@ -164,7 +176,7 @@ export default function PlumCanvasCompositor({
     }
 
     ctx.restore();
-  }, [baseImage, tintColor, wallPolygon, isNightMode]);
+  }, [baseImage, tintColor, wallPolygon, polygons, isNightMode]);
 
   // Load and cache master base image
   useEffect(() => {

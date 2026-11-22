@@ -22,13 +22,23 @@ export default function CollectionsPage() {
             ← Back to Homepage
           </Link>
 
-          <Link
-            href="/collections/stone"
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8A5836] hover:bg-[#a66a42] text-white text-xs font-bold uppercase tracking-wider transition-all font-['Plus_Jakarta_Sans'] shadow"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-            New: Explore Green 05 - Stone Collection →
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/kit/styler/kitchen_5"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C5A880] hover:bg-[#b8996f] text-[#1C130B] text-xs font-bold uppercase tracking-wider transition-all font-['Plus_Jakarta_Sans'] shadow"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#1C130B]" />
+              Line : Kitchen 3D Styler →
+            </Link>
+
+            <Link
+              href="/collections/stone"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8A5836] hover:bg-[#a66a42] text-white text-xs font-bold uppercase tracking-wider transition-all font-['Plus_Jakarta_Sans'] shadow"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
+              Green 05 - Stone Collection →
+            </Link>
+          </div>
         </div>
       </div>
 

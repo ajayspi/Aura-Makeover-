@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-export default function PlumSwatchBar() {
+export default function PlumSwatchBar({ className = '' }: { className?: string }) {
   const { swatches, removeSwatch } = useSwatch();
   const [isOpen, setIsOpen] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -42,7 +42,7 @@ export default function PlumSwatchBar() {
     <>
       <aside
         aria-label="Plum Floating Swatch Tray"
-        className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-2xl bg-[#1C130B]/95 text-[#FAF8F5] border-2 border-[#C5A880]/50 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] rounded-3xl p-3 sm:px-6 sm:py-3.5 transition-all duration-300 font-['Plus_Jakarta_Sans']"
+        className={`fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-2xl bg-[#1C130B]/95 text-[#FAF8F5] border-2 border-[#C5A880]/50 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] rounded-3xl p-3 sm:px-6 sm:py-3.5 transition-all duration-300 font-['Plus_Jakarta_Sans'] ${className}`}
       >
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
           {/* Left: 3 Swatch Slots */}

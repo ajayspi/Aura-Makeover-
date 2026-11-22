@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react';
 import { X, ArrowRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const DISMISS_KEY = 'auro:offer-banner-dismissed';
 
 export default function OfferBanner() {
+  const pathname = usePathname();
   const [dismissed, setDismissed] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     try {
@@ -24,7 +26,7 @@ export default function OfferBanner() {
     setDismissed(true);
   };
 
-  if (dismissed) return null;
+  if (dismissed || pathname?.startsWith('/kit/styler')) return null;
 
   return (
     <div className="sticky top-0 z-50 bg-[#1C130B] border-b border-[#C5A880]/30">

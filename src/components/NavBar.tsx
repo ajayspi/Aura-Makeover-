@@ -23,6 +23,9 @@ export default function NavBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // On full-screen dedicated styler routes (/kit/styler/*), the styler provides its own dedicated app header
+  if (pathname?.startsWith('/kit/styler')) return null;
+
   const navLinks = [
     { label: 'Services', href: '/services' },
     { label: 'Rooms', href: '/rooms' },

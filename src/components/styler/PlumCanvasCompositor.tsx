@@ -10,6 +10,7 @@ export interface Point2D {
 export interface PlumCanvasCompositorProps {
   baseImage: string;
   tintColor: string; // Hex color string (e.g. '#7D8471')
+  maskImage?: string; // Pixel-perfect binary mask PNG for architectural surfaces
   wallPolygon?: Point2D[];
   polygons?: Point2D[][]; // Support compound/multiple polygons (e.g. upper + lower cabinets)
   isNightMode?: boolean;
@@ -25,6 +26,7 @@ const imageCache = new Map<string, HTMLImageElement>();
 export default function PlumCanvasCompositor({
   baseImage,
   tintColor,
+  maskImage,
   wallPolygon = [
     { x: 15, y: 10 },
     { x: 85, y: 10 },
@@ -89,42 +91,68 @@ export default function PlumCanvasCompositor({
 
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
 
-    // 2. Vector Polygon Mask Clipping & Dynamic Colorama Tinting Pass
-    const activePolygons: Point2D[][] =
-      polygons && polygons.length > 0
-        ? polygons
-        : wallPolygon && wallPolygon.length >= 3
-        ? [wallPolygon]
-        : [];
+    // 2. Optical Mask Clipping & Dynamic Colorama Tinting Pass
+    const maskImg = maskImage ? imageCache.get(maskImage) : null;
 
-    if (tintColor && activePolygons.length > 0) {
+    if (maskImage) {
+      if (tintColor && maskImg && maskImg.complete && maskImg.naturalWidth > 0) {
+        // High-precision pixel mask pass (e.g. for Plum Kitchen front surfaces)
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = Math.max(1, Math.round(drawW));
+        offCanvas.height = Math.max(1, Math.round(drawH));
+        const offCtx = offCanvas.getContext('2d');
+        if (offCtx) {
+          offCtx.drawImage(maskImg, 0, 0, offCanvas.width, offCanvas.height);
+          offCtx.globalCompositeOperation = 'source-in';
+          offCtx.fillStyle = tintColor;
+          offCtx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+          // Blend Pass 1: Multiply (retains depth, shadow relief, handle occlusion)
+          ctx.save();
+          ctx.globalCompositeOperation = 'multiply';
+          ctx.globalAlpha = 0.85;
+          ctx.drawImage(offCanvas, drawX, drawY, drawW, drawH);
+
+          // Blend Pass 2: Color (accurately shifts hue & saturation of cabinet lacquer)
+          ctx.globalCompositeOperation = 'color';
+          ctx.globalAlpha = 0.80;
+          ctx.drawImage(offCanvas, drawX, drawY, drawW, drawH);
+          ctx.restore();
+        }
+      }
+    } else if (tintColor) {
+      // Vector polygon fallback only when maskImage is not configured
+      const activePolygons: Point2D[][] =
+        polygons && polygons.length > 0
+          ? polygons
+          : wallPolygon && wallPolygon.length >= 3
+          ? [wallPolygon]
+          : [];
+
       for (const poly of activePolygons) {
         if (!poly || poly.length < 3) continue;
         ctx.save();
 
-        // Begin vector polygon path
         ctx.beginPath();
         const firstPt = poly[0];
-        ctx.moveTo((firstPt.x / 100) * w, (firstPt.y / 100) * h);
+        ctx.moveTo(drawX + (firstPt.x / 100) * drawW, drawY + (firstPt.y / 100) * drawH);
 
         for (let i = 1; i < poly.length; i++) {
           const pt = poly[i];
-          ctx.lineTo((pt.x / 100) * w, (pt.y / 100) * h);
+          ctx.lineTo(drawX + (pt.x / 100) * drawW, drawY + (pt.y / 100) * drawH);
         }
         ctx.closePath();
         ctx.clip();
 
-        // Pass A: Multiply Blend (preserves 3D flute shadows, relief depth & contact shadows)
         ctx.globalCompositeOperation = 'multiply';
         ctx.fillStyle = tintColor;
         ctx.globalAlpha = 0.85;
-        ctx.fillRect(0, 0, w, h);
+        ctx.fillRect(drawX, drawY, drawW, drawH);
 
-        // Pass B: Color / Tint Blend (tints highlights and midtones authentically)
         ctx.globalCompositeOperation = 'color';
         ctx.fillStyle = tintColor;
         ctx.globalAlpha = 0.55;
-        ctx.fillRect(0, 0, w, h);
+        ctx.fillRect(drawX, drawY, drawW, drawH);
 
         ctx.restore();
       }
@@ -176,49 +204,60 @@ export default function PlumCanvasCompositor({
     }
 
     ctx.restore();
-  }, [baseImage, tintColor, wallPolygon, polygons, isNightMode]);
+  }, [baseImage, maskImage, tintColor, wallPolygon, polygons, isNightMode]);
 
-  // Load and cache master base image
+  // Load and cache master base image and mask image
   useEffect(() => {
     let isCancelled = false;
 
-    if (imageCache.has(baseImage)) {
-      const cachedImg = imageCache.get(baseImage)!;
-      if (cachedImg.complete) {
-        requestAnimationFrame(() => {
-          if (isCancelled) return;
-          setImageLoaded(true);
-          setHasError(false);
-          renderComposite();
-          onLoaded?.();
-        });
-        return;
-      }
+    // Helper to load an image into cache
+    const loadImage = (src: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        if (imageCache.has(src)) {
+          const cached = imageCache.get(src)!;
+          if (cached.complete && cached.naturalWidth > 0) {
+            resolve(cached);
+            return;
+          }
+        }
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = src;
+        img.onload = () => {
+          imageCache.set(src, img);
+          resolve(img);
+        };
+        img.onerror = reject;
+      });
+    };
+
+    const promises = [loadImage(baseImage)];
+    if (maskImage) {
+      promises.push(loadImage(maskImage));
     }
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = baseImage;
-
-    img.onload = () => {
-      if (isCancelled) return;
-      imageCache.set(baseImage, img);
-      setImageLoaded(true);
-      setHasError(false);
-      renderComposite();
-      onLoaded?.();
-    };
-
-    img.onerror = () => {
-      if (isCancelled) return;
-      setHasError(true);
-      setImageLoaded(false);
-    };
+    Promise.all(promises)
+      .then(() => {
+        if (isCancelled) return;
+        setImageLoaded(true);
+        setHasError(false);
+        requestAnimationFrame(() => {
+          if (!isCancelled) {
+            renderComposite();
+            onLoaded?.();
+          }
+        });
+      })
+      .catch(() => {
+        if (isCancelled) return;
+        setHasError(true);
+        setImageLoaded(false);
+      });
 
     return () => {
       isCancelled = true;
     };
-  }, [baseImage, onLoaded, renderComposite]);
+  }, [baseImage, maskImage, onLoaded, renderComposite]);
 
   // Re-composite when props change or container resizes
   useEffect(() => {

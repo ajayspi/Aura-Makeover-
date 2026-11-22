@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import PlumCanvasCompositor, { Point2D } from '@/components/styler/PlumCanvasCompositor';
+import PlumCanvasCompositor from '@/components/styler/PlumCanvasCompositor';
 import { SwatchProvider, useSwatch, Swatch } from '@/context/SwatchContext';
 import PlumSwatchBar from '@/components/swatches/PlumSwatchBar';
 
@@ -93,8 +93,8 @@ export interface CameraAngle {
   id: number;
   name: string;
   subtitle: string;
-  image: string;
-  cabinetPolygons: Point2D[][];
+  defaultImage: string;
+  maskImage: string;
 }
 
 export const KITCHEN_VIEWS: CameraAngle[] = [
@@ -102,57 +102,22 @@ export const KITCHEN_VIEWS: CameraAngle[] = [
     id: 0,
     name: 'Frontal Wide Perspective',
     subtitle: 'Full Linear Run & Integrated Appliances',
-    image: '/images/styler/kitchen_5/view_0.jpg',
-    cabinetPolygons: [
-      // Base cabinet run
-      [
-        { x: 18, y: 56 },
-        { x: 75, y: 56 },
-        { x: 75, y: 92 },
-        { x: 18, y: 92 },
-      ],
-      // Upper wall shelving backer / accent panel
-      [
-        { x: 18, y: 16 },
-        { x: 42, y: 16 },
-        { x: 42, y: 46 },
-        { x: 18, y: 46 },
-      ],
-    ],
+    defaultImage: '/images/styler/kitchen_5/view_0.jpg',
+    maskImage: '/images/styler/kitchen_5/mask_view_0.png',
   },
   {
     id: 1,
     name: '3/4 Perspective Angle',
     subtitle: 'Side Relief & Architectural Shadow Play',
-    image: '/images/styler/kitchen_5/view_1.jpg',
-    cabinetPolygons: [
-      [
-        { x: 10, y: 48 },
-        { x: 78, y: 57 },
-        { x: 74, y: 94 },
-        { x: 8, y: 85 },
-      ],
-      [
-        { x: 10, y: 14 },
-        { x: 44, y: 20 },
-        { x: 42, y: 46 },
-        { x: 10, y: 42 },
-      ],
-    ],
+    defaultImage: '/images/styler/kitchen_5/view_1.jpg',
+    maskImage: '/images/styler/kitchen_5/mask_view_1.png',
   },
   {
     id: 2,
     name: 'Intimate Detail View',
     subtitle: 'Brass Hardware, Drawer Relining & Marble Edge',
-    image: '/images/styler/kitchen_5/view_2.jpg',
-    cabinetPolygons: [
-      [
-        { x: 6, y: 32 },
-        { x: 94, y: 32 },
-        { x: 94, y: 96 },
-        { x: 6, y: 96 },
-      ],
-    ],
+    defaultImage: '/images/styler/kitchen_5/view_2.jpg',
+    maskImage: '/images/styler/kitchen_5/mask_view_2.png',
   },
 ];
 
@@ -193,6 +158,50 @@ function KitchenStylerContent() {
   const currentView = useMemo(() => {
     return KITCHEN_VIEWS[activeAngleIndex] || KITCHEN_VIEWS[0];
   }, [activeAngleIndex]);
+
+  // Dynamic image and tint resolver for authentic photorealism
+  const activeSceneConfig = useMemo(() => {
+    const isBlueFamily = ['lagoon', 'navy', 'slate', 'peacock', 'frost', 'ciel'].includes(selectedColorId);
+    const isTerracottaFamily = ['argile', 'terracotta', 'piment'].includes(selectedColorId);
+
+    let activeImage = currentView.defaultImage;
+    let effectiveTint = currentColor.hex;
+
+    if (activeAngleIndex === 0) {
+      if (isBlueFamily) {
+        activeImage = '/images/styler/kitchen_5/view_4.jpg';
+        if (selectedColorId === 'lagoon') effectiveTint = '';
+      } else if (isTerracottaFamily) {
+        activeImage = '/images/styler/kitchen_5/view_0.jpg';
+        if (selectedColorId === 'terracotta' || selectedColorId === 'piment' || selectedColorId === 'argile') {
+          effectiveTint = '';
+        }
+      }
+    } else if (activeAngleIndex === 2) {
+      if (isBlueFamily) {
+        activeImage = '/images/styler/kitchen_5/view_3.jpg';
+        if (selectedColorId === 'lagoon') effectiveTint = '';
+      } else if (isTerracottaFamily) {
+        activeImage = '/images/styler/kitchen_5/view_2.jpg';
+        if (selectedColorId === 'terracotta' || selectedColorId === 'piment' || selectedColorId === 'argile') {
+          effectiveTint = '';
+        }
+      }
+    } else if (activeAngleIndex === 1) {
+      if (isTerracottaFamily) {
+        activeImage = '/images/styler/kitchen_5/view_1.jpg';
+        if (selectedColorId === 'terracotta' || selectedColorId === 'piment' || selectedColorId === 'argile') {
+          effectiveTint = '';
+        }
+      }
+    }
+
+    return {
+      activeImage,
+      effectiveTint,
+      maskImage: effectiveTint ? currentView.maskImage : undefined,
+    };
+  }, [selectedColorId, activeAngleIndex, currentView, currentColor.hex]);
 
   // Pricing & BOM Calculations
   const pricing = useMemo(() => {
@@ -267,7 +276,7 @@ function KitchenStylerContent() {
       colorHex: currentColor.hex,
       pricePerSqFt: Math.round(pricing.baseFronts / 120),
       tagline: `${selectedProfile.toUpperCase()} · ${currentColor.description}`,
-      thumbnailUrl: currentView.image,
+      thumbnailUrl: activeSceneConfig.activeImage,
     };
     addSwatch(swatchItem);
   };
@@ -453,9 +462,9 @@ function KitchenStylerContent() {
           <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full max-w-6xl aspect-[4/3] sm:aspect-[16/10] max-h-[80vh] rounded-3xl overflow-hidden border border-[#C5A880]/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
               <PlumCanvasCompositor
-                baseImage={currentView.image}
-                tintColor={currentColor.hex}
-                polygons={currentView.cabinetPolygons}
+                baseImage={activeSceneConfig.activeImage}
+                tintColor={activeSceneConfig.effectiveTint}
+                maskImage={activeSceneConfig.maskImage}
                 className="w-full h-full object-cover"
                 alt={`Line Kitchen in ${currentColor.name}`}
               />
@@ -1215,7 +1224,7 @@ function KitchenStylerContent() {
       </div>
 
       {/* 4. PLUM FLOATING SWATCH TRAY */}
-      <PlumSwatchBar />
+      <PlumSwatchBar className="lg:left-8 lg:translate-x-0 lg:max-w-md" />
     </div>
   );
 }

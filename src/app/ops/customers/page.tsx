@@ -24,9 +24,10 @@ const STAGE_COLORS: Record<string, string> = {
 export default async function CustomersListPage({
   searchParams,
 }: {
-  searchParams?: { search?: string };
+  searchParams?: Promise<{ search?: string }>;
 }) {
-  const search = searchParams?.search || '';
+  const resolvedSearchParams = await searchParams;
+  const search = resolvedSearchParams?.search || '';
 
   // Fetch Live Data from Prisma safely
   let customers: any[] = [];

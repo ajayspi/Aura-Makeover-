@@ -93,7 +93,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
   const loc = LOCATIONS[resolvedParams.slug];
@@ -107,7 +107,7 @@ export async function generateMetadata({
 export default async function LocationPage({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
   const loc = LOCATIONS[resolvedParams.slug];

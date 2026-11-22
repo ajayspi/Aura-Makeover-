@@ -22,13 +22,17 @@ const safeFallback: any = new Proxy({}, {
   }
 });
 
+declare const __non_webpack_require__: any;
+
 let prismaClientInstance: any = null;
 
 function getClient(): any {
   if (prismaClientInstance) return prismaClientInstance;
   try {
+    const clientPkg = '@prisma/client';
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { PrismaClient } = require('@prisma/client');
+    const req = typeof __non_webpack_require__ !== 'undefined' ? __non_webpack_require__ : eval('require');
+    const { PrismaClient } = req(clientPkg);
     const client = new PrismaClient();
     // Test if client can actually connect or if it's missing the engine
     prismaClientInstance = client;

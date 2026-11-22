@@ -140,7 +140,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
   const room = ROOM_DATA[resolvedParams.slug];
@@ -154,7 +154,7 @@ export async function generateMetadata({
 export default async function RoomDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
   const room = ROOM_DATA[resolvedParams.slug];

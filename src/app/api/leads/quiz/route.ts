@@ -1,22 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { assignAgent } from '@/lib/lead-assign';
 import { EventBus } from '@/lib/infrastructure/EventBus';
-
-// Dynamic Prisma client for Prisma 8 compatibility
-let prismaClient: {
-  lead: {
-    upsert: (args: { where: { sessionId: string }; update: unknown; create: unknown }) => Promise<unknown>;
-    count: (args?: unknown) => Promise<unknown>;
-  };
-  saleAgent: { findMany: (args?: unknown) => Promise<unknown[]> };
-} | null = null;
+import { prisma } from '@/lib/prisma';
 
 async function getPrisma() {
-  if (!prismaClient) {
-    const { PrismaClient } = await import('@prisma/client');
-    prismaClient = new PrismaClient();
-  }
-  return prismaClient;
+  return prisma;
 }
 
 interface QuizLeadBody {

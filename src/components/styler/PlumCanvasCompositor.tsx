@@ -173,10 +173,13 @@ export default function PlumCanvasCompositor({
     if (imageCache.has(baseImage)) {
       const cachedImg = imageCache.get(baseImage)!;
       if (cachedImg.complete) {
-        setImageLoaded(true);
-        setHasError(false);
-        renderComposite();
-        onLoaded?.();
+        requestAnimationFrame(() => {
+          if (isCancelled) return;
+          setImageLoaded(true);
+          setHasError(false);
+          renderComposite();
+          onLoaded?.();
+        });
         return;
       }
     }

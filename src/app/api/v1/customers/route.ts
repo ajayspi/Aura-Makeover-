@@ -1,23 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-/**
- * REST API v1 — Customers Endpoint
- * 
- * GET  /api/v1/customers        — List customers (paginated, filterable)
- * POST /api/v1/customers        — Create a new customer
- * 
- * Authentication: API Key (X-Api-Key header)
- * CRM-Agnostic: Standardized JSON payloads
- */
-
-// Dynamic Prisma client
-let prismaClient: any = null;
 async function getPrisma() {
-  if (!prismaClient) {
-    const { PrismaClient } = await import('@prisma/client');
-    prismaClient = new PrismaClient();
-  }
-  return prismaClient;
+  return prisma;
 }
 
 export async function GET(request: NextRequest) {

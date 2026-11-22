@@ -1,23 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { attemptTransition, getAvailableTransitions, isValidStage } from '@/lib/services/LifecycleStateMachine';
 import { EventBus } from '@/lib/infrastructure/EventBus';
+import { prisma } from '@/lib/prisma';
 
-/**
- * REST API v1 — Leads Lifecycle Endpoint
- * 
- * GET  /api/v1/leads              — List leads (filterable by stage, score tier, agent)
- * POST /api/v1/leads              — Trigger lifecycle state transition
- * 
- * This endpoint enforces the State Machine guard conditions.
- */
-
-let prismaClient: any = null;
 async function getPrisma() {
-  if (!prismaClient) {
-    const { PrismaClient } = await import('@prisma/client');
-    prismaClient = new PrismaClient();
-  }
-  return prismaClient;
+  return prisma;
 }
 
 export async function GET(request: NextRequest) {

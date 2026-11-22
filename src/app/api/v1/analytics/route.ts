@@ -1,20 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-/**
- * REST API v1 — Analytics Endpoint
- * 
- * GET /api/v1/analytics?type=pipeline|revenue|conversion|agents
- * 
- * Returns pre-computed analytics for dashboards and investor decks.
- */
-
-let prismaClient: any = null;
 async function getPrisma() {
-  if (!prismaClient) {
-    const { PrismaClient } = await import('@prisma/client');
-    prismaClient = new PrismaClient();
-  }
-  return prismaClient;
+  return prisma;
 }
 
 export async function GET(request: NextRequest) {

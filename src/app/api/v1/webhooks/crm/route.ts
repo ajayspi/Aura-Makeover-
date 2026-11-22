@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-
-// Dynamic Prisma client for Prisma 8 compatibility
-let prismaClient: any = null;
+import { prisma } from '@/lib/prisma';
 
 async function getPrisma() {
-  if (!prismaClient) {
-    const { PrismaClient } = await import('@prisma/client');
-    prismaClient = new PrismaClient();
-  }
-  return prismaClient;
+  return prisma;
 }
 
 /**

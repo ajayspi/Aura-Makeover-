@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Box, Check, X, ArrowRight, Truck } from 'lucide-react';
+import { Box, Check, X, ArrowRight } from 'lucide-react';
 import { useSwatch, Swatch } from '@/context/SwatchContext';
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 
 export default function PlumSwatchBar() {
-  const { swatches, removeSwatch, clearSwatches } = useSwatch();
+  const { swatches, removeSwatch } = useSwatch();
   const [isOpen, setIsOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [society, setSociety] = useState('My Home Bhooja');

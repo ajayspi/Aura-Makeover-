@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Check, Box, ChevronRight, Sun, Moon, Sparkles, Layers, ShieldCheck, Clock, Award } from 'lucide-react';
+import { ArrowRight, Check, Box, Sun, Moon, Layers, ShieldCheck, Clock, Award } from 'lucide-react';
 import Footer from '@/components/Footer';
 import PlumCanvasCompositor, { Point2D } from '@/components/styler/PlumCanvasCompositor';
 import { SwatchProvider, useSwatch, Swatch } from '@/context/SwatchContext';
@@ -148,7 +148,7 @@ const APPLICATION_VIEWS: ApplicationView[] = [
 ];
 
 function CollectionStoneContent() {
-  const { addSwatch, swatches, activeColor, setActiveColor } = useSwatch();
+  const { addSwatch, swatches, setActiveColor } = useSwatch();
   const [selectedColor, setSelectedColor] = useState<Swatch>(COLORAMA_PALETTE[0]);
   const [activeAppView, setActiveAppView] = useState<ApplicationView>(APPLICATION_VIEWS[0]);
   const [isNightMode, setIsNightMode] = useState<boolean>(false);

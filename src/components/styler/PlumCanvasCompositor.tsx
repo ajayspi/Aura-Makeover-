@@ -71,7 +71,11 @@ export default function PlumCanvasCompositor({
     ctx.save();
     ctx.scale(dpr, dpr);
 
-    // 1. Draw Master Base Image (object-cover positioning)
+    // Clear studio canvas background with matte color
+    ctx.fillStyle = '#150E07';
+    ctx.fillRect(0, 0, w, h);
+
+    // 1. Draw Master Base Image (object-contain aspect-fit positioning)
     const imgRatio = img.naturalWidth / img.naturalHeight;
     const canvasRatio = w / h;
     let drawW = w;
@@ -80,13 +84,15 @@ export default function PlumCanvasCompositor({
     let drawY = 0;
 
     if (canvasRatio > imgRatio) {
-      drawW = w;
-      drawH = w / imgRatio;
-      drawY = (h - drawH) / 2;
-    } else {
+      // Container is wider than image: pillarbox left & right
       drawH = h;
       drawW = h * imgRatio;
       drawX = (w - drawW) / 2;
+    } else {
+      // Container is taller than image: letterbox top & bottom
+      drawW = w;
+      drawH = w / imgRatio;
+      drawY = (h - drawH) / 2;
     }
 
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
@@ -286,7 +292,7 @@ export default function PlumCanvasCompositor({
       <canvas
         ref={canvasRef}
         aria-label={alt}
-        className="w-full h-full block object-cover"
+        className="w-full h-full block"
       />
 
       {/* Loading state indicator */}

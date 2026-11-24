@@ -142,6 +142,7 @@ function KitchenStylerContent() {
   const [selectedFlooring, setSelectedFlooring] = useState<FlooringStyle>('parquet-droit');
 
   // Conversion Modals
+  const [isSampleBoxOpen, setIsSampleBoxOpen] = useState(false);
   const [isBOMOpen, setIsBOMOpen] = useState(false);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [quoteSociety, setQuoteSociety] = useState('My Home Bhooja (Tower 4)');
@@ -285,17 +286,8 @@ function KitchenStylerContent() {
 
   return (
     <div className="relative min-h-screen bg-[#1C130B] text-[#FAF8F5] flex flex-col font-['Plus_Jakarta_Sans']">
-      {/* 1. TOP ANNOUNCEMENT BANNER */}
-      <div className="bg-[#1C130B] border-b border-[#C5A880]/20 py-2 px-4 text-center">
-        <p className="text-xs sm:text-sm text-[#FAF8F5]/80 font-medium">
-          <span className="text-[#C5A880] font-bold">48-Hour Kitchen Makeover slots open</span>
-          {' · '}
-          Zero civil demolition. Free Swatch Van dispatched to gated societies in Hyderabad.
-        </p>
-      </div>
-
-      {/* 2. SUB-HEADER / BREADCRUMB NAVIGATION */}
-      <header className="sticky top-0 z-30 bg-[#1C130B]/95 backdrop-blur-md border-b border-[#C5A880]/25 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      {/* 1. COMPACT STICKY HEADER */}
+      <header className="sticky top-0 z-30 bg-[#1C130B]/95 backdrop-blur-md border-b border-[#C5A880]/25 px-4 sm:px-8 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
             href="/collections"
@@ -313,11 +305,12 @@ function KitchenStylerContent() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={handleAddActiveSwatch}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#C5A880]/40 text-xs font-semibold text-[#C5A880] hover:bg-[#C5A880]/10 transition-colors cursor-pointer"
+            onClick={() => setIsSampleBoxOpen(true)}
+            aria-haspopup="dialog"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C5A880]/40 text-xs font-semibold text-[#C5A880] hover:bg-[#C5A880]/10 transition-colors cursor-pointer"
           >
             <Box className="w-3.5 h-3.5" />
-            <span>{isCurrentSwatchSaved ? 'Saved in Swatch Box' : 'Sample This Finish'}</span>
+            <span>Sample Box ({swatches.length}/3)</span>
           </button>
 
           <Dialog open={isBOMOpen} onOpenChange={setIsBOMOpen}>
@@ -454,76 +447,74 @@ function KitchenStylerContent() {
         </div>
       </header>
 
-      {/* 3. SPLIT STAGE & CONFIGURATOR CONTAINER */}
-      <div className="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
+      {/* 2. SPLIT STAGE & CONFIGURATOR CONTAINER */}
+      <div className="flex-1 flex flex-col lg:flex-row relative overflow-hidden lg:h-[calc(100vh-56px)]">
         {/* LEFT / CENTER VIEWPORT (The Visualizer Stage) */}
-        <div className="relative flex-1 bg-[#150E07] flex flex-col items-center justify-center min-h-[50vh] lg:min-h-[calc(100vh-120px)] overflow-hidden">
+        <div className="relative flex-1 bg-[#150E07] flex items-center justify-center min-h-[50vh] lg:h-full overflow-hidden">
           {/* Composited Canvas Viewport */}
-          <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4">
-            <div className="relative w-full max-w-6xl aspect-[4/3] sm:aspect-[16/10] max-h-[80vh] rounded-3xl overflow-hidden border border-[#C5A880]/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-              <PlumCanvasCompositor
-                baseImage={activeSceneConfig.activeImage}
-                tintColor={activeSceneConfig.effectiveTint}
-                maskImage={activeSceneConfig.maskImage}
-                className="w-full h-full object-cover"
-                alt={`Line Kitchen in ${currentColor.name}`}
+          <div className="relative w-full h-full flex items-center justify-center">
+            <PlumCanvasCompositor
+              baseImage={activeSceneConfig.activeImage}
+              tintColor={activeSceneConfig.effectiveTint}
+              maskImage={activeSceneConfig.maskImage}
+              className="w-full h-full"
+              alt={`Line Kitchen in ${currentColor.name}`}
+            />
+
+            {/* Top Overlay Badge */}
+            <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-[#1C130B]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#C5A880]/40 text-xs">
+              <span
+                className="w-3 h-3 rounded-full border border-white/40 shadow-sm"
+                style={{ backgroundColor: currentColor.hex }}
               />
+              <span className="font-semibold text-[#FAF8F5]">{currentColor.name}</span>
+              <span className="text-[#C5A880]/70">• {selectedProfile.toUpperCase()}</span>
+            </div>
 
-              {/* Top Overlay Badge */}
-              <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-[#1C130B]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#C5A880]/40 text-xs">
-                <span
-                  className="w-3 h-3 rounded-full border border-white/40 shadow-sm"
-                  style={{ backgroundColor: currentColor.hex }}
-                />
-                <span className="font-semibold text-[#FAF8F5]">{currentColor.name}</span>
-                <span className="text-[#C5A880]/70">• {selectedProfile.toUpperCase()}</span>
+            {/* View Indicators / Pagination Controls */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-[#1C130B]/85 backdrop-blur-md px-4 py-2 rounded-full border border-[#C5A880]/40 shadow-lg">
+              <button
+                type="button"
+                aria-label="Previous Camera Angle"
+                onClick={() =>
+                  setActiveAngleIndex((prev) => (prev === 0 ? KITCHEN_VIEWS.length - 1 : prev - 1))
+                }
+                className="p-1 text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-2 px-2">
+                {KITCHEN_VIEWS.map((v, idx) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    aria-label={`View angle ${idx + 1}: ${v.name}`}
+                    onClick={() => setActiveAngleIndex(idx)}
+                    className={`h-2.5 rounded-full transition-all cursor-pointer ${
+                      activeAngleIndex === idx
+                        ? 'w-6 bg-[#C5A880]'
+                        : 'w-2.5 bg-white/30 hover:bg-white/60'
+                    }`}
+                  />
+                ))}
               </div>
 
-              {/* View Indicators / Pagination Controls */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-[#1C130B]/85 backdrop-blur-md px-4 py-2 rounded-full border border-[#C5A880]/40 shadow-lg">
-                <button
-                  type="button"
-                  aria-label="Previous Camera Angle"
-                  onClick={() =>
-                    setActiveAngleIndex((prev) => (prev === 0 ? KITCHEN_VIEWS.length - 1 : prev - 1))
-                  }
-                  className="p-1 text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-
-                <div className="flex items-center gap-2 px-2">
-                  {KITCHEN_VIEWS.map((v, idx) => (
-                    <button
-                      key={v.id}
-                      type="button"
-                      aria-label={`View angle ${idx + 1}: ${v.name}`}
-                      onClick={() => setActiveAngleIndex(idx)}
-                      className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                        activeAngleIndex === idx
-                          ? 'w-6 bg-[#C5A880]'
-                          : 'w-2.5 bg-white/30 hover:bg-white/60'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  aria-label="Next Camera Angle"
-                  onClick={() =>
-                    setActiveAngleIndex((prev) => (prev === KITCHEN_VIEWS.length - 1 ? 0 : prev + 1))
-                  }
-                  className="p-1 text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors cursor-pointer"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+              <button
+                type="button"
+                aria-label="Next Camera Angle"
+                onClick={() =>
+                  setActiveAngleIndex((prev) => (prev === KITCHEN_VIEWS.length - 1 ? 0 : prev + 1))
+                }
+                className="p-1 text-[#FAF8F5]/70 hover:text-[#C5A880] transition-colors cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
           {/* Perspective Subtitle */}
-          <div className="hidden lg:block absolute bottom-3 left-6 text-xs text-[#FAF8F5]/50">
+          <div className="hidden lg:block absolute bottom-3 left-6 text-xs text-[#FAF8F5]/50 pointer-events-none">
             <span>{currentView.name} — {currentView.subtitle}</span>
           </div>
         </div>
@@ -531,10 +522,10 @@ function KitchenStylerContent() {
         {/* RIGHT CONFIGURATOR PANEL (Plum Floating Card UX) */}
         <aside
           aria-label="Kitchen Customizer Panel"
-          className="w-full lg:w-[480px] xl:w-[520px] bg-[#1C130B] border-t lg:border-t-0 lg:border-l border-[#C5A880]/30 flex flex-col h-auto lg:h-[calc(100vh-120px)] z-20"
+          className="w-full lg:w-[420px] xl:w-[460px] bg-[#1C130B] border-t lg:border-t-0 lg:border-l border-[#C5A880]/30 flex flex-col h-auto lg:h-full z-20"
         >
           {/* Scrollable Options Stack */}
-          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+          <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5">
             {/* Title & Collection Badge */}
             <div className="space-y-1 pb-4 border-b border-[#C5A880]/20">
               <div className="flex items-center justify-between">
@@ -585,9 +576,9 @@ function KitchenStylerContent() {
               {/* TAB 1: FRONTS & CABINET DOORS (Façades) */}
               <TabsPrimitive.Content value="facades" className="space-y-6 focus:outline-none">
                 {/* 1. Profile / Design */}
-                <div className="space-y-2.5">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#C5A880] uppercase tracking-wider">
+                    <span className="font-bold text-[#C5A880] uppercase tracking-wider text-[11px]">
                       1. Profile Style
                     </span>
                     <span className="text-[#FAF8F5]/60 text-[11px]">
@@ -596,50 +587,47 @@ function KitchenStylerContent() {
                       {selectedProfile === 'cadre' && 'Modern Shaker Frame'}
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-[#FAF8F5]/5 border border-[#C5A880]/20">
                     <button
                       type="button"
                       onClick={() => setSelectedProfile('lisse')}
-                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedProfile === 'lisse'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 ring-1 ring-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 hover:border-[#C5A880]/50'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="block font-bold text-xs text-[#FAF8F5]">Lisse</span>
-                      <span className="block text-[10px] text-[#FAF8F5]/60 mt-0.5">Smooth Slab</span>
+                      Lisse
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedProfile('cannele')}
-                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedProfile === 'cannele'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 ring-1 ring-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 hover:border-[#C5A880]/50'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="block font-bold text-xs text-[#FAF8F5]">Cannelé</span>
-                      <span className="block text-[10px] text-[#FAF8F5]/60 mt-0.5">Fluted Slat</span>
+                      Cannelé
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedProfile('cadre')}
-                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedProfile === 'cadre'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 ring-1 ring-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 hover:border-[#C5A880]/50'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="block font-bold text-xs text-[#FAF8F5]">À Cadre</span>
-                      <span className="block text-[10px] text-[#FAF8F5]/60 mt-0.5">Shaker Frame</span>
+                      À Cadre
                     </button>
                   </div>
                 </div>
 
                 {/* 2. Finish Tier */}
-                <div className="space-y-2.5">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#C5A880] uppercase tracking-wider">
+                    <span className="font-bold text-[#C5A880] uppercase tracking-wider text-[11px]">
                       2. Finish Quality
                     </span>
                     <span className="text-[#FAF8F5]/60 text-[11px]">
@@ -648,39 +636,41 @@ function KitchenStylerContent() {
                       {selectedFinish === 'duo' && 'Two-Tone Split (+₹19k)'}
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-[#FAF8F5]/5 border border-[#C5A880]/20">
                     <button
                       type="button"
                       onClick={() => setSelectedFinish('matte')}
-                      className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedFinish === 'matte'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 font-bold text-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 text-[#FAF8F5]/70'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="text-xs">Matte Lacquer</span>
+                      Matte Lacquer
                     </button>
                     <button
                       type="button"
+                      aria-label="Natural Oak (+₹28k)"
                       onClick={() => setSelectedFinish('wood')}
-                      className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedFinish === 'wood'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 font-bold text-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 text-[#FAF8F5]/70'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="text-xs">Natural Oak</span>
+                      Oak (+₹28k)
                     </button>
                     <button
                       type="button"
+                      aria-label="Duo Tone (+₹19k)"
                       onClick={() => setSelectedFinish('duo')}
-                      className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                      className={`h-9 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer truncate ${
                         selectedFinish === 'duo'
-                          ? 'border-[#C5A880] bg-[#C5A880]/15 font-bold text-[#C5A880]'
-                          : 'border-[#C5A880]/20 bg-[#FAF8F5]/5 text-[#FAF8F5]/70'
+                          ? 'bg-[#C5A880] text-[#1C130B] shadow-sm'
+                          : 'text-[#FAF8F5]/70 hover:text-white'
                       }`}
                     >
-                      <span className="text-xs">Duo Tone</span>
+                      Duo (+₹19k)
                     </button>
                   </div>
                 </div>
@@ -688,17 +678,28 @@ function KitchenStylerContent() {
                 {/* 3. Colorama Swatches (34 Designer Shades) */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#C5A880] uppercase tracking-wider">
+                    <span className="font-bold text-[#C5A880] uppercase tracking-wider text-[11px]">
                       3. Color Palette ({currentColor.name})
                     </span>
-                    <button
-                      type="button"
-                      onClick={handleAddActiveSwatch}
-                      className="text-[11px] text-[#C5A880] hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      <Plus className="w-3 h-3" />
-                      Add to Swatch Box
-                    </button>
+                    {isCurrentSwatchSaved ? (
+                      <button
+                        type="button"
+                        onClick={() => setIsSampleBoxOpen(true)}
+                        className="text-[11px] text-[#C5A880] hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        <Check className="w-3 h-3 text-[#15803D]" />
+                        <span>Saved in Box</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleAddActiveSwatch}
+                        className="text-[11px] text-[#C5A880] hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Add to Swatch Box</span>
+                      </button>
+                    )}
                   </div>
 
                   {/* Swatches categorized by mood */}
@@ -1094,7 +1095,7 @@ function KitchenStylerContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button
                 type="button"
-                onClick={handleAddActiveSwatch}
+                onClick={isCurrentSwatchSaved ? () => setIsSampleBoxOpen(true) : handleAddActiveSwatch}
                 className="py-3 px-4 rounded-2xl border-2 border-[#C5A880]/50 hover:bg-[#C5A880]/15 text-[#C5A880] font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <Box className="w-4 h-4" />
@@ -1223,8 +1224,12 @@ function KitchenStylerContent() {
         </aside>
       </div>
 
-      {/* 4. PLUM FLOATING SWATCH TRAY */}
-      <PlumSwatchBar className="lg:left-8 lg:translate-x-0 lg:max-w-md" />
+      {/* 4. PLUM SAMPLE BOX DIALOG (Controlled, no floating tray covering stage) */}
+      <PlumSwatchBar
+        open={isSampleBoxOpen}
+        onOpenChange={setIsSampleBoxOpen}
+        hideFloatingBar={true}
+      />
     </div>
   );
 }

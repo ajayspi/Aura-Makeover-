@@ -12,9 +12,25 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-export default function PlumSwatchBar({ className = '' }: { className?: string }) {
+export interface PlumSwatchBarProps {
+  className?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideFloatingBar?: boolean;
+}
+
+export default function PlumSwatchBar({
+  className = '',
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  hideFloatingBar = false,
+}: PlumSwatchBarProps) {
   const { swatches, removeSwatch } = useSwatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const setIsOpen = isControlled ? (controlledOnOpenChange || (() => {})) : setInternalOpen;
+
   const [success, setSuccess] = useState(false);
   const [society, setSociety] = useState('My Home Bhooja');
   const [fullName, setFullName] = useState('');
@@ -37,6 +53,157 @@ export default function PlumSwatchBar({ className = '' }: { className?: string }
     e.preventDefault();
     setSuccess(true);
   };
+
+  const dialogContentMarkup = (
+    <DialogContent className="max-w-lg bg-[#FAF8F5] text-[#1C130B]">
+      <DialogHeader>
+        <DialogTitle className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
+          Your Swatch Box (3 Free Samples)
+        </DialogTitle>
+        <DialogDescription className="text-sm text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
+          Inspect your 3 tactile material swatches in 13×13 cm format. Our Swatch Van visits West Hyderabad gated societies daily.
+        </DialogDescription>
+      </DialogHeader>
+
+      {success ? (
+        <div className="py-8 text-center space-y-4">
+          <div className="w-14 h-14 bg-green-100 text-[#15803D] rounded-full mx-auto flex items-center justify-center">
+            <Check className="w-7 h-7" />
+          </div>
+          <h4 className="font-['Syne'] text-xl font-bold text-[#1C130B]">
+            Swatch Van Visit Confirmed!
+          </h4>
+          <p className="text-xs text-[#1C130B]/70 font-['Plus_Jakarta_Sans'] max-w-sm mx-auto">
+            Your curated swatch box will be delivered within 48 hours to {society}. Confirm your MyGate entry code on WhatsApp.
+          </p>
+          <a
+            href={`https://wa.me/919700675637?text=${bookingText}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#15803D] text-white rounded-2xl text-xs font-bold uppercase tracking-wider font-['Plus_Jakarta_Sans'] shadow"
+          >
+            Confirm Gate Pass on WhatsApp (919700675637)
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      ) : (
+        <div className="space-y-4 pt-2">
+          {/* Swatches in Box with direct deletion support */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#8A5836] font-['Plus_Jakarta_Sans']">
+                Selected Swatches ({swatches.length}/3):
+              </span>
+              {swatches.length < 3 && (
+                <span className="text-[11px] text-[#1C130B]/60 font-medium">
+                  {3 - swatches.length} free slot{3 - swatches.length > 1 ? 's' : ''} remaining
+                </span>
+              )}
+            </div>
+            {swatches.length === 0 ? (
+              <div className="p-4 rounded-xl border border-dashed border-[#1C130B]/20 text-center text-xs text-[#1C130B]/60">
+                No swatches selected yet. Tap &quot;Sample Finish&quot; on any material in the visualizer to add up to 3 free samples.
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2">
+                {swatches.map((s) => (
+                  <div
+                    key={s.id}
+                    className="relative p-2.5 rounded-xl border border-[#1C130B]/15 bg-white text-center flex flex-col items-center justify-between shadow-sm group"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => removeSwatch(s.id)}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors cursor-pointer"
+                      aria-label={`Remove ${s.name} swatch`}
+                      title={`Remove ${s.name}`}
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    <span
+                      className="w-7 h-7 rounded-lg mb-1 border border-black/20"
+                      style={{ backgroundColor: s.colorHex }}
+                    />
+                    <span className="text-[10px] font-bold text-[#1C130B] line-clamp-1">{s.name}</span>
+                    <span className="text-[9px] text-[#8A5836] uppercase">{s.category}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3 pt-2">
+            <div>
+              <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
+                Gated Community / High-Rise (Hyderabad)
+              </label>
+              <select
+                value={society}
+                onChange={(e) => setSociety(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
+              >
+                <option value="My Home Bhooja">My Home Bhooja (Kokapet)</option>
+                <option value="Rajapushpa Provincia">Rajapushpa Provincia (Narsingi)</option>
+                <option value="Prestige High Fields">Prestige High Fields (Financial District)</option>
+                <option value="Aparna Sarovar Zenith">Aparna Sarovar Zenith (Nallagandla)</option>
+                <option value="Lanco Hills">Lanco Hills (Manikonda)</option>
+                <option value="Other High-Rise">Other West Hyderabad Society</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
+                Full Name
+              </label>
+              <input
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="e.g. Ananya Rao"
+                className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
+                WhatsApp Mobile Number (for MyGate pass)
+              </label>
+              <input
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="9876543210"
+                className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={swatches.length === 0}
+              className={`w-full py-3.5 font-bold text-xs uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer font-['Plus_Jakarta_Sans'] ${
+                swatches.length > 0
+                  ? 'bg-[#C5A880] hover:bg-[#b0936d] text-[#1C130B]'
+                  : 'bg-black/10 text-black/40 cursor-not-allowed'
+              }`}
+            >
+              Dispatch Free Swatch Box in 48 Hours
+            </button>
+          </form>
+        </div>
+      )}
+    </DialogContent>
+  );
+
+  // If floating bar is suppressed or controlled externally, render strictly the Dialog
+  if (hideFloatingBar || isControlled) {
+    return (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        {dialogContentMarkup}
+      </Dialog>
+    );
+  }
 
   return (
     <>
@@ -107,118 +274,7 @@ export default function PlumSwatchBar({ className = '' }: { className?: string }
                   <span>Order Sample Box ({swatches.length}/3)</span>
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-w-lg bg-[#FAF8F5] text-[#1C130B]">
-                <DialogHeader>
-                  <DialogTitle className="font-['Syne'] text-2xl font-bold text-[#1C130B]">
-                    Your Swatch Box (3 Free Samples)
-                  </DialogTitle>
-                  <DialogDescription className="text-sm text-[#1C130B]/70 font-['Plus_Jakarta_Sans']">
-                    Inspect your 3 tactile material swatches in 13×13 cm format. Our Swatch Van visits West Hyderabad gated societies daily.
-                  </DialogDescription>
-                </DialogHeader>
-
-                {success ? (
-                  <div className="py-8 text-center space-y-4">
-                    <div className="w-14 h-14 bg-green-100 text-[#15803D] rounded-full mx-auto flex items-center justify-center">
-                      <Check className="w-7 h-7" />
-                    </div>
-                    <h4 className="font-['Syne'] text-xl font-bold text-[#1C130B]">
-                      Swatch Van Visit Confirmed!
-                    </h4>
-                    <p className="text-xs text-[#1C130B]/70 font-['Plus_Jakarta_Sans'] max-w-sm mx-auto">
-                      Your curated swatch box will be delivered within 48 hours to {society}. Confirm your MyGate entry code on WhatsApp.
-                    </p>
-                    <a
-                      href={`https://wa.me/919700675637?text=${bookingText}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#15803D] text-white rounded-2xl text-xs font-bold uppercase tracking-wider font-['Plus_Jakarta_Sans'] shadow"
-                    >
-                      Confirm Gate Pass on WhatsApp (919700675637)
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                ) : (
-                  <div className="space-y-4 pt-2">
-                    {/* Swatches in Box */}
-                    <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#8A5836] block mb-2 font-['Plus_Jakarta_Sans']">
-                        Selected Swatches ({swatches.length}/3):
-                      </span>
-                      <div className="grid grid-cols-3 gap-2">
-                        {swatches.map((s) => (
-                          <div
-                            key={s.id}
-                            className="p-2.5 rounded-xl border border-[#1C130B]/15 bg-white text-center flex flex-col items-center justify-between shadow-sm"
-                          >
-                            <span
-                              className="w-7 h-7 rounded-lg mb-1 border border-black/20"
-                              style={{ backgroundColor: s.colorHex }}
-                            />
-                            <span className="text-[10px] font-bold text-[#1C130B] line-clamp-1">{s.name}</span>
-                            <span className="text-[9px] text-[#8A5836] uppercase">{s.category}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-                      <div>
-                        <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          Gated Community / High-Rise (Hyderabad)
-                        </label>
-                        <select
-                          value={society}
-                          onChange={(e) => setSociety(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
-                        >
-                          <option value="My Home Bhooja">My Home Bhooja (Kokapet)</option>
-                          <option value="Rajapushpa Provincia">Rajapushpa Provincia (Narsingi)</option>
-                          <option value="Prestige High Fields">Prestige High Fields (Financial District)</option>
-                          <option value="Aparna Sarovar Zenith">Aparna Sarovar Zenith (Nallagandla)</option>
-                          <option value="Lanco Hills">Lanco Hills (Manikonda)</option>
-                          <option value="Other High-Rise">Other West Hyderabad Society</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="e.g. Ananya Rao"
-                          className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-[#1C130B] uppercase tracking-wider mb-1 font-['Plus_Jakarta_Sans']">
-                          WhatsApp Mobile Number (for MyGate pass)
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="9876543210"
-                          className="w-full px-4 py-2.5 rounded-2xl border border-[#1C130B]/20 bg-white text-sm font-['Plus_Jakarta_Sans'] text-[#1C130B]"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="w-full py-3.5 bg-[#C5A880] hover:bg-[#b0936d] text-[#1C130B] font-bold text-xs uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer font-['Plus_Jakarta_Sans']"
-                      >
-                        Dispatch Free Swatch Box in 48 Hours
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </DialogContent>
+              {dialogContentMarkup}
             </Dialog>
           </div>
         </div>

@@ -123,7 +123,7 @@ async function runAudit() {
     await page.waitForTimeout(500);
   }
 
-  const woodBtn = page.getByRole('button', { name: /Natural Oak/i }).first();
+  const woodBtn = page.getByRole('button', { name: /Natural Oak|Oak/i }).first();
   if (await woodBtn.isVisible()) {
     await woodBtn.click();
     await page.waitForTimeout(500);
@@ -165,14 +165,28 @@ async function runAudit() {
     await page.waitForTimeout(500);
   }
 
-  // 8. Test Sample Swatch Box Addition
+  // 8. Test Sample Swatch Box Addition & Modal
   console.log('Testing Swatch Box Action...');
   const sampleBtn = page.getByRole('button', { name: /Sample Finish/i }).first();
   if (await sampleBtn.isVisible()) {
     await sampleBtn.click();
     await page.waitForTimeout(800);
+  }
+
+  // Header Sample Box pill click to open dialog
+  const headerSampleBoxBtn = page.getByRole('button', { name: /Sample Box/i }).first();
+  if (await headerSampleBoxBtn.isVisible()) {
+    console.log('Opening Sample Box dialog from header...');
+    await headerSampleBoxBtn.click();
+    await page.waitForTimeout(800);
     await page.screenshot({ path: path.join(outputDir, '08_swatch_bar_active.png') });
-    console.log('Captured 08_swatch_bar_active.png');
+    console.log('Captured 08_swatch_bar_active.png (Sample Box Modal open)');
+
+    // Close modal
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(500);
+  } else {
+    await page.screenshot({ path: path.join(outputDir, '08_swatch_bar_active.png') });
   }
 
   // 9. Test Instant Quote Modal
